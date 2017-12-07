@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-//import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @Configuration
 @EntityScan(basePackages = {"com.frank.entity"})
