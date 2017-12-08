@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +48,10 @@ public class StockTest {
     @Autowired
     private IncomeStatementRepository incomeStatementRepository;
 
+//    @Autowired
+//    @Qualifier(value="testTaskPoolExecutor")
+//    private Executor testTaskPoolExecutor;
+
 /*	@Autowired
     private BenefitService benefitService;*/
 
@@ -54,6 +59,21 @@ public class StockTest {
     private static final String ACCESS_TOKEN = "feca4dcb1241d2564ff37534a9f509705a5154664ff39364849639145ab9f1b3";
 
     private static CloseableHttpClient httpClient = HttpUtil.getClient();
+    volatile int count = 0;
+    @Test
+    public void testVolatile(){
+      for(int i =0;i<100;i++){
+          count(i);
+      }
+
+    }
+
+    @Async("testTaskPoolExecutor")
+    private void count(int k){
+       log.info("threadID={},before k={}",Thread.currentThread().getId(),k);
+        k = k++;
+        log.info("threadID={},after k={}",Thread.currentThread().getId(),k);
+    }
 
     @Test
     public void t(){
