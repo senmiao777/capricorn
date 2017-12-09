@@ -1,11 +1,19 @@
 package com.frank.entity.mysql;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.math.BigDecimal;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.persistence.*;
+import java.math.BigDecimal;
+/**
+ *股票基本信息
+ */
+@Data
+@Entity
+@Table(name = "stock_base_info")
+@Getter
+@Setter
 public class Stock {
     /**
      * NAME

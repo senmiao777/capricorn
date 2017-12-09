@@ -1,8 +1,10 @@
 package com.frank.controller;
 
 import com.frank.entity.mysql.IncomeStatement;
+import com.frank.entity.mysql.Stock;
 import com.frank.model.JsonResult;
 import com.frank.repository.mysql.IncomeStatementRepository;
+import com.frank.repository.mysql.StockRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +31,9 @@ public class TestController {
     @Autowired
     private IncomeStatementRepository incomeStatementRepository;
 
+    @Autowired
+    private StockRepository stockRepository;
+
 
     /**
      * 根据股票名称查询该股票合并利润表信息
@@ -42,6 +47,25 @@ public class TestController {
         return JsonResult.buildSuccessResult(incomeStatementList);
 
     }
+
+    /**
+     * 根据股票名称查询该股票基本信息
+     * @param stockCode
+     * @return
+     */
+    @RequestMapping(value = "/base")
+    public JsonResult base(@RequestParam String stockCode) {
+        Stock stock = stockRepository.findByStockCode(stockCode);
+        if(stock == null){
+            log.info("base stock is null.input stock code ={}",stockCode);
+            return JsonResult.buildSuccessResult("根据该股票代码未查到数据，请确认后输入",stock);
+        }
+
+        return JsonResult.buildSuccessResult(stock);
+
+    }
+
+
 
 
     /**
