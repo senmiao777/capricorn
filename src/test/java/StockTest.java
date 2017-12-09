@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,23 +59,69 @@ public class StockTest {
 
     private static CloseableHttpClient httpClient = HttpUtil.getClient();
     volatile int count = 0;
+    private StringBuilder getE(StringBuilder b,List<String> p){
+        b.append("/**NAME*/")
+                .append("@Column(name = \"")
+                .append(p.get(0).replaceAll("`","")).append("\")")
+
+
+                .append("private ").append(getTy(p.get(1))).append(" ")
+                .append(p.get(0).replaceAll("`","")).append(";\n\n");
+        return b;
+    }
+    private String getTy(String type){
+        if(type.contains("decimal")){
+            return "BigDecimal";
+        }else if(type.contains("int")){
+            return "Integer";
+        }else {
+            return "String";
+        }
+    }
+
+@Test
+public void t3(){
+    StringBuilder builder = new StringBuilder("");
+    try {
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File("D:\\s1.txt")),
+                "UTF-8"));
+        String lineTxt = null;
+        while ((lineTxt = br.readLine()) != null) {
+            List<String> list = Splitter.on(" ").limit(3).splitToList(lineTxt);
+log.info("```````````````````````````list={}",list.toString());
+            builder =  getE(builder, list);
+
+        }
+        br.close();
+    } catch (Exception e) {
+        System.err.println("read errors :" + e);
+    }
+    try {
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File("D:/s4.txt")),
+                "UTF-8"));
+        bw.write(builder.toString());
+        bw.close();
+    } catch (Exception e) {
+        System.err.println("write errors :" + e);
+    }
+    log.info("result-----------------------------");
+}
+
+
     @Test
-    public void testVolatile(){
-      for(int i =0;i<100;i++){
-          count(i);
-      }
-
+    public void ti(){
+        Benefit benefit = new Benefit();
+        benefit.setSecId("testSave");
+        Benefit save = benefitRepository.save(benefit);
+        log.info("Benefit={}",save);
     }
-
-    @Async("testTaskPoolExecutor")
-    private void count(int k){
-       log.info("threadID={},before k={}",Thread.currentThread().getId(),k);
-        k = k++;
-        log.info("threadID={},after k={}",Thread.currentThread().getId(),k);
-    }
-
     @Test
     public void t(){
+
+        Benefit one = benefitRepository.findOne(7L);
+        log.info("Benefit={}",one);
+
+
         DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String s = "2018-09-09";
         LocalDate date= LocalDate.parse(s, formatter);

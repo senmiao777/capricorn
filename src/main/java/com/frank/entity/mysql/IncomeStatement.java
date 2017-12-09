@@ -286,7 +286,6 @@ public class IncomeStatement {
 
 
 
-
     public void setPublishDate(String publishDate) {
         String s = StringUtils.replaceAll(publishDate, "-", "");
         this.publishDate = Integer.valueOf(s);
