@@ -86,8 +86,8 @@ public class UserController {
      */
     @RequestMapping(value = "/u", method = RequestMethod.POST)
     public JsonResult updateUser(@RequestParam Long id,
-                                 @RequestParam String userName,
-                                 @RequestParam String age) {
+                                 @RequestParam(required = false) String userName,
+                                 @RequestParam(required = false) String age) {
 
 
         log.info("updateUser id={},userName={},age={}", id, userName, age);
