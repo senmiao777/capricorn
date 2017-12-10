@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Date;
+
 /**
  * 基本增删改查操作
  * 缺少权限验证
@@ -93,19 +95,25 @@ public class UserController {
         log.info("updateUser id={},userName={},age={}", id, userName, age);
 
         User user = userRepository.findOne(id);
+        log.info("create ={}",user.getCreateAt());
         if(null == user){
             log.info("updateUser can not find user.id={},userName={},age={}", id, userName, age);
             return JsonResult.buildSuccessResult("根据此id未查询到用户",user);
         }
+        log.info("updateUser user={}", user);
         if(StringUtils.isNotBlank(userName)){
             user.setUserName(userName);
         }
         if(NumberUtils.isDigits(age)){
             user.setAge(Integer.valueOf(age));
         }
-        user = userRepository.save(user);
+        log.info("date ={}", new Date());
+        user.setUpdateAt(new Date());
+        User save = userRepository.save(user);
+        log.info("after update user = {}",save);
 
-        return JsonResult.buildSuccessResult(user);
+
+        return JsonResult.buildSuccessResult(save);
 
     }
 

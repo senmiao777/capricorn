@@ -4,12 +4,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 
 /**
@@ -21,6 +20,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @ToString
+@Slf4j
 public class User implements Serializable {
 
     private static final long serialVersionUID = -3622354500982417427L;
@@ -38,13 +38,21 @@ public class User implements Serializable {
     @Column(name = "age")
     private Integer age;
 
-    @CreatedDate
     @Column(name = "create_at")
-    private Timestamp createAt;
+    private Date createAt;
 
-    @LastModifiedDate
-    @Column(name = "update_at")
-    private Timestamp updateAt;
 
+   @Column(name = "update_at")
+    private Date updateAt;
+
+
+   /*  @PreUpdate
+    public void updateTime(){
+      //  this.updateAt = new Timestamp(System.currentTimeMillis());
+        log.info("updateTime in");
+        this.setUpdateAt(new Date());
+        log.info("updateTime user={}",this);
+    }
+*/
 
 }

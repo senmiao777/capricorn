@@ -19,7 +19,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @ComponentScan(basePackages ="com.frank")
 @EnableAsync
 @SpringBootApplication
-@PropertySource({"classpath:dev/my.properties"})
+@PropertySource({"classpath:dev/my.properties","classpath:dev/application.properties"})
 public class Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class);
