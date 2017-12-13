@@ -35,6 +35,13 @@ public class StockController {
     @Autowired
     private StockRepository stockRepository;
 
+    @RequestMapping("/hello")
+    public String helloHtml(){
+      //  map.put("hello","hello");
+        return"/firstEchart.html";
+    }
+
+
 
     /**
      * 根据股票代码查询该股票合并利润表信息
