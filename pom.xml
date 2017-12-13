@@ -219,7 +219,7 @@
                 <resources>
                     <resource>
                         <directory>
-                            ${project.basedir}/src/main/resources/config/release
+                            ${project.basedir}/src/main/resources/release
                         </directory>
                     </resource>
                 </resources>
@@ -237,7 +237,7 @@
                 <resources>
                     <resource>
                         <directory>
-                            ${project.basedir}/src/main/resources/config/dev
+                            ${project.basedir}/src/main/resources/dev
                         </directory>
                     </resource>
                 </resources>
@@ -256,7 +256,7 @@
                 <resources>
                     <resource>
                         <directory>
-                            ${project.basedir}/src/main/resources/config/test
+                            ${project.basedir}/src/main/resources/test
                         </directory>
                     </resource>
                 </resources>
