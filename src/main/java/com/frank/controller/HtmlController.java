@@ -30,7 +30,7 @@ public class HtmlController {
     @RequestMapping("/hello")
     public String helloHtml(){
       //  map.put("hello","hello");
-        return"/firstEchart.html";
+        return"/view/firstEchart";
     }
 
 
