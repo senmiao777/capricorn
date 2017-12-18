@@ -38,6 +38,7 @@ public class StockController {
     @Autowired
     private StockRepository stockRepository;
 
+    @ApiOperation(value="跳转到Echart页面")
     @RequestMapping("/hello")
     public String helloHtml(){
       //  map.put("hello","hello");
@@ -45,17 +46,9 @@ public class StockController {
     }
 
 
-
-    /**
-     * 根据股票代码查询该股票合并利润表信息
-     *
-     * @param stockCode
-     * @return
-     */
-    @ApiOperation(value="根据股票代码查询该股票合并利润表信息", notes="根据传入的股票代码查询该股票的详细信息")
+    @ApiOperation(value="根据股票代码查询该股票合并利润表信息", notes="这是展示在详情里的信息。根据传入的股票代码查询该股票的详细信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Long"),
-            @ApiImplicitParam(name = "stockCode", value = "股票代码", required = true, dataType = "String")
+            @ApiImplicitParam(paramType= "query",name = "stockCode", value = "股票代码，如600672", required = true, dataType = "String")
     })
     @RequestMapping(value = "/incomeStatement", method = RequestMethod.GET)
     public JsonResult incomeStatement(@RequestParam String stockCode) {
