@@ -5,6 +5,9 @@ import com.frank.entity.mysql.Stock;
 import com.frank.model.JsonResult;
 import com.frank.repository.mysql.IncomeStatementRepository;
 import com.frank.repository.mysql.StockRepository;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -49,6 +52,11 @@ public class StockController {
      * @param stockCode
      * @return
      */
+    @ApiOperation(value="根据股票代码查询该股票合并利润表信息", notes="根据传入的股票代码查询该股票的详细信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Long"),
+            @ApiImplicitParam(name = "stockCode", value = "股票代码", required = true, dataType = "String")
+    })
     @RequestMapping(value = "/incomeStatement", method = RequestMethod.GET)
     public JsonResult incomeStatement(@RequestParam String stockCode) {
         List<IncomeStatement> incomeStatementList = incomeStatementRepository.findByStockCode(stockCode);
