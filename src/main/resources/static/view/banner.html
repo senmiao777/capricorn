@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en"/>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="/js/echarts.js"></script>
+    <script src="/js/jquery-3.2.1.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+    myChart.showLoading();
+    fetchData(function (data) {
+        myChart.hideLoading();
+        myChart.setOption({
+            xAxis: {
+                data: data.categories
+            },
+            series: [{
+                // 根据名字对应到相应的系列
+                name: '激进型',
+                data: data.data1
+            }, {
+                name: '防御型',
+                data: data.data2
+            }]
+        });
+    });
+    // 指定图表的配置项和数据
+    /*var option = {
+        title: {
+            text: 'ECharts 入门示例'
+        },
+        tooltip: {},
+        legend: {
+            data: ['激进型', '防御型']
+        },
+        xAxis: {
+            data: ["2012", "2013", "2014", "2015", "2016", "2017"]
+        },
+        yAxis: {},
+        series: [{
+            name: '激进型',
+            type: 'bar',
+            data: [-5, 20, 38, 10, 15, 34]
+        }, {
+            name: '防御型',
+            type: 'bar',
+            data: [15, 22, 36, 10, 10, 110]
+        }]
+    };*/
+
+    function fetchData(cb) {
+        // 通过 setTimeout 模拟异步加载
+        setTimeout(function () {
+            cb({
+                categories: ["2012", "2013", "2014", "2015", "2016", "2017"],
+                data1: [5, 20, 36, -10, -12, 20],
+                data2: [15, 22, 36, -15, 10, 110]
+            });
+        }, 2000);
+    }
+
+    var option = {
+        title: {
+            text: 'ECharts 入门示例'
+        },
+        tooltip: {},
+        legend: {
+            data: ['激进型', '防御型']
+        },
+        xAxis: {
+            data: []
+        },
+        yAxis: {},
+        series: [{
+            name: '激进型',
+            type: 'bar',
+            data: []
+        }, {
+            name: '防御型',
+            type: 'bar',
+            data: []
+        }]
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+
+
+    var pipOne = echarts.init(document.getElementById('pipChart'));
+    pipOne.setOption({
+        backgroundColor: '#2c343c',
+        textStyle: {
+            color: 'rgba(255, 255, 255, 0.3)'
+        },
+        series: [
+            {
+                name: '访问来源',
+                type: 'pie',
+                //radius: '55%',
+                roseType: 'angle',
+                itemStyle: {
+                    normal: {
+                        color: '#c23531',
+                        shadowBlur: 200,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        /* // 阴影的大小
+                         shadowBlur: 200,
+                         // 阴影水平方向上的偏移
+                         shadowOffsetX: 0,
+                         // 阴影垂直方向上的偏移
+                         shadowOffsetY: 0,
+                         // 阴影颜色
+                         shadowColor: 'rgba(0, 0, 0, 0.5)'*/
+
+                        /* color: {
+                                                    type: 'linear',
+                                                    x: 0,
+                                                    y: 0,
+                                                    x2: 0,
+                                                    y2: 1,
+                                                    colorStops: [{
+                                                        offset: 0, color: 'red' // 0% 处的颜色
+                                                    }, {
+                                                        offset: 1, color: 'blue' // 100% 处的颜色
+                                                    }],
+                                                    globalCoord: false // 缺省为 false
+                                                }*/
+                    },
+                    // 鼠标 hover 时候的高亮样式
+                    emphasis: {
+                        shadowBlur: 200,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                },
+                data: [
+                    {value: 235, name: '视频广告'},
+                    {value: 274, name: '联盟广告',},
+                    {value: 310, name: '邮件营销'},
+                    {value: 335, name: '直接访问'},
+                    {value: 400, name: '搜索引擎'}
+                ],
+                visualMap: {
+                    // 不显示 visualMap 组件，只用于明暗度的映射
+                    show: false,
+                    // 映射的最小值为 80
+                    min: 80,
+                    // 映射的最大值为 600
+                    max: 600,
+                    inRange: {
+                        // 明暗度的范围是 0 到 1
+                        colorLightness: [0, 1]
+                    }
+                },
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                    }
+                }
+            }
+        ]
+    })
+
+
+    function test() {
+        var age = document.getElementById("age").value;
+        alert(age);
+        $.ajax({
+            type: "GET", //请求方式
+            url: "http://localhost:8080/user/userInfo?age=" + age, //请求路径
+            //url:"http://localhost:8080/r/client/"+age, //请求路径
+            cache: false,
+            //  data:"age="+age,  //传参
+            dataType: 'json',   //返回值类型
+            success: function (d) {
+                //  alert("fanhuijieguo"+data.userName)
+                myChart.setOption({
+                    xAxis: {
+                        data: d.data.years
+                    },
+                    series: [{
+                        // 根据名字对应到相应的系列
+                        name: '激进型',
+                        data: d.data.radicalList
+                    }, {
+                        name: '防御型',
+                        data: d.data.defenseList
+                    }]
+                });
+
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+</script>
+
+<h1>Attention please</h1>
+<div style="border-color: red;border-bottom-color: blue">
+    <form action="#" method="post" id="inputForm" enctype="multipart/form-data">
+        <table align="center" border="0px" width="600px">
+
+            <tr>
+                <td>banner：</td>
+                <td>
+                    <img id="img1" alt="" src="/resource/banner.png" width="260px" height="100px"/>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="file" name="upload" id="upload" value="上传banner"/>
+                    <input type="hidden" name="imgPath" id="imgPath"/>
+                    <input type="button" id="upLoadImg" value="上传"/>
+                </td>
+            </tr>
+            <tr>
+                <td>title：</td>
+                <td>
+                    <input type="text" name="title" size="30px"/>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td align="right">&nbsp;</td>
+                <td>
+                    <input type="button" value="提交" id="sub"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="返回" id="goBack"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
