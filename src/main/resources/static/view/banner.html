@@ -77,6 +77,7 @@
             }).done(function(data) {
                 var obj =eval('(' + data + ')');
                 var path = obj.path;
+                alert(obj)
                 $("#imgPath").val(path);
                 $("#img1").attr("src",path);
             }).fail(function(data) {
