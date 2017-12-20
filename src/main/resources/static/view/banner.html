@@ -41,14 +41,14 @@
         $("#upLoadImg").click(function(){
 
             var isImg = $("#upload").val();
-            alert(333);
+
             /*if(!new RegExp('.*((.jpg)|(.jpeg)|(.gif)|(.png))$','ig').test(isImg) ){
                 alert("请选择图片文件");
                 return false;
             }*/
             alert(isImg);
-            $.ajaxFileUpload({
-                url:"127.0.0.1:8080/file/uploadImg",
+       /*     $.ajaxFileUpload({
+                url:"${pageContext.request.contextPath}/file/uploadImg",
                 cache:false,
                 secureuri:false,
                 type:'post',
@@ -65,7 +65,27 @@
                     var obj =eval('(' + data + ')');
                     alert("banner上传异常！"+obj.res);
                 }
+            });*/
+// http://www.jianshu.com/p/46e6e03a0d53
+            $.ajax({
+                url: '/file/uploadImage',
+                type: 'POST',
+                cache: false,
+                data: new FormData($('#inputForm')[0]),
+                processData: false,
+                contentType: false
+            }).done(function(data) {
+                var obj =eval('(' + data + ')');
+                var path = obj.path;
+                $("#imgPath").val(path);
+                $("#img1").attr("src",path);
+            }).fail(function(data) {
+                var obj =eval('(' + data + ')');
+                alert("banner上传异常！"+obj.res);
             });
+
+
+
         });
 
 

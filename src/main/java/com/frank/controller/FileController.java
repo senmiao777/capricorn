@@ -37,7 +37,7 @@ public class FileController {
         return"/view/banner";
     }
 
-    @RequestMapping(value = "/uploadImg", method = RequestMethod.POST)
+    @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
     public void uploadImg(HttpServletRequest request, HttpServletResponse response, Model model) {
         // 转型为MultipartHttpRequest：
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
