@@ -79,7 +79,7 @@
                 var path = obj.path;
                 alert(obj)
                 $("#imgPath").val(path);
-                $("#img1").attr("src",path);
+                $("#img1").attr("src",path + '?t='+Date.now());
             }).fail(function(data) {
                 var obj =eval('(' + data + ')');
                 alert("banner上传异常！"+obj.res);

@@ -65,7 +65,7 @@ public class FileController {
             FileOutputStream fileOut = null;
             try {
 
-                String filePath = "F:/demo/zeus/src/main/resources/static/image/"+originalFilename;
+                String filePath = "F:/file/image/"+originalFilename;
                 File imageFile = new File(filePath);
                 //创建输出流
                 FileOutputStream outStream = new FileOutputStream(imageFile);
@@ -73,7 +73,7 @@ public class FileController {
                 outStream.write(file.getBytes());
                 //关闭输出流
                 outStream.close();
-                response.getWriter().write("{\"res\":\"图片上传成功！\",\"path\":\"/image/" +originalFilename+ "\"}");
+                response.getWriter().write("{\"res\":\"图片上传成功！\",\"path\":\"" +filePath+ "\"}");
 
             } catch (Exception e) {
                 e.printStackTrace();
