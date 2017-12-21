@@ -79,7 +79,7 @@
                 var path = obj.path;
                 alert(obj)
                 $("#imgPath").val(path);
-                $("#img1").attr("src",path + '?t='+Date.now());
+                $("#img1").attr("src",path);
             }).fail(function(data) {
                 var obj =eval('(' + data + ')');
                 alert("banner上传异常！"+obj.res);
@@ -107,6 +107,7 @@
                 <td>banner：</td>
                 <td>
                     <img id="img1" alt="" src="/image/20171219223649.png" width="260px" height="100px"/>
+                    <img id="img2" alt="" src="http://localhost:8080/file/getImg?fileName=506.jpg" width="260px" height="100px"/>
                 </td>
             </tr>
             <tr>
