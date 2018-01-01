@@ -74,7 +74,7 @@ public class FileController {
                 outStream.write(file.getBytes());
                 //关闭输出流
                 outStream.close();
-                response.getWriter().write("{\"res\":\"图片上传成功！\",\"path\":\"" + "localhost:8080/file/getImg?fileName="+ originalFilename+ "&t="+System.currentTimeMillis()+"\"}");
+                response.getWriter().write("{\"res\":\"图片上传成功！\",\"path\":\"" + "http://localhost:8080/file/getImg?fileName="+ originalFilename+ "&t="+System.currentTimeMillis()+"\"}");
 
             } catch (Exception e) {
                 e.printStackTrace();
