@@ -54,7 +54,7 @@ public class SynchronizedTest {
             public void run() {
                 obj.normalMethod1();
             }
-        }, anotherName).start();
+        }, "normal synchronized").start();
 
         // synchronized 代码块
         new Thread(new Runnable() {
@@ -62,7 +62,8 @@ public class SynchronizedTest {
             public void run() {
                 obj.innerSyncWithClass();
             }
-        }, anotherName).start();
+        }, "synchronized block").start();
+
         try {
             Thread.sleep(7000);
         } catch (InterruptedException e) {

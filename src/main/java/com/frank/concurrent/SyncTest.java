@@ -40,14 +40,18 @@ public class SyncTest<Integer> implements Callable<Integer> {
                 } catch (InterruptedException ie) {
                 }
             }
-            // Thread.sleep(i);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         return s;
     }
 
+    /**
+     * synchronized 修饰方法，则只有一个线程能获得锁。
+     * synchronized 代码块，注意是对谁加锁，加的不是同一把锁，根本不起作用。
+     * @param lock
+     * @return
+     */
     public int syncMethod(String lock) {
         // synchronized (this.lock) {
         synchronized (lock) {
@@ -63,6 +67,7 @@ public class SyncTest<Integer> implements Callable<Integer> {
      * static synchronized
      * 调用任何一个static synchronized 修饰的方法，其他static synchronized修饰的方法都阻塞。
      * 比如有十个 static synchronized 修饰的方法，一个被调用后，其余九个方法在调用时会阻塞，直到该方法执行结束。
+     * synchronized代码块，用类.class加锁，效果和static synchronized一样
      * 没有static修饰的synchronized不影响。
      * @return
      */
