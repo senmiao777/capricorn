@@ -97,11 +97,28 @@ public class SyncTest<Integer> implements Callable<Integer> {
 
     }
 
+
+    /**
+     * 同步代码块，锁为 clazz
+     * @return
+     */
+    public int innerSyncWithClass() {
+
+        synchronized (SyncTest.class) {
+            final int n = RandomUtils.nextInt(500, 1000);
+            log.info("syncInnerMethod ThreadId={},name={},time={},sleepMillis={}", Thread.currentThread().getId(), Thread.currentThread().getName(), LocalDateTime.now(), n);
+            show();
+            return n;
+        }
+
+
+    }
+
     /**
      * 打印日志，方便观察线程执行情况
      * @return
      */
-    private static int show(){
+    private static void show(){
         int i = 5;
         while (i-- > 0) {
             log.info("ThreadId ={},i={}", Thread.currentThread().getId(), i);
@@ -111,6 +128,5 @@ public class SyncTest<Integer> implements Callable<Integer> {
                 e.printStackTrace();
             }
         }
-        return i;
     }
 }

@@ -26,33 +26,43 @@ public class SynchronizedTest {
      * static synchronized 修饰方法测试
      */
     @Test
-    public void testS(){
+    public void testS() {
         log.info("---  just for test begin ");
         SyncTest obj = new SyncTest();
         String name = "T1";
         String anotherName = "T2";
 
+        // static synchronized 修饰方法
         new Thread(new Runnable() {
             @Override
             public void run() {
                 obj.staticMethod1();
             }
-        },name).start();
+        }, name).start();
 
+        //static synchronized 修饰方法
         new Thread(new Runnable() {
             @Override
             public void run() {
                 obj.staticMethod2();
             }
-        },anotherName).start();
+        }, anotherName).start();
 
+        // 普通synchronized方法
         new Thread(new Runnable() {
             @Override
             public void run() {
                 obj.normalMethod1();
             }
-        },anotherName).start();
+        }, anotherName).start();
 
+        // synchronized 代码块
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                obj.innerSyncWithClass();
+            }
+        }, anotherName).start();
         try {
             Thread.sleep(7000);
         } catch (InterruptedException e) {
@@ -63,7 +73,7 @@ public class SynchronizedTest {
     }
 
     @Test
-    public void test(){
+    public void test() {
         log.info("---  just for test begin ");
         SyncTest obj = new SyncTest();
 //        new Thread(new FutureTask<Integer>(new SyncTest())).start();
@@ -76,24 +86,23 @@ public class SynchronizedTest {
             public void run() {
                 obj.syncMethod(name);
             }
-        },name).start();
+        }, name).start();
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 obj.syncMethod(anotherName);
             }
-        },anotherName).start();
+        }, anotherName).start();
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 obj.syncMethod(name);
             }
-        },name).start();
+        }, name).start();
 
         new Vector<String>();
-
 
 
         try {
