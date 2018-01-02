@@ -29,6 +29,8 @@ public class SynchronizedTest {
     public void testS() {
         log.info("---  just for test begin ");
         SyncTest obj = new SyncTest();
+        SyncTest obj2 = new SyncTest();
+        SyncTest obj3 = new SyncTest();
         String name = "T1";
         String anotherName = "T2";
 
@@ -38,29 +40,29 @@ public class SynchronizedTest {
             public void run() {
                 obj.staticMethod1();
             }
-        }, name).start();
+        }, "obj - staticMethod1 ").start();
 
         //static synchronized 修饰方法
         new Thread(new Runnable() {
             @Override
             public void run() {
-                obj.staticMethod2();
+                obj2.staticMethod2();
             }
-        }, anotherName).start();
+        }, "obj2 - staticMethod2 ").start();
 
-        // 普通synchronized方法
+       /* // 普通synchronized方法
         new Thread(new Runnable() {
             @Override
             public void run() {
                 obj.normalMethod1();
             }
         }, "normal synchronized").start();
-
+*/
         // synchronized 代码块
         new Thread(new Runnable() {
             @Override
             public void run() {
-                obj.innerSyncWithClass();
+                obj3.innerSyncWithClass();
             }
         }, "synchronized block").start();
 
@@ -73,35 +75,35 @@ public class SynchronizedTest {
 
     }
 
+    /**
+     * synchronized 锁住的是对象
+     */
     @Test
     public void test() {
         log.info("---  just for test begin ");
         SyncTest obj = new SyncTest();
-//        new Thread(new FutureTask<Integer>(new SyncTest())).start();
-//        new Thread(new FutureTask<Integer>(new SyncTest())).start();
-        String name = "T1";
-        String anotherName = "T2";
+        SyncTest obj2 = new SyncTest();
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                obj.syncMethod(name);
+                obj.normalMethod1();
             }
-        }, name).start();
+        }, "obj - normalMethod1").start();
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                obj.syncMethod(anotherName);
+                obj.normalMethod2();
             }
-        }, anotherName).start();
+        }, "obj - normalMethod2").start();
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                obj.syncMethod(name);
+                obj2.normalMethod2();
             }
-        }, name).start();
+        }, "obj2 - normalMethod2").start();
 
         new Vector<String>();
 
