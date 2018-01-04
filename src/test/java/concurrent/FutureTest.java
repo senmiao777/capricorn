@@ -11,6 +11,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author frank
  * @version 1.0
@@ -27,7 +30,7 @@ public class FutureTest {
     @Autowired
     private ConcurrentService concurrentService;
     /**
-     * static synchronized 修饰方法测试
+     * ThreadPoolTaskExecutor 线程池测试
      */
     @Test
     public void testS() {
@@ -46,4 +49,37 @@ public class FutureTest {
 
     }
 
+
+    /**
+     * CompletionService 测试
+     */
+    @Test
+    public void testS2() {
+
+        log.info("---  just for test begin");
+        try {
+            for (int i = 0; i < 20; i++) {
+
+                try{
+                    Future<Integer> numberFuture = concurrentService.getNumberFuture();
+                    log.info("numberFuture.isDone={}", numberFuture.isDone());
+                    log.info("numberFuture={}", numberFuture.get(35, TimeUnit.MILLISECONDS));
+                }catch (Exception e) {
+                    log.error("Exception={}",e);
+                }
+
+
+            }
+        } catch (Exception e) {
+            log.error("testS2 Exception={}",e);
+        }
+
+        try {
+            Thread.sleep(60000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        log.info("---  just for test end");
+
+    }
 }
