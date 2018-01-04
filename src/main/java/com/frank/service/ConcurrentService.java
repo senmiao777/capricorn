@@ -5,6 +5,7 @@ import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 import java.util.concurrent.*;
 
@@ -14,6 +15,7 @@ import java.util.concurrent.*;
  * @date 2018/1/4 0004 下午 9:24
  */
 @Slf4j
+@Service
 public class ConcurrentService {
 
 //    @Autowired
@@ -31,7 +33,7 @@ public class ConcurrentService {
 
     @Async("testTaskPoolExecutor")
     public Integer getNumber(){
-        int i = RandomUtils.nextInt(100, 300);
+        int i = RandomUtils.nextInt(50, 100);
         try {
             log.info("current thread is {},number is {}",Thread.currentThread().getId(),i);
             Thread.sleep(i);
