@@ -4,7 +4,10 @@ package com.frank.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+import java.util.concurrent.CompletionService;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ThreadPoolExecutor;
 
 @Configuration
@@ -15,7 +18,7 @@ public class ExecutorConfig {
      * @return
      */
     @Bean(name = "testTaskPoolExecutor")
-    public Executor TestTaskPoolExecutor() {
+    public Executor testTaskPoolExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(5);
         executor.setMaxPoolSize(10);
@@ -28,4 +31,11 @@ public class ExecutorConfig {
         executor.initialize();
         return executor;
     }
+
+    @Bean(name = "completionService")
+    public CompletionService CompletionService() {
+        return new ExecutorCompletionService(testTaskPoolExecutor());
+    }
+
+   // CompletionService<Integer> completionService = new ExecutorCompletionService<Integer>(executorService);
 }
