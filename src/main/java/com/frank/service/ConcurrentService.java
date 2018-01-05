@@ -37,6 +37,11 @@ public class ConcurrentService {
      */
     private static final int DEFAULT_RETURN_NUMBER = -1;
 
+    /**
+     * 默认返回值
+     */
+    private static final String DEFAULT_RETURN_STRING = "default";
+
     @Async("testTaskPoolExecutor")
     public Integer getNumber(){
         int i = RandomUtils.nextInt(50, 100);
@@ -50,33 +55,13 @@ public class ConcurrentService {
         return i;
     }
 
-   /* @Async("testTaskPoolExecutor")
-    public Future<Integer> getNumberFuture() {
-        Future submit = null;
-        try {
-            log.info("current thread is {}", Thread.currentThread().getId());
-            submit = completionService.submit(new Callable<Integer>() {
-                @Override
-                public Integer call() throws Exception {
-                    final int number = RandomUtils.nextInt(10, 100);
-                    Thread.sleep(number);
-                    log.info("ThreadId={},number={}", Thread.currentThread().getId(), number);
-                    return number;
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return submit;
-    }*/
-
     /**
      *
      * @param mark 无实际意义，用于观察当前任务
      * @return Integer sleep毫秒数
      */
     @Async("testTaskPoolExecutor")
-    public Future<Integer> testFuture(String mark) {
+    public Future<String> testFuture(String mark) {
         try {
             int i = RandomUtils.nextInt(5, 50);
             for (int k = 1; k < TOTAL; k++) {
@@ -84,9 +69,9 @@ public class ConcurrentService {
                 Thread.sleep(i);
                 log.info("-------after sleep---ThreadId={},cycle time={},sleep={},t={}", Thread.currentThread().getId(), k, i, mark);
             }
-            return new AsyncResult<>(i);
+            return new AsyncResult<>(mark);
         } catch (Exception e) {
-            return new AsyncResult<>(DEFAULT_RETURN_NUMBER);
+            return new AsyncResult<>(DEFAULT_RETURN_STRING);
         }
     }
 
