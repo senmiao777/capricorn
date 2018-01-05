@@ -5,6 +5,7 @@ import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.*;
@@ -18,9 +19,6 @@ import java.util.concurrent.*;
 @Service
 public class ConcurrentService {
 
-//    @Autowired
-//    @Qualifier(value = "testTaskPoolExecutor")
-//    private Executor testTaskPoolExecutor;
 
 
     @Autowired
@@ -29,21 +27,30 @@ public class ConcurrentService {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
-    CompletionService<Integer> cService = new ExecutorCompletionService<Integer>(executorService);
+    /**
+     * 循环次数
+     */
+    private static final int TOTAL = 4;
+
+    /**
+     * 默认返回值
+     */
+    private static final int DEFAULT_RETURN_NUMBER = -1;
 
     @Async("testTaskPoolExecutor")
     public Integer getNumber(){
         int i = RandomUtils.nextInt(50, 100);
         try {
-            log.info("current thread is {},number is {}",Thread.currentThread().getId(),i);
+            log.info("--getNumber in-- current thread is {},number is {}",Thread.currentThread().getId(),i);
             Thread.sleep(i);
+            log.info("--getNumber after sleep-- current thread is {},number is {}",Thread.currentThread().getId(),i);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         return i;
     }
 
-    @Async("testTaskPoolExecutor")
+   /* @Async("testTaskPoolExecutor")
     public Future<Integer> getNumberFuture() {
         Future submit = null;
         try {
@@ -57,39 +64,31 @@ public class ConcurrentService {
                     return number;
                 }
             });
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         return submit;
-    }
+    }*/
 
-    public void justForTest() throws InterruptedException {
-        for (int i = 0; i < 10; i++) {
-            completionService.submit(new Callable<Integer>() {
-                @Override
-                public Integer call() throws Exception {
-                    final int number = RandomUtils.nextInt(100, 200);
-                    Thread.sleep(number);
-                    log.info("ThreadId={},number={}", Thread.currentThread().getId(), number);
-                    return number;
-                }
-            });
-        }
-
-        for (int i = 0; i < 10; i++) {
-
-            try {
-                Future<Integer> take = completionService.take();
-                Integer integer = take.get();
-                log.info("integer={}", integer);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
+    /**
+     *
+     * @param mark 无实际意义，用于观察当前任务
+     * @return Integer sleep毫秒数
+     */
+    @Async("testTaskPoolExecutor")
+    public Future<Integer> testFuture(String mark) {
+        try {
+            int i = RandomUtils.nextInt(5, 50);
+            for (int k = 1; k < TOTAL; k++) {
+                log.info("----------in---------ThreadId={},cycle time={},sleep={},t={}", Thread.currentThread().getId(), k, i, mark);
+                Thread.sleep(i);
+                log.info("-------after sleep---ThreadId={},cycle time={},sleep={},t={}", Thread.currentThread().getId(), k, i, mark);
             }
-
+            return new AsyncResult<>(i);
+        } catch (Exception e) {
+            return new AsyncResult<>(DEFAULT_RETURN_NUMBER);
         }
     }
+
+
 }
