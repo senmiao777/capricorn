@@ -1,5 +1,6 @@
 package concurrent;
 
+import com.frank.concurrent.FinalTest;
 import com.frank.service.ConcurrentService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
@@ -13,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -32,6 +33,28 @@ public class FutureTest {
 
     @Autowired
     private ConcurrentService concurrentService;
+
+    // 基本数据类型，用final修饰，值不可变。
+    // 引用类型，用final修饰，指向的对象可以修改，不能指向新的对象
+    @Test
+    public void t() {
+        FinalTest f1 = new FinalTest();
+        FinalTest f2 = new FinalTest();
+        FinalTest f3 = new FinalTest();
+        log.info("f1.STR={}", f1.STR);
+        log.info("f2.STR={}", f2.STR);
+        log.info("f3.STR={}", f3.STR);
+
+        log.info("STATIC_STR={}", f1.STATIC_STR);
+        log.info("STATIC_STR={}", f2.STATIC_STR);
+        log.info("STATIC_STR={}", f3.STATIC_STR);
+        String curStr = "World";
+        StringBuilder builder = new StringBuilder("Hello");
+        f1.append( builder,curStr);
+        log.info("builder={}", builder);
+    }
+
+
     /**
      * ThreadPoolTaskExecutor 线程池测试
      */
@@ -78,6 +101,10 @@ public class FutureTest {
             }
         });
 
+
+        Map m =new HashMap();
+        Hashtable h=new Hashtable();
+        PriorityQueue q = new PriorityQueue();
 
 
       /*  for (int i=0;i<list.size();i++){
