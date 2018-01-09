@@ -66,10 +66,26 @@ public class StockController {
      */
     @RequestMapping(value = "/base", method = RequestMethod.GET)
     public JsonResult base(@RequestParam String stockCode) {
+        log.info("-----------------stockCode={}----------------{}",stockCode);
+        Stock stock3 = stockRepository.findOne(1L);
+        log.info("stock={}",stock3);
         Stock stock = stockRepository.findByStockCode(stockCode);
         log.info("stock={}",stock);
         Stock stock2 = stockRepository.findByStockCode(stockCode);
         log.info("stock={}",stock2);
+        Stock stock6 = stockRepository.findByStockCode(stockCode);
+        log.info("stock={}",stock6);
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Stock stock4 = stockRepository.findOne(1L);
+        log.info("stock={}",stock4);
+        Stock stock7 = stockRepository.findOne(1L);
+        log.info("stock={}",stock7);
         if (stock == null) {
             log.info("base stock is null.input stock code ={}", stockCode);
             return JsonResult.buildSuccessResult("根据该股票代码未查到数据，请确认后输入", stock);

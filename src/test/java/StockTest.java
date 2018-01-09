@@ -120,11 +120,11 @@ log.info("```````````````````````````list={}",list.toString());
         benefitRepository.save(one);
         log.info("Benefit={}",one);
 
-        try {
+        /*try {
             Thread.sleep(7000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
 
         Benefit two = benefitRepository.findOne(7L);
         log.info("Benefit two={}",two);
