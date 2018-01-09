@@ -67,6 +67,9 @@ public class StockController {
     @RequestMapping(value = "/base", method = RequestMethod.GET)
     public JsonResult base(@RequestParam String stockCode) {
         Stock stock = stockRepository.findByStockCode(stockCode);
+        log.info("stock={}",stock);
+        Stock stock2 = stockRepository.findByStockCode(stockCode);
+        log.info("stock={}",stock2);
         if (stock == null) {
             log.info("base stock is null.input stock code ={}", stockCode);
             return JsonResult.buildSuccessResult("根据该股票代码未查到数据，请确认后输入", stock);

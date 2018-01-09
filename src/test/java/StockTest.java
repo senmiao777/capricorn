@@ -7,7 +7,6 @@ import com.frank.repository.mysql.IncomeStatementRepository;
 import com.frank.util.HttpUtil;
 import com.google.common.base.Splitter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -24,8 +23,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 //import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -116,18 +113,29 @@ log.info("```````````````````````````list={}",list.toString());
         log.info("Benefit={}",save);
     }
     @Test
-    public void t(){
+    public void testTime(){
 
         Benefit one = benefitRepository.findOne(7L);
+        one.setSecId("aaa");
+        benefitRepository.save(one);
         log.info("Benefit={}",one);
 
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String s = "2018-09-09";
-        LocalDate date= LocalDate.parse(s, formatter);
-        String s1 = date.toString();
-        String s2 = StringUtils.replaceAll(s, "-", "");
-        log.info("1111111111111:={}",s2);
+        Benefit two = benefitRepository.findOne(7L);
+        log.info("Benefit two={}",two);
+
+
+//        DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//        String s = "2018-09-09";
+//        LocalDate date= LocalDate.parse(s, formatter);
+//        String s1 = date.toString();
+//        String s2 = StringUtils.replaceAll(s, "-", "");
+//        log.info("1111111111111:={}",s2);
     }
 
     @Test
