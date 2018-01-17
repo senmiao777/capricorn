@@ -116,18 +116,21 @@ log.info("```````````````````````````list={}",list.toString());
     public void testTime(){
 
         Benefit one = benefitRepository.findOne(7L);
-        one.setSecId("aaa");
-        benefitRepository.save(one);
-        log.info("Benefit={}",one);
-
-        /*try {
-            Thread.sleep(7000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
-
+        log.info("Benefit two={}",one);
         Benefit two = benefitRepository.findOne(7L);
         log.info("Benefit two={}",two);
+//        one.setSecId("aaa");
+//        benefitRepository.save(one);
+//        log.info("Benefit={}",one);
+//
+//        /*try {
+//            Thread.sleep(7000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }*/
+//
+//        Benefit two = benefitRepository.findOne(7L);
+//        log.info("Benefit two={}",two);
 
 
 //        DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd");
