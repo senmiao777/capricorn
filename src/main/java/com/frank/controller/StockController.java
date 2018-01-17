@@ -1,5 +1,6 @@
 package com.frank.controller;
 
+import com.frank.annotation.RedisLock;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.Stock;
 import com.frank.model.JsonResult;
@@ -113,6 +114,7 @@ public class StockController {
         return JsonResult.buildSuccessResult(stockList);
 
     }
+
 
 
     @RequestMapping(value = "/insertStock", method = RequestMethod.GET)

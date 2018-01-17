@@ -25,7 +25,7 @@ public @interface RedisLock {
      * key 前缀，默认取方法名
      * @return
      */
-    String perfix();
+    String perfix() default "123";
 
     /**
      * 默认等待（阻塞）时间，超过该时间无响应抛异常

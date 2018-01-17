@@ -1,5 +1,6 @@
 package com.frank.controller;
 
+import com.frank.annotation.RedisLock;
 import com.frank.entity.mysql.User;
 import com.frank.model.JsonResult;
 import com.frank.repository.mysql.UserRepository;
@@ -61,6 +62,7 @@ public class UserController {
      * @param
      * @return
      */
+    @RedisLock
     @RequestMapping(value = "/c", method = RequestMethod.POST)
     public JsonResult createUser(@RequestParam String userName,
                                  @RequestParam Integer age) {
