@@ -75,7 +75,7 @@ public class UserController {
         user.setAge(age);
         user.setUserName(userName);
         user.setUserType(1);
-        user.setPhone(Integer.valueOf(phone));
+        user.setPhone(Long.valueOf(phone));
         user = userRepository.save(user);
 
         return JsonResult.buildSuccessResult(user);

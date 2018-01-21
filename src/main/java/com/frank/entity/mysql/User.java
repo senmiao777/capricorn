@@ -39,7 +39,7 @@ public class User implements Serializable {
     private Integer age;
 
     @Column(name = "phone")
-    private Integer phone;
+    private Long phone;
 
     @Column(name = "create_at")
     private Date createAt;

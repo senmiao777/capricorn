@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author frank
@@ -35,6 +37,8 @@ public class RedisLockAspect {
     private final String PERFIX_SPEL = "#this";
     private final String COLON = ":";
     private final Long ONE = 1L;
+    private final Long ZERO = 0L;
+    private ThreadLocal<String> lockName = new ThreadLocal<>();
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -47,17 +51,82 @@ public class RedisLockAspect {
     @Before("annotationPointCut()")
     public void before(JoinPoint joinPoint) {
 
+        log.info("[RedisLockAspect] ---before---");
+        String lockKey = getLockKey(joinPoint);
+        /**
+         * 默认值 1
+         * redis 报错，increment =1 ,程序可以继续走
+         * 高并发重复提交是极少数情况，不应该因为redis的问题儿影响主流程执行
+         */
+        Long increment = ONE;
+        try {
+            increment = redisTemplate.opsForValue().increment(lockKey, ONE);
+        } catch (Exception e) {
+            log.error("[RedisLockAspect] redis Exception e={}", ExceptionUtils.getStackTrace(e));
+        }
+        /**
+         * 当前lockKey未被占用，可以继续执行
+         */
+        if (ONE.equals(increment)) {
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            if (request != null) {
+                System.out.println("URL : " + request.getRequestURL().toString());
+
+                System.out.println("HTTP_METHOD : " + request.getMethod());
+
+                System.out.println("IP : " + request.getRemoteAddr());
+
+                System.out.println("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
+
+                System.out.println("ARGS : " + Arrays.toString(joinPoint.getArgs()));
+
+                //获取所有参数方法一：
+
+                Enumeration<String> enu = request.getParameterNames();
+
+                while (enu.hasMoreElements()) {
+
+                    String paraName = (String) enu.nextElement();
+                    log.info("paraName={}", request.getParameter(paraName));
+
+                }
+            } else {
+                log.info("request is null={}");
+            }
+        } else {
+            throw new RuntimeException("当前lockKey已被占用");
+        }
+
+
+
+
+
+
+    }
+
+    @After("annotationPointCut()")
+    public void after(JoinPoint joinPoint) {
+        log.info("[RedisLockAspect] ---after---");
+        final String lockKey = lockName.get();
+        log.info("[RedisLockAspect] ---after---lockKey={}",lockKey);
+        try {
+            redisTemplate.expire(lockKey, ZERO, TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            log.error("[RedisLockAspect] after expire Exception.lockKey={}e={}", lockKey,ExceptionUtils.getStackTrace(e));
+        }
+    }
+
+    /**
+     * 获取最终的redis key
+     * @param joinPoint
+     * @return
+     */
+    private String getLockKey(JoinPoint joinPoint){
         MethodSignature sign = (MethodSignature) joinPoint.getSignature();
-        final String name1 = sign.getName();
         Method method = sign.getMethod();
         final String name = method.getName();
         RedisLock annotation = method.getAnnotation(RedisLock.class);
-
-        //final RedisLock annotation = getAnnotation(joinPoint, RedisLock.class);
-
         String perfix = annotation.perfix();
-        log.info("name={},perfix={},name1={}", name, perfix, name1);
-
         /**
          * 前缀默认取方法名
          */
@@ -78,59 +147,8 @@ public class RedisLockAspect {
         } else {
             lockKey = lockKey.append(key);
         }
-
-        /**
-         * 默认值1
-         * redis 报错，程序可以继续走
-         * 高并发重复提交是极少数情况，不应该因为redis的问题儿影响主流程执行
-         */
-        Long increment = ONE;
-        try {
-            increment = redisTemplate.opsForValue().increment(lockKey.toString(), ONE);
-        } catch (Exception e) {
-            log.error("[RedisLockAspect] redis Exception e={}",ExceptionUtils.getStackTrace(e));
-        }
-        /**
-         * 当前lockKey未被占用，可以继续执行
-         */
-            if (ONE.equals(increment)) {
-                HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-                if (request != null) {
-                    System.out.println("URL : " + request.getRequestURL().toString());
-
-                    System.out.println("HTTP_METHOD : " + request.getMethod());
-
-                    System.out.println("IP : " + request.getRemoteAddr());
-
-                    System.out.println("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-
-                    System.out.println("ARGS : " + Arrays.toString(joinPoint.getArgs()));
-
-                    //获取所有参数方法一：
-
-                    Enumeration<String> enu = request.getParameterNames();
-
-                    while (enu.hasMoreElements()) {
-
-                        String paraName = (String) enu.nextElement();
-                        log.info("paraName={}", request.getParameter(paraName));
-
-                    }
-                } else {
-                    log.info("request is null={}");
-                }
-            }else {
-                throw new RuntimeException("当前lockKey已被占用");
-            }
-
-
-
-
-
-    /*@After("annotationPointCut()")
-    public void after(JoinPoint joinPoint) {
-
-    }*/
+        lockName.set(lockKey.toString());
+        return lockKey.toString();
     }
 
 
