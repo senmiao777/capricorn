@@ -34,8 +34,9 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RedisLockAspect {
 
-    private final String PERFIX_SPEL = "#this";
+    private final String PREFIX_SPEL = "#this";
     private final String COLON = ":";
+    private final String PREFIX_LOCK = "RedisLock:";
     private final Long ONE = 1L;
     private final Long ZERO = 0L;
     private ThreadLocal<String> lockName = new ThreadLocal<>();
@@ -127,16 +128,16 @@ public class RedisLockAspect {
         Method method = sign.getMethod();
         final String name = method.getName();
         RedisLock annotation = method.getAnnotation(RedisLock.class);
-        String perfix = annotation.perfix();
+        String prefix = annotation.perfix();
         /**
          * 前缀默认取方法名
          */
-        if (StringUtils.isBlank(perfix)) {
-            perfix = name;
+        if (StringUtils.isBlank(prefix)) {
+            prefix = name;
         }
-        StringBuilder lockKey = new StringBuilder(perfix).append(COLON);
+        StringBuilder lockKey = new StringBuilder(PREFIX_LOCK).append(prefix).append(COLON);
         String key = annotation.key();
-        if (key.startsWith(PERFIX_SPEL)) {
+        if (key.startsWith(PREFIX_SPEL)) {
             try {
                 Expression expression = new SpelExpressionParser().parseExpression(key);
                 String value = expression.getValue(joinPoint.getArgs(), String.class);
@@ -149,7 +150,7 @@ public class RedisLockAspect {
             lockKey = lockKey.append(key);
         }
         /**
-         * lockKey 存到ThreadLocal里，方便在After方法中去取，设置到期（删除lockKey值）
+         * lockKey 存到ThreadLocal里，方便在After方法中获取，设置到期（删除lockKey值）
          */
         lockName.set(lockKey.toString());
         return lockKey.toString();

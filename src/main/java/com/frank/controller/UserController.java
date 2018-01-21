@@ -62,12 +62,11 @@ public class UserController {
      * @param
      * @return
      */
-    @RedisLock(perfix="testPerfix",key="#this[2]")
+    @RedisLock(perfix = "testPerfix", key = "#this[2]")
     @RequestMapping(value = "/c", method = RequestMethod.POST)
     public JsonResult createUser(@RequestParam String userName,
                                  @RequestParam Integer age,
                                  @RequestParam String phone) {
-
 
         log.info("createUser userName={},age={}", userName, age);
 
@@ -77,7 +76,6 @@ public class UserController {
         user.setUserType(1);
         user.setPhone(Long.valueOf(phone));
         user = userRepository.save(user);
-
         return JsonResult.buildSuccessResult(user);
 
     }
@@ -99,22 +97,22 @@ public class UserController {
         log.info("updateUser id={},userName={},age={}", id, userName, age);
 
         User user = userRepository.findOne(id);
-        log.info("create ={}",user.getCreateAt());
-        if(null == user){
+        log.info("create ={}", user.getCreateAt());
+        if (null == user) {
             log.info("updateUser can not find user.id={},userName={},age={}", id, userName, age);
-            return JsonResult.buildSuccessResult("根据此id未查询到用户",user);
+            return JsonResult.buildSuccessResult("根据此id未查询到用户", user);
         }
         log.info("updateUser user={}", user);
-        if(StringUtils.isNotBlank(userName)){
+        if (StringUtils.isNotBlank(userName)) {
             user.setUserName(userName);
         }
-        if(NumberUtils.isDigits(age)){
+        if (NumberUtils.isDigits(age)) {
             user.setAge(Integer.valueOf(age));
         }
         log.info("date ={}", new Date());
         user.setUpdateAt(new Date());
         User save = userRepository.save(user);
-        log.info("after update user = {}",save);
+        log.info("after update user = {}", save);
 
 
         return JsonResult.buildSuccessResult(save);
