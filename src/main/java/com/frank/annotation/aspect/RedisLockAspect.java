@@ -9,6 +9,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.stereotype.Component;
@@ -30,8 +32,12 @@ import java.util.Enumeration;
 @Slf4j
 public class RedisLockAspect {
 
-    private String PERFIX_SPEL = "#this";
-    private String COLON = ":";
+    private final String PERFIX_SPEL = "#this";
+    private final String COLON = ":";
+    private final Long ONE = 1L;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Pointcut("@annotation(com.frank.annotation.RedisLock)")
     public void annotationPointCut() {
@@ -73,34 +79,52 @@ public class RedisLockAspect {
             lockKey = lockKey.append(key);
         }
 
-
-
-
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        if (request != null) {
-            System.out.println("URL : " + request.getRequestURL().toString());
-
-            System.out.println("HTTP_METHOD : " + request.getMethod());
-
-            System.out.println("IP : " + request.getRemoteAddr());
-
-            System.out.println("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-
-            System.out.println("ARGS : " + Arrays.toString(joinPoint.getArgs()));
-
-            //获取所有参数方法一：
-
-            Enumeration<String> enu = request.getParameterNames();
-
-            while (enu.hasMoreElements()) {
-
-                String paraName = (String) enu.nextElement();
-                log.info("paraName={}", request.getParameter(paraName));
-
-            }
-        } else {
-            log.info("request is null={}");
+        /**
+         * 默认值1
+         * redis 报错，程序可以继续走
+         * 高并发重复提交是极少数情况，不应该因为redis的问题儿影响主流程执行
+         */
+        Long increment = ONE;
+        try {
+            increment = redisTemplate.opsForValue().increment(lockKey.toString(), ONE);
+        } catch (Exception e) {
+            log.error("[RedisLockAspect] redis Exception e={}",ExceptionUtils.getStackTrace(e));
         }
+        /**
+         * 当前lockKey未被占用，可以继续执行
+         */
+            if (ONE.equals(increment)) {
+                HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+                if (request != null) {
+                    System.out.println("URL : " + request.getRequestURL().toString());
+
+                    System.out.println("HTTP_METHOD : " + request.getMethod());
+
+                    System.out.println("IP : " + request.getRemoteAddr());
+
+                    System.out.println("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
+
+                    System.out.println("ARGS : " + Arrays.toString(joinPoint.getArgs()));
+
+                    //获取所有参数方法一：
+
+                    Enumeration<String> enu = request.getParameterNames();
+
+                    while (enu.hasMoreElements()) {
+
+                        String paraName = (String) enu.nextElement();
+                        log.info("paraName={}", request.getParameter(paraName));
+
+                    }
+                } else {
+                    log.info("request is null={}");
+                }
+            }else {
+                throw new RuntimeException("当前lockKey已被占用");
+            }
+
+
+
 
 
     /*@After("annotationPointCut()")
