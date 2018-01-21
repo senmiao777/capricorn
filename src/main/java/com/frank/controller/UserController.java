@@ -62,10 +62,11 @@ public class UserController {
      * @param
      * @return
      */
-    @RedisLock
+    @RedisLock(perfix="testPerfix",key="#this[2]")
     @RequestMapping(value = "/c", method = RequestMethod.POST)
     public JsonResult createUser(@RequestParam String userName,
-                                 @RequestParam Integer age) {
+                                 @RequestParam Integer age,
+                                 @RequestParam String phone) {
 
 
         log.info("createUser userName={},age={}", userName, age);
@@ -74,6 +75,7 @@ public class UserController {
         user.setAge(age);
         user.setUserName(userName);
         user.setUserType(1);
+        user.setPhone(Integer.valueOf(phone));
         user = userRepository.save(user);
 
         return JsonResult.buildSuccessResult(user);

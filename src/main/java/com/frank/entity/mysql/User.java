@@ -38,6 +38,9 @@ public class User implements Serializable {
     @Column(name = "age")
     private Integer age;
 
+    @Column(name = "phone")
+    private Integer phone;
+
     @Column(name = "create_at")
     private Date createAt;
 
