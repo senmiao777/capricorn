@@ -110,7 +110,8 @@ public class RedisLockAspect {
         final String lockKey = lockName.get();
         log.info("[RedisLockAspect] ---after---lockKey={}",lockKey);
         try {
-            redisTemplate.expire(lockKey, ZERO, TimeUnit.MILLISECONDS);
+            final Boolean expire = redisTemplate.expire(lockKey, ZERO, TimeUnit.MILLISECONDS);
+            log.info("[RedisLockAspect] ---after---lockKey={},expire={}",lockKey,expire);
         } catch (Exception e) {
             log.error("[RedisLockAspect] after expire Exception.lockKey={}e={}", lockKey,ExceptionUtils.getStackTrace(e));
         }
@@ -147,6 +148,9 @@ public class RedisLockAspect {
         } else {
             lockKey = lockKey.append(key);
         }
+        /**
+         * lockKey 存到ThreadLocal里，方便在After方法中去取，设置到期（删除lockKey值）
+         */
         lockName.set(lockKey.toString());
         return lockKey.toString();
     }
