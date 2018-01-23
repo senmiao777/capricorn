@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author frank
@@ -71,18 +72,13 @@ public class RedisLockAspect {
         if (ONE.equals(increment)) {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             if (request != null) {
-                System.out.println("URL : " + request.getRequestURL().toString());
-
-                System.out.println("HTTP_METHOD : " + request.getMethod());
-
-                System.out.println("IP : " + request.getRemoteAddr());
-
-                System.out.println("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-
-                System.out.println("ARGS : " + Arrays.toString(joinPoint.getArgs()));
-
+                log.info("URL :{} ", request.getRequestURL().toString());
+                log.info("HTTP_METHOD : {}", request.getMethod());
+                log.info("IP :{} ", request.getRemoteAddr());
+                log.info("PACKAGE :{}", joinPoint.getSignature().getDeclaringTypeName());
+                log.info("CLASS_METHOD :{}", joinPoint.getSignature().getName());
+                log.info("ARGS :{} ", Arrays.toString(joinPoint.getArgs()));
                 //获取所有参数方法一：
-
                 Enumeration<String> enu = request.getParameterNames();
 
                 while (enu.hasMoreElements()) {
@@ -99,31 +95,28 @@ public class RedisLockAspect {
         }
 
 
-
-
-
-
     }
 
     @After("annotationPointCut()")
     public void after(JoinPoint joinPoint) {
         log.info("[RedisLockAspect] ---after---");
         final String lockKey = lockName.get();
-        log.info("[RedisLockAspect] ---after---lockKey={}",lockKey);
-//        try {
-//            final Boolean expire = redisTemplate.expire(lockKey, ZERO, TimeUnit.MILLISECONDS);
-//            log.info("[RedisLockAspect] ---after---lockKey={},expire={}",lockKey,expire);
-//        } catch (Exception e) {
-//            log.error("[RedisLockAspect] after expire Exception.lockKey={}e={}", lockKey,ExceptionUtils.getStackTrace(e));
-//        }
+        log.info("[RedisLockAspect] ---after---lockKey={}", lockKey);
+        try {
+            final Boolean expire = redisTemplate.expire(lockKey, ZERO, TimeUnit.MILLISECONDS);
+            log.info("[RedisLockAspect] ---after---lockKey={},expire={}", lockKey, expire);
+        } catch (Exception e) {
+            log.error("[RedisLockAspect] after expire Exception.lockKey={}e={}", lockKey, ExceptionUtils.getStackTrace(e));
+        }
     }
 
     /**
      * 获取最终的redis key
+     *
      * @param joinPoint
      * @return
      */
-    private String getLockKey(JoinPoint joinPoint){
+    private String getLockKey(JoinPoint joinPoint) {
         MethodSignature sign = (MethodSignature) joinPoint.getSignature();
         Method method = sign.getMethod();
         final String name = method.getName();
