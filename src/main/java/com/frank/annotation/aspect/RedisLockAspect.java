@@ -1,6 +1,7 @@
 package com.frank.annotation.aspect;
 
 import com.frank.annotation.RedisLock;
+import com.frank.exception.ResubmitException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -22,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author frank
@@ -95,7 +95,7 @@ public class RedisLockAspect {
                 log.info("request is null={}");
             }
         } else {
-            throw new RuntimeException("当前lockKey已被占用");
+            throw new ResubmitException("当前lockKey已被占用");
         }
 
 
@@ -110,12 +110,12 @@ public class RedisLockAspect {
         log.info("[RedisLockAspect] ---after---");
         final String lockKey = lockName.get();
         log.info("[RedisLockAspect] ---after---lockKey={}",lockKey);
-        try {
-            final Boolean expire = redisTemplate.expire(lockKey, ZERO, TimeUnit.MILLISECONDS);
-            log.info("[RedisLockAspect] ---after---lockKey={},expire={}",lockKey,expire);
-        } catch (Exception e) {
-            log.error("[RedisLockAspect] after expire Exception.lockKey={}e={}", lockKey,ExceptionUtils.getStackTrace(e));
-        }
+//        try {
+//            final Boolean expire = redisTemplate.expire(lockKey, ZERO, TimeUnit.MILLISECONDS);
+//            log.info("[RedisLockAspect] ---after---lockKey={},expire={}",lockKey,expire);
+//        } catch (Exception e) {
+//            log.error("[RedisLockAspect] after expire Exception.lockKey={}e={}", lockKey,ExceptionUtils.getStackTrace(e));
+//        }
     }
 
     /**

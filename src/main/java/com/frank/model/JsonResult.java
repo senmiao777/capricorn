@@ -40,6 +40,18 @@ public class JsonResult {
         return new JsonResult(SUCC, MEAAAGE_SUCC, data);
     }
 
+    public static JsonResult success(Object data) {
+        return new JsonResult(SUCC, MEAAAGE_SUCC, data);
+    }
+
+    public static JsonResult error(Object data) {
+        return new JsonResult(SUCC, MEAAAGE_SUCC, data);
+    }
+
+    public static JsonResult error(String msg,Object data) {
+        return new JsonResult(FAIL, msg, data);
+    }
+
     public static JsonResult buildErrorResult(String msg, Object data) {
         if (StringUtils.isBlank(msg)) {
             msg = MEAAAGE_FAIL;
