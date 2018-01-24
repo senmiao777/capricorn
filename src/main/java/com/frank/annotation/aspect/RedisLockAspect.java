@@ -44,7 +44,7 @@ public class RedisLockAspect {
 
     /**
      * Pointcut无实际意义，只是为了方便引用，不用before写一次@annotation(com.frank.annotation.RedisLock)
-     * after 在写一次@annotation(com.frank.annotation.RedisLock)
+     * after再写一次@annotation(com.frank.annotation.RedisLock)
      * afterthrowing再写一次。。。
      */
     @Pointcut("@annotation(com.frank.annotation.RedisLock)")
@@ -99,6 +99,14 @@ public class RedisLockAspect {
 
     }
 
+    /**
+     * After约等于AfterReturning + AfterThrowing
+     * AfterReturning 当正常返回时触发，异常时不触发
+     * AfterThrowing 和 AfterReturning相反
+     * After是正常返回或者抛异常后都会触发
+     * 如果After和AfterReturning/AfterThrowing都定义了的话，先执行After的
+     * 如果我就是想在目标方法执行后释放资源，不管你成不成功我都需要释放，那显然用After合适
+     */
     @After("annotationPointCut()")
     public void after() {
         log.info("[RedisLockAspect] ---after---");
@@ -115,6 +123,11 @@ public class RedisLockAspect {
     @AfterReturning("annotationPointCut()")
     public void afterReturning() {
         log.info("[RedisLockAspect] ---afterReturning---");
+    }
+
+    @AfterThrowing("annotationPointCut()")
+    public void afterThrowing() {
+        log.info("[RedisLockAspect] ---afterThrowing---");
     }
 
     /**

@@ -2,6 +2,7 @@ package com.frank.controller;
 
 import com.frank.annotation.RedisLock;
 import com.frank.entity.mysql.User;
+import com.frank.exception.ResubmitException;
 import com.frank.model.JsonResult;
 import com.frank.repository.mysql.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -77,7 +78,8 @@ public class UserController {
         user.setPhone(Long.valueOf(phone));
         user = userRepository.save(user);
         log.info("createUser userId={}", user.getId());
-        return JsonResult.buildSuccessResult(user);
+        throw new ResubmitException("justfortest");
+       // return JsonResult.buildSuccessResult(user);
 
     }
 
