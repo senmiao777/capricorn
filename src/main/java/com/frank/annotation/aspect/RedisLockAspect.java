@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -103,7 +100,7 @@ public class RedisLockAspect {
     }
 
     @After("annotationPointCut()")
-    public void after(JoinPoint joinPoint) {
+    public void after() {
         log.info("[RedisLockAspect] ---after---");
         final String lockKey = lockName.get();
         log.info("[RedisLockAspect] ---after---lockKey={}", lockKey);
@@ -113,6 +110,11 @@ public class RedisLockAspect {
         } catch (Exception e) {
             log.error("[RedisLockAspect] after expire Exception.lockKey={}e={}", lockKey, ExceptionUtils.getStackTrace(e));
         }
+    }
+
+    @AfterReturning("annotationPointCut()")
+    public void afterReturning() {
+        log.info("[RedisLockAspect] ---afterReturning---");
     }
 
     /**

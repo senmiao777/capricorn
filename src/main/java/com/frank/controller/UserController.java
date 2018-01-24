@@ -76,6 +76,7 @@ public class UserController {
         user.setUserType(1);
         user.setPhone(Long.valueOf(phone));
         user = userRepository.save(user);
+        log.info("createUser userId={}", user.getId());
         return JsonResult.buildSuccessResult(user);
 
     }
