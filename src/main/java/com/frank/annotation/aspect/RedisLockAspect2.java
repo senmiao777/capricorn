@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 @Aspect
 @Component
 @Slf4j
-public class RedisLockAspect {
+public class RedisLockAspect2 {
 
     private final String PREFIX_SPEL = "#this";
     private final String COLON = ":";
