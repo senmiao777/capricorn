@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 // 抽象角色：声明真实对象和代理对象的共同接口
 @Slf4j
 abstract public class Subject {
+    /**
+     * 仅供示意
+     */
     abstract public void request();
 }
 
@@ -26,7 +29,18 @@ class RealSubject extends Subject {
     }
 }
 
-// 代理角色：
+/**
+ * 代理角色：
+ * 代理对象内部包含有真实角色的引用，从而可以操作真实角色.
+ * 代理对象与真实对象有相同的接口，能在任何时候代替真实对象
+ * 代理对象可以在执行真实对象前后加入特定的逻辑以实现功能的扩展。
+ *
+ *  客户端调用：
+ *  RealSubject real = new RealSubject();
+ *  Subject sub = new ProxySubject(real);
+ *  sub.request();
+ *
+ */
 @Slf4j
 class ProxySubject extends Subject {
     /**
@@ -58,7 +72,4 @@ class ProxySubject extends Subject {
 }
 
 
-    /*// 客户端调用：
-    RealSubject real = new RealSubject();
-    Subject sub = new ProxySubject(real);
-Sub.request();*/
+
