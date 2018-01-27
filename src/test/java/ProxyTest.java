@@ -38,7 +38,10 @@ public class ProxyTest {
         Subject2 subject = (Subject2) Proxy.newProxyInstance(cls.getClassLoader(), cls.getInterfaces(), invocationHandler);
         subject.call();
         subject.call("测试代理");
-        log.info("---------------------subject={}", subject.getClass());
+        final Class<? extends Subject2> clazz = subject.getClass();
+        log.info("---------------------subject.getClass()={}", clazz);
+        log.info("---------------------subject.getClass().isInterface()={}", clazz.isInterface());
+
         log.info(Common.LOG_END.getValue());
     }
 }
