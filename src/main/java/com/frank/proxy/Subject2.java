@@ -5,6 +5,7 @@ package com.frank.proxy;
  * @version 1.0
  * @date 2018/1/27 0027 下午 4:51
  * 动态代理
+ * 抽象角色：真实对象和代理对象的共同接口
  */
 public interface Subject2 {
     /**
