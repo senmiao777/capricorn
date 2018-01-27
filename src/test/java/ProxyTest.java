@@ -28,7 +28,7 @@ public class ProxyTest {
 
     @Test
     public void testProxy() {
-        log.info("------begin-----------");
+        log.info("------------------begin------------------");
         RealSubject rs = new RealSubject();
         InvocationHandler invocationHandler = new DynamicSubject(rs);
         Class cls = rs.getClass();
@@ -37,6 +37,6 @@ public class ProxyTest {
         Subject2 subject = (Subject2) Proxy.newProxyInstance(cls.getClassLoader(), cls.getInterfaces(), invocationHandler);
         subject.call();
         subject.call("测试代理");
-        log.info("------end-----------");
+        log.info("---------------------end------------------");
     }
 }
