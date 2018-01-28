@@ -1,7 +1,9 @@
 import com.frank.enums.Common;
-import com.frank.service.Subject2;
+import com.frank.proxy.CglibProxy;
 import com.frank.proxy.DynamicProxy;
-import com.frank.service.impl.RealSubject;
+import com.frank.service.ConcurrentService;
+import com.frank.service.DemoService;
+import com.frank.service.impl.DemoServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,20 +30,29 @@ import java.lang.reflect.Proxy;
 public class ProxyTest {
 
     @Test
-    public void testProxy() {
+    public void testDynamicProxy() {
         log.info(Common.LOG_BEGIN.getValue());
-        RealSubject rs = new RealSubject();
-        Class cls = rs.getClass();
+        DemoServiceImpl serviceImpl = new DemoServiceImpl();
+        Class cls = serviceImpl.getClass();
 
-        InvocationHandler invocationHandler = new DynamicProxy(rs);
+        InvocationHandler invocationHandler = new DynamicProxy(serviceImpl);
         // 抽象角色：真实对象和代理对象的共同接口
-        Subject2 subject = (Subject2) Proxy.newProxyInstance(cls.getClassLoader(), cls.getInterfaces(), invocationHandler);
-        subject.call();
-        subject.call("测试代理");
-        final Class<? extends Subject2> clazz = subject.getClass();
+        DemoService service = (DemoService) Proxy.newProxyInstance(cls.getClassLoader(), cls.getInterfaces(), invocationHandler);
+        service.call();
+        service.call("测试代理");
+        final Class<? extends DemoService> clazz = service.getClass();
         log.info("---------------------subject.getClass()={}", clazz);
         log.info("---------------------subject.getClass().isInterface()={}", clazz.isInterface());
 
         log.info(Common.LOG_END.getValue());
+    }
+
+    @Test
+    public void testCglibProxy(){
+        CglibProxy proxy = new CglibProxy();
+        ConcurrentService concurrentService =(ConcurrentService)proxy.getProxy(ConcurrentService.class);
+        log.info("concurrentService.getClass()={}",concurrentService.getClass());
+        final Integer number = concurrentService.getNumber();
+        log.info("number={}",number);
     }
 }
