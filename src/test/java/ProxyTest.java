@@ -4,9 +4,12 @@ import com.frank.proxy.DynamicProxy;
 import com.frank.service.ConcurrentService;
 import com.frank.service.DemoService;
 import com.frank.service.impl.DemoServiceImpl;
+import com.sun.deploy.util.Waiter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.aop.BeforeAdvice;
+import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -54,5 +57,43 @@ public class ProxyTest {
         log.info("concurrentService.getClass()={}",concurrentService.getClass());
         final Integer number = concurrentService.getNumber();
         log.info("number={}",number);
+    }
+
+    @Test
+    public void testSpringDynamicProxy(){
+        //Spring提供的代理工厂
+        ProxyFactory factory = new ProxyFactory();
+        factory.setInterfaces(waiter.getClass().getInterfaces());
+
+　　//以上代码就指定了JdkDynamicAopProxy进行代理；
+
+        BeforeAdvice advice = new GreetingBeforeAdvice();
+        Waiter waiter  = new NaiveWaiter();
+
+        //Spring提供的代理工厂
+        ProxyFactory factory2 = new ProxyFactory();
+        factory2.setInterfaces(waiter.getClass().getInterfaces());
+        factory2.setOptimize(true);
+
+        以上代码虽然指定了代理的接口，但由于setOptimize(true)，所以还是使用了Cglib2AopProxy代理；
+    }
+
+    @Test
+    public void testSpringCglibProxy(){
+        //Spring提供的代理工厂
+        ProxyFactory factory = new ProxyFactory();
+        factory.setInterfaces(waiter.getClass().getInterfaces());
+
+　　//以上代码就指定了JdkDynamicAopProxy进行代理；
+
+        BeforeAdvice advice = new GreetingBeforeAdvice();
+        Waiter waiter  = new NaiveWaiter();
+
+        //Spring提供的代理工厂
+        ProxyFactory factory2 = new ProxyFactory();
+        factory2.setInterfaces(waiter.getClass().getInterfaces());
+        factory2.setOptimize(true);
+
+        以上代码虽然指定了代理的接口，但由于setOptimize(true)，所以还是使用了Cglib2AopProxy代理；
     }
 }
