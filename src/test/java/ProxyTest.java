@@ -1,7 +1,7 @@
 import com.frank.enums.Common;
-import com.frank.proxy.Subject2;
-import com.frank.proxy.impl.DynamicSubject;
-import com.frank.proxy.impl.RealSubject;
+import com.frank.service.Subject2;
+import com.frank.proxy.DynamicProxy;
+import com.frank.service.impl.RealSubject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,9 +31,9 @@ public class ProxyTest {
     public void testProxy() {
         log.info(Common.LOG_BEGIN.getValue());
         RealSubject rs = new RealSubject();
-        InvocationHandler invocationHandler = new DynamicSubject(rs);
         Class cls = rs.getClass();
 
+        InvocationHandler invocationHandler = new DynamicProxy(rs);
         // 抽象角色：真实对象和代理对象的共同接口
         Subject2 subject = (Subject2) Proxy.newProxyInstance(cls.getClassLoader(), cls.getInterfaces(), invocationHandler);
         subject.call();

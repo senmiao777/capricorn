@@ -1,6 +1,6 @@
-package com.frank.proxy.impl;
+package com.frank.service.impl;
 
-import com.frank.proxy.Subject2;
+import com.frank.service.Subject2;
 import lombok.extern.slf4j.Slf4j;
 
 /**

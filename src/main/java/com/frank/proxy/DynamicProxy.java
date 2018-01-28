@@ -1,4 +1,4 @@
-package com.frank.proxy.impl;
+package com.frank.proxy;
 // 代理处理器：
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,23 +32,24 @@ import java.lang.reflect.Method;
  * 装饰模式可以在不使用创造更多子类的情况下，将对象的功能加以扩展。
  * 他的每一种变化都给他带来一种附加的本领。他变成鱼儿时，就可以到水里游泳；他变成雀儿时，就可以在天上飞行。
  * 而不管悟空怎么变化，在二郎神眼里，他永远是那只猢狲。
- *
+ * <p>
  * AopProxy代理对象是在Bean初始化时生成的
  * 其中AbstractAutoProxyCreator中有两个方法：
  * 一个是getAdvicesAndAdvisorsForBean()，该方法非常重要，会返回所有的advices（读取BeanDefinition，返回用到Aop的方法的相关信息）；
  * 另一个是createProxy()，也就是创建代理对象，
- * 如果targetClass.isInterface()就创建JdkDynamicAopProxy(通过Proxy.newProxyInstance())，否则创建CglibAopProxy
+ * 如果targetClass.isInterface()就创建JdkDynamicAopProxy(通过Proxy.newProxyInstance(代理类，接口集合，InvocationHandler对象))，否则创建CglibAopProxy
+ * （spring的动态代理只能为接口创建代理实例，从Proxy.newProxyInstance的第二个参数就能看出来）
  */
 @Slf4j
-public class DynamicSubject implements InvocationHandler {
+public class DynamicProxy implements InvocationHandler {
 
 
     private Object sub;
 
-    public DynamicSubject() {
+    public DynamicProxy() {
     }
 
-    public DynamicSubject(Object obj) {
+    public DynamicProxy(Object obj) {
         sub = obj;
     }
 
