@@ -59,7 +59,7 @@ public class BlockingQueueTest {
         producer3.stop();
 
         try {
-            Thread.sleep(2000);
+            Thread.sleep(20000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
