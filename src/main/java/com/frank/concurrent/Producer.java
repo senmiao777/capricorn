@@ -46,7 +46,7 @@ public class Producer implements Runnable {
             sleepMillis = RandomUtils.nextInt(DOWN, UP);
             data = new StringBuilder(String.valueOf(count.incrementAndGet())).append("COLON").append(UUID.randomUUID()).toString();
             try {
-                log.info("[Producer]正在生产数据, data : {} 将放入队列,sleepMillis={}", data,sleepMillis);
+                log.info("[Producer]正在生产数据, data : {} 将放入队列,costTime={}", data,sleepMillis);
                 Thread.sleep(sleepMillis);
                 if (!queue.offer(data, 2, TimeUnit.SECONDS)) {
                     log.info("[Producer]向队列放入数据失败, data = {} ", data);
@@ -64,7 +64,7 @@ public class Producer implements Runnable {
     /**
      * 关闭循环开关
      */
-    public void shutdown() {
+    public void stop() {
         runSwitch = false;
     }
 }
