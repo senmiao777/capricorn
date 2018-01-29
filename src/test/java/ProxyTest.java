@@ -1,14 +1,15 @@
 import com.frank.enums.Common;
+import com.frank.interceptor.LogBeforeAdvice;
+import com.frank.interceptor.TimeAfterAdvice;
+import com.frank.interceptor.TimeBeforeAdvice;
 import com.frank.proxy.CglibProxy;
 import com.frank.proxy.DynamicProxy;
 import com.frank.service.ConcurrentService;
 import com.frank.service.DemoService;
 import com.frank.service.impl.DemoServiceImpl;
-import com.sun.deploy.util.Waiter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.aop.BeforeAdvice;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -51,49 +52,48 @@ public class ProxyTest {
     }
 
     @Test
-    public void testCglibProxy(){
+    public void testCglibProxy() {
         CglibProxy proxy = new CglibProxy();
-        ConcurrentService concurrentService =(ConcurrentService)proxy.getProxy(ConcurrentService.class);
-        log.info("concurrentService.getClass()={}",concurrentService.getClass());
+        ConcurrentService concurrentService = (ConcurrentService) proxy.getProxy(ConcurrentService.class);
+        log.info("concurrentService.getClass()={}", concurrentService.getClass());
         final Integer number = concurrentService.getNumber();
-        log.info("number={}",number);
+        log.info("number={}", number);
     }
 
     @Test
-    public void testSpringDynamicProxy(){
+    public void testSpringDynamicProxy() {
         //Spring提供的代理工厂
         ProxyFactory factory = new ProxyFactory();
-        factory.setInterfaces(waiter.getClass().getInterfaces());
-
-　　//以上代码就指定了JdkDynamicAopProxy进行代理；
-
-        BeforeAdvice advice = new GreetingBeforeAdvice();
-        Waiter waiter  = new NaiveWaiter();
-
-        //Spring提供的代理工厂
-        ProxyFactory factory2 = new ProxyFactory();
-        factory2.setInterfaces(waiter.getClass().getInterfaces());
-        factory2.setOptimize(true);
-
-        以上代码虽然指定了代理的接口，但由于setOptimize(true)，所以还是使用了Cglib2AopProxy代理；
+        DemoService demoService = new DemoServiceImpl();
+        //指定JdkDynamicAopProxy进行代理；
+        factory.setInterfaces(demoService.getClass().getInterfaces());
+        factory.setTarget(demoService);
+        factory.addAdvice(0,new TimeBeforeAdvice());
+        factory.addAdvice(1,new LogBeforeAdvice());
+        factory.addAdvice(new TimeAfterAdvice());
+        final DemoService proxy = (DemoService) factory.getProxy();
+        proxy.call("testSpringDynamicProxy");
+        // proxy class=class com.sun.proxy.$Proxy166
+        log.info("proxy class={}", proxy.getClass());
     }
 
     @Test
-    public void testSpringCglibProxy(){
+    public void testSpringCglibProxy() {
         //Spring提供的代理工厂
         ProxyFactory factory = new ProxyFactory();
-        factory.setInterfaces(waiter.getClass().getInterfaces());
+        DemoService demoService = new DemoServiceImpl();
+        //指定JdkDynamicAopProxy进行代理；
+        factory.setInterfaces(demoService.getClass().getInterfaces());
+        factory.setTarget(demoService);
+        //  虽然指定了代理的接口，但由于setOptimize(true)，所以还是使用了Cglib2AopProxy代理；
+        factory.setOptimize(true);
+        factory.addAdvice(0,new TimeBeforeAdvice());
+        factory.addAdvice(1,new LogBeforeAdvice());
+        final DemoService proxy = (DemoService) factory.getProxy();
+        proxy.call("testSpringDynamicProxy");
+        // 输出结果proxy class=class com.frank.service.impl.DemoServiceImpl$$EnhancerBySpringCGLIB$$35c57a8e
+        log.info("proxy class={}", proxy.getClass());
 
-　　//以上代码就指定了JdkDynamicAopProxy进行代理；
 
-        BeforeAdvice advice = new GreetingBeforeAdvice();
-        Waiter waiter  = new NaiveWaiter();
-
-        //Spring提供的代理工厂
-        ProxyFactory factory2 = new ProxyFactory();
-        factory2.setInterfaces(waiter.getClass().getInterfaces());
-        factory2.setOptimize(true);
-
-        以上代码虽然指定了代理的接口，但由于setOptimize(true)，所以还是使用了Cglib2AopProxy代理；
     }
 }

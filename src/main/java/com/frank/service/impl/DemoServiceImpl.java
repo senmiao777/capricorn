@@ -23,4 +23,9 @@ public class DemoServiceImpl implements DemoService {
         log.info("[DemoServiceImpl]From real service msg={}", msg);
         return msg;
     }
+
+    public String call2(String msg) {
+        log.info("[DemoServiceImpl]From real service.only in here.msg={}", msg);
+        return msg;
+    }
 }
