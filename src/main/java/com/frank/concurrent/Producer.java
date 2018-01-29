@@ -31,7 +31,7 @@ public class Producer implements Runnable {
     /**
      * 随机数默认下限
      */
-    private static final String COLON = ":";
+    private static final String UNDERLINE = "_";
 
     public Producer(BlockingQueue<String> queue) {
         this.queue = queue;
@@ -44,12 +44,12 @@ public class Producer implements Runnable {
         String data;
         while (runSwitch) {
             sleepMillis = RandomUtils.nextInt(DOWN, UP);
-            data = new StringBuilder(String.valueOf(count.incrementAndGet())).append("COLON").append(UUID.randomUUID()).toString();
+            data = new StringBuilder(String.valueOf(count.incrementAndGet())).append(UNDERLINE).append(UUID.randomUUID()).toString();
             try {
-                log.info("[Producer]正在生产数据, data : {} 将放入队列,costTime={}", data,sleepMillis);
+                log.info("[Producer]正在生产数据, data : {} 将放入队列,costTime={}", data, sleepMillis);
                 Thread.sleep(sleepMillis);
                 if (!queue.offer(data, 2, TimeUnit.SECONDS)) {
-                    log.info("[Producer]向队列放入数据失败, data = {} ", data);
+                    log.info("[Producer]向队列放入数据失败!!!!!!!!!!!!!!!, data = {} ", data);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();

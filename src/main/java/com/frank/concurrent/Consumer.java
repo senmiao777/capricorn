@@ -33,8 +33,6 @@ public class Consumer implements Runnable {
                 log.info("[Consumer]正从队列获取数据...");
                 String data = queue.poll(2, TimeUnit.SECONDS);
                 if (null != data) {
-                    System.out.println("拿到数据：" + data);
-                    System.out.println("正在消费数据：" + data);
                     sleepMillis = RandomUtils.nextInt(0, 1000);
                     log.info("[Consumer]poll到数据 data={},正在消费...costTime={}", data, sleepMillis);
                     Thread.sleep(sleepMillis);
