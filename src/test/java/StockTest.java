@@ -28,6 +28,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 //import org.springframework.boot.test.SpringApplicationConfiguration;
 
@@ -60,6 +61,13 @@ public class StockTest {
 
     private static CloseableHttpClient httpClient = HttpUtil.getClient();
     volatile int count = 0;
+    private final AtomicLong num = new AtomicLong(0L);
+    @Test
+    public void testAtomicLong(){
+        long l = num.incrementAndGet();
+
+    }
+
     @Test
     public void testVolatile(){
       for(int i =0;i<100;i++){
