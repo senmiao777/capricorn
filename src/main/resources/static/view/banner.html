@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en"/>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="/js/echarts.js"></script>
+    <script src="/js/jquery-3.2.1.js"></script>
+    <script src="/js/ajaxfileupload.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+    $(function(){
+
+        // 表单提交
+//        $("#sub").click(function(){
+//
+//            if(999 == $("#appName").val()){
+//                alert("请选择app！");
+//                return;
+//            }
+//
+//            if(999 == $("#spec").val()){
+//                alert("请选择banner尺寸！");
+//                return;
+//            }
+//
+//            if("" == $("#spec").val()){
+//                alert("请输入banner位置！");
+//                return;
+//            }
+//
+//            var form = document.getElementById('inputForm');
+//            form.action = '${pageContext.request.contextPath}/banner/bannerAdd.do';
+//            form.method='POST';
+//            form.submit();
+//
+//        });
+
+        $("#upLoadImg").click(function(){
+
+            var isImg = $("#upload").val();
+
+            /*if(!new RegExp('.*((.jpg)|(.jpeg)|(.gif)|(.png))$','ig').test(isImg) ){
+                alert("请选择图片文件");
+                return false;
+            }*/
+            alert(isImg);
+       /*     $.ajaxFileUpload({
+                url:"${pageContext.request.contextPath}/file/uploadImg",
+                cache:false,
+                secureuri:false,
+                type:'post',
+                fileElementId : 'upload',
+                dataType: 'JSON',
+                success: function(data){
+                    var obj =eval('(' + data + ')');
+                    var path = obj.path;
+                    $("#imgPath").val(path);
+                    $("#img1").attr("src",path);
+                    //$("#img1").attr("src","http://10.0.0.112/"+path);
+                },
+                error: function(data){
+                    var obj =eval('(' + data + ')');
+                    alert("banner上传异常！"+obj.res);
+                }
+            });*/
+// http://www.jianshu.com/p/46e6e03a0d53
+            $.ajax({
+                url: '/file/uploadImage',
+                type: 'POST',
+                cache: false,
+                data: new FormData($('#inputForm')[0]),
+                processData: false,
+                contentType: false
+            }).done(function(data) {
+                var obj =eval('(' + data + ')');
+                var path = obj.path;
+                alert(obj)
+                $("#imgPath").val(path);
+                $("#img1").attr("src",path);
+            }).fail(function(data) {
+                var obj =eval('(' + data + ')');
+                alert("banner上传异常！"+obj.res);
+            });
+
+
+
+        });
+
+
+        // 返回
+        /*$("#goBack").click(function(){
+            location.href='${pageContext.request.contextPath}/banner/toBanner.do';
+        });*/
+
+    });
+</script>
+
+<h1>Attention please</h1>
+<div style="border-color: red;border-bottom-color: blue">
+    <form action="#" method="post" id="inputForm" enctype="multipart/form-data">
+        <table align="center" border="0px" width="600px">
+
+            <tr>
+                <td>banner：</td>
+                <td>
+                    <img id="img1" alt="" src="/image/20171219223649.png" width="260px" height="100px"/>
+                    <img id="img2" alt="" src="http://localhost:8080/file/getImg?fileName=506.jpg" width="260px" height="100px"/>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="file" name="upload" id="upload" value="上传banner"/>
+                    <input type="hidden" name="imgPath" id="imgPath"/>
+                    <input type="button" id="upLoadImg" value="上传"/>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">&nbsp;</td>
+                <td>
+                    <input type="button" value="提交" id="sub"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="返回" id="goBack"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

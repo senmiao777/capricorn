@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * 合并利润表
@@ -283,7 +283,6 @@ public class IncomeStatement {
      */
     @Column(name = "comprIncAttrMS")
     private BigDecimal comprIncAttrMS;
-
 
 
 
