@@ -15,6 +15,11 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class Consumer implements Runnable {
+    /**
+     * LinkedBlockingQueue对于生产者端和消费者端分别采用了独立的锁来控制数据同步，
+     * 这也意味着在高并发的情况下生产者和消费者可以并行地操作队列中的数据，
+     * 以此来提高整个队列的并发性能。
+     */
     private BlockingQueue<String> queue;
 
     public Consumer(BlockingQueue<String> queue) {
