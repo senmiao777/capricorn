@@ -1,5 +1,6 @@
 package concurrent;
 
+import com.frank.enums.Common;
 import com.frank.service.ConcurrentService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -38,6 +39,12 @@ public class SemaphoreTest {
         for (int i = 0; i < 10; i++) {
             final Future<BigDecimal> deposit = concurrentService.deposit(i,amount, atmNumber);
             log.info("deposit result={}",deposit);
+        }
+        try {
+            Thread.sleep(1000);
+            log.info(Common.LOG_END.getValue());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
     }

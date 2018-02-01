@@ -82,21 +82,25 @@ public class ConcurrentService {
 
     /**
      * 存款操作
+     *
      * @param amount 存钱数量
-     * @param atm 自动取款机 数量
+     * @param atm    自动取款机 数量
      */
     @Async("testTaskPoolExecutor")
-    public Future<BigDecimal> deposit(int i,BigDecimal amount,Semaphore atm) {
+    public Future<BigDecimal> deposit(int i, BigDecimal amount, Semaphore atm) {
         try {
-            int sleepMillis = RandomUtils.nextInt(5, 50);
-           //atm.
             atm.acquire();
-                log.info("[ConcurrentService][deposit]第 {} 个用户正在存钱,amount={},atm={},sleepMillis={}", amount, atm, sleepMillis);
-                Thread.sleep(sleepMillis);
+            log.info("atm={}", atm);
+            int sleepMillis = RandomUtils.nextInt(5, 50);
+            /**
+             * 获取当前还有几个可用信号量
+             */
+            log.info("[ConcurrentService][deposit]可用取款机还剩{}台,第 {} 个用户正在存钱,sleepMillis={}", atm.availablePermits(), i, sleepMillis);
+            Thread.sleep(sleepMillis);
             return new AsyncResult<>(amount);
         } catch (Exception e) {
             return new AsyncResult<>(DEFAULT_RETURN_AMOUNT);
-        }finally {
+        } finally {
             atm.release();
         }
     }
