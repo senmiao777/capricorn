@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.concurrent.*;
 
 /**
@@ -18,7 +19,6 @@ import java.util.concurrent.*;
 @Slf4j
 @Service
 public class ConcurrentService {
-
 
 
     @Autowired
@@ -42,13 +42,18 @@ public class ConcurrentService {
      */
     private static final String DEFAULT_RETURN_STRING = "default";
 
+    /**
+     * 默认返回值
+     */
+    private static final BigDecimal DEFAULT_RETURN_AMOUNT = BigDecimal.ZERO;
+
     @Async("testTaskPoolExecutor")
-    public Integer getNumber(){
+    public Integer getNumber() {
         int i = RandomUtils.nextInt(50, 100);
         try {
-            log.info("--getNumber in-- current thread is {},number is {}",Thread.currentThread().getId(),i);
+            log.info("--getNumber in-- current thread is {},number is {}", Thread.currentThread().getId(), i);
             Thread.sleep(i);
-            log.info("--getNumber after sleep-- current thread is {},number is {}",Thread.currentThread().getId(),i);
+            log.info("--getNumber after sleep-- current thread is {},number is {}", Thread.currentThread().getId(), i);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -56,7 +61,6 @@ public class ConcurrentService {
     }
 
     /**
-     *
      * @param mark 无实际意义，用于观察当前任务
      * @return Integer sleep毫秒数
      */
@@ -75,5 +79,24 @@ public class ConcurrentService {
         }
     }
 
+
+    /**
+     * 存款操作
+     * @param amount 存钱数量
+     * @param atm 自动取款机 数量
+     */
+    @Async("testTaskPoolExecutor")
+    public Future<BigDecimal> deposit(BigDecimal amount,Semaphore atm) {
+        try {
+            int sleepMillis = RandomUtils.nextInt(5, 50);
+            for (int k = 1; k < TOTAL; k++) {
+                log.info("[ConcurrentService][deposit]amount={},atm={},sleepMillis={}", amount, atm, sleepMillis);
+                Thread.sleep(sleepMillis);
+            }
+            return new AsyncResult<>(amount);
+        } catch (Exception e) {
+            return new AsyncResult<>(DEFAULT_RETURN_AMOUNT);
+        }
+    }
 
 }
