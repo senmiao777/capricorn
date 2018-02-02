@@ -13,7 +13,9 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -34,8 +36,10 @@ public class SemaphoreTest {
 
     @Test
     public void t() {
+
+        final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(7);
         BigDecimal amount = new BigDecimal("77.8");
-        Semaphore atmNumber = new Semaphore(3);
+        Semaphore atmNumber = new Semaphore(1);
         for (int i = 0; i < 10; i++) {
             final Future<BigDecimal> deposit = concurrentService.deposit(i,amount, atmNumber);
             log.info("deposit result={}",deposit);
