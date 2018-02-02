@@ -85,7 +85,14 @@ public class ConcurrentService {
      *
      * @param amount 存钱数量
      * @param atm    自动取款机 数量
+     *               <p>
+     *               Semaphore
+     *               公平策略
+     *               在获取permit的时候会判断阻塞队列有没有等待的线程，有的话，后来的排到阻塞队列的末尾 hasQueuedPredecessors（）
+     *               所谓非公平，就是A已经等待了半天了，这时候B来了，有一个许可P，B和A同时参数竞争P
      */
+
+
     @Async("testTaskPoolExecutor")
     public Future<BigDecimal> deposit(int i, BigDecimal amount, Semaphore atm) {
         try {

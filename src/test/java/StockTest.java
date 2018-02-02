@@ -7,12 +7,14 @@ import com.frank.repository.mysql.IncomeStatementRepository;
 import com.frank.util.HttpUtil;
 import com.google.common.base.Splitter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.apache.tomcat.jni.Thread;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
 //import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -35,11 +39,11 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Created by Administrator on 2017/4/25 0025.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootApplication
-@ComponentScan(basePackages ="com.frank")
-@SpringBootTest(classes=StockTest.class)
-@Rollback(false)
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@SpringBootApplication
+//@ComponentScan(basePackages = "com.frank")
+//@SpringBootTest(classes = StockTest.class)
+//@Rollback(false)
 @Slf4j
 public class StockTest {
 
@@ -60,37 +64,54 @@ public class StockTest {
     private static final String ACCESS_TOKEN = "feca4dcb1241d2564ff37534a9f509705a5154664ff39364849639145ab9f1b3";
 
     private static CloseableHttpClient httpClient = HttpUtil.getClient();
-    volatile int count = 0;
+
     private final AtomicLong num = new AtomicLong(0L);
+    volatile int count = 0;
+
     @Test
-    public void testAtomicLong(){
+    public void testVolatile() {
+
+        Executor executor = Executors.newScheduledThreadPool(10);
+        for (int i = 0; i < 100; i++) {
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    count++;
+                    try {
+                        java.lang.Thread.sleep(RandomUtils.nextInt(5, 15));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+        }
+        log.info("count={}", count);
+
+    }
+
+    @Test
+    public void testAtomicLong() {
         long l = num.incrementAndGet();
 
     }
 
-    @Test
-    public void testVolatile(){
-      for(int i =0;i<100;i++){
-          count(i);
-      }
-
-    }
 
     @Async("testTaskPoolExecutor")
-    private void count(int k){
-       log.info("threadID={},before k={}",Thread.currentThread().getId(),k);
+    private void count(int k) {
+        log.info("threadID={},before k={}", Thread.currentThread().getId(), k);
         k = k++;
-        log.info("threadID={},after k={}",Thread.currentThread().getId(),k);
+        log.info("threadID={},after k={}", Thread.currentThread().getId(), k);
     }
 
     @Test
-    public void t(){
-        DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public void t() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String s = "2018-09-09";
-        LocalDate date= LocalDate.parse(s, formatter);
+        LocalDate date = LocalDate.parse(s, formatter);
         String s1 = date.toString();
         String s2 = StringUtils.replaceAll(s, "-", "");
-        log.info("1111111111111:={}",s2);
+        log.info("1111111111111:={}", s2);
     }
 
     @Test
@@ -106,18 +127,18 @@ public class StockTest {
                 "NoperateExp,NCADisploss,TProfit,incomeTax,NIncome,NIncomeAttrP," +
                 "minorityGain,basicEPS,dilutedEPS,othComprIncome,TComprIncome,comprIncAttrP,comprIncAttrMS";
 
-      //  String url = "https://api.wmcloud.com/data/v1/api/fundamental/getFdmt.json?ticker=600276&secID=&beginDate=20060101&beginYear=2006&endYear=2017&endDate=20171111&publishDateBegin=20070101&publishDateEnd=20171111&reportType=A&" + field;
+        //  String url = "https://api.wmcloud.com/data/v1/api/fundamental/getFdmt.json?ticker=600276&secID=&beginDate=20060101&beginYear=2006&endYear=2017&endDate=20171111&publishDateBegin=20070101&publishDateEnd=20171111&reportType=A&" + field;
 
         String perfix = "https://api.wmcloud.com/data/v1";
         String stockCode = "600276";
-      //  String url2 = "/api/fundamental/getFdmtISAllLatest.json?ticker="+stockCode+"&secID=&beginDate=20150101&endDate=20161231&year=2016&reportType=&field="+field;
-        String url2 = "/api/fundamental/getFdmtIS.json?ticker="+stockCode+"&secID=&beginDate=20150101&endDate=20161231&reportType=&field="+field;
-        url2 = url2 + "&publishDateBegin=" +20150101;
-        url2 = url2 + "&beginDateRep=" +20150101;
-        url2 = url2 + "&beginYear=" +2015;
+        //  String url2 = "/api/fundamental/getFdmtISAllLatest.json?ticker="+stockCode+"&secID=&beginDate=20150101&endDate=20161231&year=2016&reportType=&field="+field;
+        String url2 = "/api/fundamental/getFdmtIS.json?ticker=" + stockCode + "&secID=&beginDate=20150101&endDate=20161231&reportType=&field=" + field;
+        url2 = url2 + "&publishDateBegin=" + 20150101;
+        url2 = url2 + "&beginDateRep=" + 20150101;
+        url2 = url2 + "&beginYear=" + 2015;
 
 
-        HttpGet httpGet = new HttpGet(perfix+url2);
+        HttpGet httpGet = new HttpGet(perfix + url2);
         //在header里加入 Bearer {token}，添加认证的token，并执行get请求获取json数据
         httpGet.addHeader("Authorization", "Bearer " + ACCESS_TOKEN);
         httpGet.addHeader("Connection", "keep-alive");
@@ -128,7 +149,7 @@ public class StockTest {
         //System.out.println(body);
         Result result = JSON.parseObject(body, Result.class);
 
-        log.info("result={}",result);
+        log.info("result={}", result);
         for (IncomeStatement stock :
                 result.getIncomeStatementList()) {
 
@@ -140,6 +161,7 @@ public class StockTest {
 
     /**
      * 读取txt1，处理后输出到txt2
+     *
      * @throws Exception
      */
     @Test
@@ -153,10 +175,10 @@ public class StockTest {
                 List<String> list = Splitter.on("\t").limit(3).splitToList(lineTxt);
                 // 实体类
                 //builder = getCurrentString(builder, list);
-                 //建表语句
-              //  builder =   getTableString(builder, list);
+                //建表语句
+                //  builder =   getTableString(builder, list);
                 //param
-                builder =  getParamString(builder, list);
+                builder = getParamString(builder, list);
 
             }
             br.close();
@@ -176,6 +198,7 @@ public class StockTest {
 
     /**
      * 拼接参数
+     *
      * @param s
      * @param list
      * @return
@@ -187,34 +210,36 @@ public class StockTest {
 
     /**
      * 拼接建表语句
-                * @param s
-                * @param list
-                * @return
+     *
+     * @param s
+     * @param list
+     * @return
      */
-        private StringBuilder getTableString(StringBuilder s, List<String> list) {
+    private StringBuilder getTableString(StringBuilder s, List<String> list) {
 
 
-            s.append(list.get(0)).append(" ").append(getTabelType(list.get(1))).append(" ")
-                    .append("COMMENT '").append(list.get(2)).append("',\n");
+        s.append(list.get(0)).append(" ").append(getTabelType(list.get(1))).append(" ")
+                .append("COMMENT '").append(list.get(2)).append("',\n");
         return s;
     }
 
-    private String getTabelType(String type){
-        if("String".equals(type)){
+    private String getTabelType(String type) {
+        if ("String".equals(type)) {
             return "varchar(32) default \"\"";
-        }else if("Double".equals(type)){
+        } else if ("Double".equals(type)) {
             return "decimal(16,4) default 0";
-        }else if("Int32".equals(type)){
+        } else if ("Int32".equals(type)) {
             return "int default 0";
-        }else if("Date".equals(type)){
+        } else if ("Date".equals(type)) {
             return "int(8)";
-        }else{
+        } else {
             return "varchar(32) default \"\"";
         }
     }
 
     /**
      * 拼接实体类
+     *
      * @param s
      * @param list
      * @return
