@@ -14,16 +14,9 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.apache.tomcat.jni.Thread;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
@@ -98,10 +91,10 @@ public class StockTest {
 
 
     @Async("testTaskPoolExecutor")
-    private void count(int k) {
-        log.info("threadID={},before k={}", Thread.currentThread().getId(), k);
+    public void count(int k) {
+        log.info("threadID={},before k={}", java.lang.Thread.currentThread().getId(), k);
         k = k++;
-        log.info("threadID={},after k={}", Thread.currentThread().getId(), k);
+        log.info("threadID={},after k={}", java.lang.Thread.currentThread().getId(), k);
     }
 
     @Test
