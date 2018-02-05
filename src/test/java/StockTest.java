@@ -14,17 +14,12 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.apache.tomcat.jni.Thread;
+import java.lang.Thread;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import sun.misc.Unsafe;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -87,6 +82,7 @@ public class StockTest {
             });
         }
         log.info("count={}", count);
+        Unsafe
 
     }
 
