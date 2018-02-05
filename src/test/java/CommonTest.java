@@ -1,4 +1,5 @@
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,6 +20,24 @@ public class CommonTest {
     @Autowired
     private RedisTemplate redisTemplate;
 
+
+    @Test
+    public void testFor() {
+        int i = 0;
+        int r;
+        for (; ; ) {
+
+            r = RandomUtils.nextInt(10, 100);
+            log.info("i={},r={}", i, r);
+            // 当随机数为7的倍数时，返回
+            if (r % 7 == 0) {
+                log.info("i={},r={},return", i, r);
+                return;
+            }
+            i++;
+        }
+    }
+
     @Test
     public void testString() {
         redisTemplate.opsForValue().set("k2", "v2");
@@ -29,7 +48,7 @@ public class CommonTest {
      * public ArrayBlockingQueue(int capacity, boolean fair,Collection<? extends E> c)
      * 中用的赋值方式items[i++] = e;
      * for (E e : c) {
-     *  items[i++] = e;
+     * items[i++] = e;
      * }
      * //元素数量
      * count = i;
