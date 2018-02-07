@@ -99,6 +99,8 @@ public class CommonTest {
     @Test
     public void testExpire() {
 
-
+        for (int i = 0; i < 100; i++) {
+            log.info("random={}", RandomUtils.nextInt(10, 15));
+        }
     }
 }
