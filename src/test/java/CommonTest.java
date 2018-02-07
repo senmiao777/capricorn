@@ -1,9 +1,13 @@
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.frank.model.AssignMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -99,8 +103,21 @@ public class CommonTest {
     @Test
     public void testExpire() {
 
-        for (int i = 0; i < 100; i++) {
-            log.info("random={}", RandomUtils.nextInt(10, 15));
+
+        ObjectMapper MAPPER = new ObjectMapper();
+
+
+        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        String msg = "{\"userId\":6921,\"loanId\":57114,\"reviewId\":6388,\"productName\":\"QG_HI_2000_3\",\"creditClass\":2,\"amount\":2}";
+        AssignMessage result;
+
+
+        try {
+            result = MAPPER.readValue(msg, AssignMessage.class);
+            log.info("result={}", result);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
     }
 }
