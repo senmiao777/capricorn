@@ -3,6 +3,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * @author frank
  * @version 1.0
@@ -18,6 +20,12 @@ public class CommonTest {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Test
+    public void testAtomic() {
+        AtomicInteger count = new AtomicInteger();
+
+    }
 
     @Test
     public void testString() {
@@ -71,10 +79,7 @@ public class CommonTest {
 
     @Test
     public void testExpire() {
-        String redisKey = "testPerfix:18110000002";
 
-        ;
-        log.info("[testExpire] third expire={},get={}");
 
     }
 }
