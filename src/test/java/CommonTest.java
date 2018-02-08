@@ -1,31 +1,60 @@
+import com.frank.entity.mysql.IncomeStatement;
+import com.frank.repository.mysql.IncomeStatementRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author frank
  * @version 1.0
  * @date 2018/2/4 0021 下午 4:18
  */
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@SpringBootApplication
-//@ComponentScan(basePackages = "com.frank")
-//@SpringBootTest(classes = StockTest.class)
-//@Rollback(false)
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootApplication
+@ComponentScan(basePackages = "com.frank")
+@SpringBootTest(classes = StockTest.class)
+@Rollback(false)
 @Slf4j
 public class CommonTest {
 
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private IncomeStatementRepository incomeStatementRepository;
+
+
+    @Test
+    public void testStream() {
+        String stockCode = "000002";
+        List<IncomeStatement> stockList = incomeStatementRepository.findByStockCode(stockCode);
+        log.info("stockList.size={}", stockList.size());
+        BigDecimal amount = new BigDecimal("0.09");
+        final List<IncomeStatement> collect = stockList.stream().filter(s -> s.getDilutedEPS().compareTo(amount) == 1).collect(Collectors.toList());
+
+        collect.stream().forEach(
+                c -> {
+                    log.info("amount={}", c.getDilutedEPS());
+                });
+       // log.info("collect={}", collect);
+    }
 
     @Test
     public void testFor() {
-        int i = 0;
         int r;
-        for (; ; ) {
+        for (int i = 0; ; i++) {
 
             r = RandomUtils.nextInt(10, 100);
             log.info("i={},r={}", i, r);
@@ -34,7 +63,6 @@ public class CommonTest {
                 log.info("i={},r={},return", i, r);
                 return;
             }
-            i++;
         }
     }
 
