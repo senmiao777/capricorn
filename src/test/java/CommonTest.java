@@ -98,7 +98,6 @@ public class CommonTest {
         } else {
             log.info("++c != b,c={},b={}", c, b);
         }
-
         /**
          *
          for (E e : c) {
