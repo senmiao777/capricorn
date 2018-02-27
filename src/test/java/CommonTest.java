@@ -1,46 +1,60 @@
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.frank.model.AssignMessage;
+import com.frank.entity.mysql.IncomeStatement;
+import com.frank.repository.mysql.IncomeStatementRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author frank
  * @version 1.0
  * @date 2018/2/4 0021 下午 4:18
  */
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@SpringBootApplication
-//@ComponentScan(basePackages = "com.frank")
-//@SpringBootTest(classes = StockTest.class)
-//@Rollback(false)
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootApplication
+@ComponentScan(basePackages = "com.frank")
+@SpringBootTest(classes = StockTest.class)
+@Rollback(false)
 @Slf4j
 public class CommonTest {
 
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Test
-    public void testNumberUtil() {
-        String num1 = "-1";
-        final boolean digits = NumberUtils.isDigits(num1);
-        log.info("NumberUtils.isDigits(num1)={}",digits);
-    }
+    @Autowired
+    private IncomeStatementRepository incomeStatementRepository;
 
+
+    @Test
+    public void testStream() {
+        String stockCode = "000002";
+        List<IncomeStatement> stockList = incomeStatementRepository.findByStockCode(stockCode);
+        log.info("stockList.size={}", stockList.size());
+        BigDecimal amount = new BigDecimal("0.09");
+        final List<IncomeStatement> collect = stockList.stream().filter(s -> s.getDilutedEPS().compareTo(amount) == 1).collect(Collectors.toList());
+
+        collect.stream().forEach(
+                c -> {
+                    log.info("amount={}", c.getDilutedEPS());
+                });
+       // log.info("collect={}", collect);
+    }
 
     @Test
     public void testFor() {
-        int i = 0;
         int r;
-        for (; ; ) {
+        for (int i = 0; ; i++) {
 
             r = RandomUtils.nextInt(10, 100);
             log.info("i={},r={}", i, r);
@@ -49,14 +63,7 @@ public class CommonTest {
                 log.info("i={},r={},return", i, r);
                 return;
             }
-            i++;
         }
-    }
-
-    @Test
-    public void testAtomic() {
-        AtomicInteger count = new AtomicInteger();
-
     }
 
     @Test
@@ -91,7 +98,6 @@ public class CommonTest {
         } else {
             log.info("++c != b,c={},b={}", c, b);
         }
-
         /**
          *
          for (E e : c) {
@@ -111,25 +117,10 @@ public class CommonTest {
 
     @Test
     public void testExpire() {
+        String redisKey = "testPerfix:18110000002";
 
-        BigDecimal b = new BigDecimal("0.00");
-        log.info("result = {}", b.compareTo(BigDecimal.ZERO));
-
-
-        ObjectMapper MAPPER = new ObjectMapper();
-
-
-        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        String msg = "{\"userId\":6921,\"loanId\":57114,\"reviewId\":6388,\"productName\":\"QG_HI_2000_3\",\"creditClass\":2,\"amount\":2}";
-        AssignMessage result;
-
-
-        try {
-            result = MAPPER.readValue(msg, AssignMessage.class);
-            log.info("result={}", result);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ;
+        log.info("[testExpire] third expire={},get={}");
 
     }
 }
