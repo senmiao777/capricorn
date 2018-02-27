@@ -3,11 +3,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.frank.model.AssignMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -25,6 +27,13 @@ public class CommonTest {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Test
+    public void testNumberUtil() {
+        String num1 = "-1";
+        final boolean digits = NumberUtils.isDigits(num1);
+        log.info("NumberUtils.isDigits(num1)={}",digits);
+    }
 
 
     @Test
@@ -102,6 +111,9 @@ public class CommonTest {
 
     @Test
     public void testExpire() {
+
+        BigDecimal b = new BigDecimal("0.00");
+        log.info("result = {}", b.compareTo(BigDecimal.ZERO));
 
 
         ObjectMapper MAPPER = new ObjectMapper();
