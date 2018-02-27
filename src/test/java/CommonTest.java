@@ -9,6 +9,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.annotation.Rollback;
 
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,12 +33,25 @@ public class CommonTest {
     @Autowired
     private IncomeStatementRepository incomeStatementRepository;
 
+    @Test
+    public void testDuration() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime updatedAtPlus = now.plusDays(12);
+        final Duration between = Duration.between(now, updatedAtPlus);
+        log.info("between={}", between);
+        log.info("between.toDays={}", between.toDays());
+        log.info("between.toHours={}", between.toHours());
+        log.info("between.toMillis={}", between.toMillis());
+    }
+
 
     @Test
     public void testNumberUtil() {
         String num1 = "-1";
         final boolean digits = NumberUtils.isDigits(num1);
-        log.info("NumberUtils.isDigits(num1)={}",digits);
+        log.info("NumberUtils.isDigits(num1)={}", digits);
+        final boolean isNumber = NumberUtils.isNumber(num1);
+        log.info("NumberUtils.isNumber(num1)={}", isNumber);
     }
 
     @Test
@@ -51,7 +66,7 @@ public class CommonTest {
                 c -> {
                     log.info("amount={}", c.getDilutedEPS());
                 });
-       // log.info("collect={}", collect);
+        // log.info("collect={}", collect);
     }
 
     @Test
