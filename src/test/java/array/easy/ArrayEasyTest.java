@@ -4,6 +4,9 @@ import com.frank.enums.Common;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author frank
  * @version 1.0
@@ -30,6 +33,8 @@ public class ArrayEasyTest {
         int[] nums = {2, 5, 7, 11, 15};
         int target = 18;
         log.info("twoSum={}", twoSum(nums, target));
+        log.info("twoSum twoSumSolution={}", twoSumSolution(nums, target));
+
         log.info(Common.LOG_END.getValue());
     }
 
@@ -43,6 +48,26 @@ public class ArrayEasyTest {
                     result[1] = j;
                 }
             }
+        }
+        return result;
+    }
+
+    public int[] twoSumSolution(int[] numbers, int target) {
+        int[] result = new int[2];
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < numbers.length; i++) {
+            /**
+             * if 为真，说明有两个数字之和符合要求
+             */
+            if (map.containsKey(target - numbers[i])) {
+                result[1] = i;
+                result[0] = map.get(target - numbers[i]);
+                return result;
+            }
+            /**
+             * 存放元素及下标
+             */
+            map.put(numbers[i], i);
         }
         return result;
     }
