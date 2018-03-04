@@ -2,17 +2,15 @@ import com.frank.entity.mysql.IncomeStatement;
 import com.frank.repository.mysql.IncomeStatementRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,10 +19,10 @@ import java.util.stream.Collectors;
  * @version 1.0
  * @date 2018/2/4 0021 下午 4:18
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootApplication
-@ComponentScan(basePackages = "com.frank")
-@SpringBootTest(classes = StockTest.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@SpringBootApplication
+//@ComponentScan(basePackages = "com.frank")
+//@SpringBootTest(classes = StockTest.class)
 @Rollback(false)
 @Slf4j
 public class CommonTest {
@@ -35,6 +33,26 @@ public class CommonTest {
     @Autowired
     private IncomeStatementRepository incomeStatementRepository;
 
+    @Test
+    public void testDuration() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime updatedAtPlus = now.plusDays(12);
+        final Duration between = Duration.between(now, updatedAtPlus);
+        log.info("between={}", between);
+        log.info("between.toDays={}", between.toDays());
+        log.info("between.toHours={}", between.toHours());
+        log.info("between.toMillis={}", between.toMillis());
+    }
+
+
+    @Test
+    public void testNumberUtil() {
+        String num1 = "-1";
+        final boolean digits = NumberUtils.isDigits(num1);
+        log.info("NumberUtils.isDigits(num1)={}", digits);
+        final boolean isNumber = NumberUtils.isNumber(num1);
+        log.info("NumberUtils.isNumber(num1)={}", isNumber);
+    }
 
     @Test
     public void testStream() {
@@ -48,7 +66,7 @@ public class CommonTest {
                 c -> {
                     log.info("amount={}", c.getDilutedEPS());
                 });
-       // log.info("collect={}", collect);
+        // log.info("collect={}", collect);
     }
 
     @Test
