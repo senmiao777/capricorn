@@ -38,6 +38,41 @@ public class ArrayEasyTest {
         log.info(Common.LOG_END.getValue());
     }
 
+    /**
+     * Given a sorted array, remove the duplicates in-place such that each element appear only once and return the new length.
+     * <p>
+     * Do not allocate extra space for another array, you must do this by modifying the input array in-place with O(1) extra memory.
+     */
+    @Test
+    public void testRemoveDuplicates() {
+        log.info(Common.LOG_BEGIN.getValue());
+        int[] nums = {1, 1, 1, 2, 2, 3, 4, 4, 5, 6};
+
+        log.info("removeDuplicates={}", removeDuplicates(nums));
+        log.info("nums={}", nums);
+
+        log.info(Common.LOG_END.getValue());
+    }
+
+
+    int removeDuplicates(int a[]) {
+        int n = a.length;
+        if (n < 2) {
+            return n;
+        }
+        int id = 1;
+        for (int i = 1; i < n; ++i) {
+            /**
+             * 赋值索引位置从1开始，第一个元素，即数组[0]不动
+             * 后边的值不等于前边的值，则个数加一
+             */
+            if (a[i] != a[i - 1]) {
+                a[id++] = a[i];
+            }
+        }
+        return id;
+    }
+
     private int[] twoSum(int[] nums, int target) {
         int size = nums.length;
         int[] result = new int[2];
