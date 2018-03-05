@@ -16,6 +16,33 @@ import java.util.Map;
 public class ArrayEasyTest {
 
     /**
+     * Given a sorted array, remove the duplicates in-place such that each element appear only once and return the new length.
+     * <p>
+     * Do not allocate extra space for another array, you must do this by modifying the input array in-place with O(1) extra memory.
+     */
+    @Test
+    public void testRemoveDuplicates() {
+        int[] numbers = {1,1,1,2,3,4,5,5,6,6,6,7,8};
+        final int i = removeDuplicates(numbers);
+        log.info("数组长度={}",i);
+        log.info("numbers={}",numbers);
+
+    }
+
+    public int removeDuplicates(int[] nums) {
+        int temp = 0;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] != nums[i - 1]) {
+                nums[++temp] = nums[i - 1];
+                //nums[++temp] = nums[i];
+            }
+        }
+        return temp;
+
+    }
+
+
+    /**
      * Given an array of integers, return indices of the two numbers such that they add up to a specific target.
      * <p>
      * You may assume that each input would have exactly one solution, and you may not use the same element twice.
