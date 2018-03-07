@@ -49,6 +49,46 @@ public class ArrayEasyTest {
         return index;
     }
 
+    @Test
+    public void removeElement() {
+        int[] n = {1, 1, 2, 3, 3, 3, 4, 4, 3, 6, 7};
+        int target = 3;
+        log.info("removeElement={}", removeElement(n, target));
+        log.info("numbers={}", n);
+    }
+
+    /**
+     * Given an array and a value, remove all instances of that value in-place and return the new length.
+     * <p>
+     * Do not allocate extra space for another array, you must do this by modifying the input array in-place with O(1) extra memory.
+     * <p>
+     * The order of elements can be changed. It doesn't matter what you leave beyond the new length.
+     * <p>
+     * Example:
+     * <p>
+     * Given nums = [3,2,2,3], val = 3,
+     * <p>
+     * Your function should return length = 2, with the first two elements of nums being 2.
+     *
+     * @param numbers
+     * @param target
+     */
+    private int removeElement(int[] numbers, int target) {
+        int index = 0;
+        if (numbers.length == 0) {
+            return index;
+        }
+
+        for (int i = 0; i < numbers.length; i++) {
+            if (numbers[i] != target) {
+                numbers[index] = numbers[i];
+                index++;
+            }
+        }
+        return index;
+
+    }
+
     /**
      * Given an array of integers, return indices of the two numbers such that they add up to a specific target.
      * <p>
@@ -99,6 +139,8 @@ public class ArrayEasyTest {
             /**
              * 赋值索引位置从1开始，第一个元素，即数组[0]不动
              * 后边的值不等于前边的值，则个数加一
+             * 有不一样的就需要往前放，放到哪个位置呢
+             * 第几个不一样，就放到第几个 index =几的位置
              */
             if (a[i] != a[i - 1]) {
                 a[id++] = a[i];
@@ -120,6 +162,7 @@ public class ArrayEasyTest {
         }
         return result;
     }
+
 
     public int[] twoSumSolution(int[] numbers, int target) {
         int[] result = new int[2];

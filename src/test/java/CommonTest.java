@@ -1,5 +1,7 @@
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.repository.mysql.IncomeStatementRepository;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -12,6 +14,8 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -33,15 +37,34 @@ public class CommonTest {
     @Autowired
     private IncomeStatementRepository incomeStatementRepository;
 
+
+    @Test
+    public void testNull() {
+        Object obj = null;
+        Map<String,String> map = (Map<String,String>)obj;
+        log.info("map={}",map);
+    }
+    @Test
+    public void testIndexOf() {
+        String between = "between";
+        String between2 = "123456betweentoMinutes";
+        final int i = between2.indexOf(between);
+        log.info("i={}",i);
+    }
     @Test
     public void testDuration() {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime updatedAtPlus = now.plusDays(12);
+        LocalDateTime updatedAtPlus = now.plusMinutes(-68).plusDays(-15);
         final Duration between = Duration.between(now, updatedAtPlus);
+       // final Duration between = Duration.between(updatedAtPlus,now);
         log.info("between={}", between);
         log.info("between.toDays={}", between.toDays());
         log.info("between.toHours={}", between.toHours());
+        log.info("between.toMinutes={}", between.toMinutes());
         log.info("between.toMillis={}", between.toMillis());
+
+
+
     }
 
 
