@@ -14,6 +14,40 @@ import java.util.Map;
  */
 @Slf4j
 public class ArrayEasyTest {
+    @Test
+    public void moveZeroes() {
+        log.info(Common.LOG_BEGIN.getValue());
+        int[] nums = {0, 2, 5, 7, 0, 11, 15};
+        int target = 18;
+        log.info("moveZeroes={}", moveZeroes(nums));
+        log.info("moveZeroes={}", nums);
+
+        log.info(Common.LOG_END.getValue());
+    }
+
+    /**
+     * Given an array nums, write a function to move all 0's to the end of it while maintaining the relative order of the non-zero elements.
+     * <p>
+     * For example, given nums = [0, 1, 0, 3, 12], after calling your function, nums should be [1, 3, 12, 0, 0].
+     * <p>
+     * Note:
+     * <p>
+     * You must do this in-place without making a copy of the array.
+     * Minimize the total number of operations.
+     *
+     * @param nums
+     */
+    public int moveZeroes(int[] nums) {
+        int index = 0;
+        int n = nums.length;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] != 0) {
+                nums[index] = nums[i];
+                index++;
+            }
+        }
+        return index;
+    }
 
     @Test
     public void removeElement() {
