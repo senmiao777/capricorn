@@ -18,7 +18,7 @@ public class ArrayEasyTest {
     @Test
     public void removeElement() {
         int[] n = {1, 1, 2, 3, 3, 3, 4, 4, 3, 6, 7};
-        int target = 3;
+        int target = 1;
         log.info("removeElement={}", removeElement(n, target));
         log.info("numbers={}", n);
     }
@@ -40,12 +40,15 @@ public class ArrayEasyTest {
      * @param target
      */
     private int removeElement(int[] numbers, int target) {
+        // 需要替换的元素的位置
         int index = 0;
         if (numbers.length == 0) {
             return index;
         }
 
+
         for (int i = 0; i < numbers.length; i++) {
+            //
             if (numbers[i] != target) {
                 numbers[index] = numbers[i];
                 index++;
