@@ -29,7 +29,23 @@ public class TopInterviewQuestions {
 
         int sum = getNumber(l1) + getNumber(l4);
         log.info("sum={}", sum);
+        ListNode head = new ListNode(sum % 10);
+        sum = sum / 10;
+        ListNode current = head;
+        //ListNode t;
+        ListNode currentNode = head ;
+        while (sum / 10 > 0 || sum % 10 >0) {
+            ListNode t = new ListNode(sum % 10);
+            currentNode.setNext(t);
+            currentNode = t;
+            sum = sum /10;
+        }
+        ListNode next = head;
+       do{
 
+           log.info("{}->",next.val);
+           next = next.getNext();
+       }while (next !=null);
         log.info(Common.LOG_END.getValue());
     }
 
