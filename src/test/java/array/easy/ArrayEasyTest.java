@@ -2,8 +2,10 @@ package array.easy;
 
 import com.frank.enums.Common;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.util.Lists;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +16,14 @@ import java.util.Map;
  */
 @Slf4j
 public class ArrayEasyTest {
+    @Test
+    public void moveZeroes2() {
+        log.info(Common.LOG_BEGIN.getValue());
+        ArrayList<Object> objects = Lists.newArrayList();
+
+        log.info(Common.LOG_END.getValue());
+    }
+
     @Test
     public void moveZeroes() {
         log.info(Common.LOG_BEGIN.getValue());
@@ -45,6 +55,10 @@ public class ArrayEasyTest {
                 nums[index] = nums[i];
                 index++;
             }
+        }
+
+        for(int i = index;i<n;i++){
+            nums[i] = 0;
         }
         return index;
     }
