@@ -36,39 +36,54 @@ public class CommonTest {
     @Autowired
     private IncomeStatementRepository incomeStatementRepository;
 
+    private String PASS = "PASS";
+    private String FAIL = "FAIL";
+
+    @Test
+    public void testString2() {
+        String test = PASS;
+        if (PASS.equals(test)) {
+            log.info("testString2 PASS in ");
+            test = FAIL;
+        } else if (FAIL.equals(test)) {
+            log.info("testString2 FAIL in ");
+        }
+    }
+
     @Test
     public void testNullw() {
 
-        Map<String,Boolean> map = Maps.newHashMap();
-        map.put("sendMessage",false);
+        Map<String, Boolean> map = Maps.newHashMap();
+        map.put("sendMessage", false);
         log.info("map={}", JSON.toJSONString(map));
     }
 
     @Test
     public void testNull() {
         Object obj = null;
-        Map<String,String> map = (Map<String,String>)obj;
-        log.info("map={}",map);
+        Map<String, String> map = (Map<String, String>) obj;
+        log.info("map={}", map);
     }
+
     @Test
     public void testIndexOf() {
         String between = "between";
         String between2 = "123456betweentoMinutes";
         final int i = between2.indexOf(between);
-        log.info("i={}",i);
+        log.info("i={}", i);
     }
+
     @Test
     public void testDuration() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime updatedAtPlus = now.plusMinutes(-68).plusDays(-15);
         final Duration between = Duration.between(now, updatedAtPlus);
-       // final Duration between = Duration.between(updatedAtPlus,now);
+        // final Duration between = Duration.between(updatedAtPlus,now);
         log.info("between={}", between);
         log.info("between.toDays={}", between.toDays());
         log.info("between.toHours={}", between.toHours());
         log.info("between.toMinutes={}", between.toMinutes());
         log.info("between.toMillis={}", between.toMillis());
-
 
 
     }
