@@ -1,9 +1,8 @@
 package com.frank.entity.mysql;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.Data;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
@@ -11,6 +10,14 @@ import java.sql.Timestamp;
  * @version 1.0
  * @date 2018/3/18 0018 下午 4:31
  */
+
+/**
+ * 相亲题目下用户评论
+ * 知乎URL：https://www.zhihu.com/question/67228907/answer/251023939
+ */
+@Data
+@Entity
+@Table(name = "blind_date_comment")
 public class BlindDateComment {
     /**
      * 主键
