@@ -4,6 +4,7 @@ import com.frank.entity.mysql.IncomeStatement;
 import com.frank.model.Result;
 import com.frank.repository.mysql.BenefitRepository;
 import com.frank.repository.mysql.IncomeStatementRepository;
+import com.frank.util.GenerateUtil;
 import com.frank.util.HttpUtil;
 import com.google.common.base.Splitter;
 import lombok.extern.slf4j.Slf4j;
@@ -102,20 +103,8 @@ public class StockTest {
                 "register_at bigint(20) ",
                 "headline varchar(256) ");
 
-        String perfix = "/**\n" +
-                "     * //TODO\n" +
-                "     */";
-
-        StringBuilder sql = new StringBuilder(" @Id\n" +
-                "    @GeneratedValue(strategy = GenerationType.IDENTITY)\n" +
-                "    private Long id");
-        for (String a : attrList) {
-            List<String> strings = Splitter.on(" ").splitToList(a);
-            sql.append(perfix)
-                    .append("@Column(name = \"").append(strings.get(0)).append("\")")
-                    .append(getAttributeType(strings.get(1))).append(strings.get(0)).append(";\n\n");
-        }
-        log.info("sql = {}",sql.toString());
+        String sql = GenerateUtil.sqlList2Entity(attrList);
+        log.info("sqlList2Entity sql = {}",sql.toString());
 
 
     }

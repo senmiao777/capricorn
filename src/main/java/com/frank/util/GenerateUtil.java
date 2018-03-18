@@ -45,7 +45,7 @@ public class GenerateUtil {
      * @param type
      * @return
      */
-    private String getAttributeType(String type) {
+    private static String getAttributeType(String type) {
         if (type.contains("varchar")) {
             return "private String ";
         } else if (type.contains("bigint")) {
