@@ -106,10 +106,14 @@ public class StockTest {
                 "     * //TODO\n" +
                 "     */";
 
-        StringBuilder sql = new StringBuilder();
+        StringBuilder sql = new StringBuilder(" @Id\n" +
+                "    @GeneratedValue(strategy = GenerationType.IDENTITY)\n" +
+                "    private Long id");
         for (String a : attrList) {
             List<String> strings = Splitter.on(" ").splitToList(a);
-            sql.append(perfix).append(getAttributeType(strings.get(1))).append(strings.get(0)).append(";\n\n");;
+            sql.append(perfix)
+                    .append("@Column(name = \"").append(strings.get(0)).append("\")")
+                    .append(getAttributeType(strings.get(1))).append(strings.get(0)).append(";\n\n");
         }
         log.info("sql = {}",sql.toString());
 
