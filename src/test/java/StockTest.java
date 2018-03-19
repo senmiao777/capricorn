@@ -4,6 +4,7 @@ import com.frank.entity.mysql.IncomeStatement;
 import com.frank.model.Result;
 import com.frank.repository.mysql.BenefitRepository;
 import com.frank.repository.mysql.IncomeStatementRepository;
+import com.frank.util.GenerateUtil;
 import com.frank.util.HttpUtil;
 import com.google.common.base.Splitter;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -84,9 +86,52 @@ public class StockTest {
     }
 
     @Test
-    public void testAtomicLong() {
+    public void sql2Entity() {
         long l = num.incrementAndGet();
 
+        List<String> attrList = Lists.newArrayList("id bigint(20) NOT NULL AUTO_INCREMENT",
+                "area varchar(40)",
+                "occupation varchar(40)",
+                "requirement varchar(256) ",
+                "content varchar(1024) ",
+                "user_id varchar(30) ",
+                "user_name varchar(64) ",
+                "url_token varchar(100) ",
+                "head_image varchar(256) ",
+                "gender tinyint(1) default 1",
+                "register_gender tinyint(1) default 1",
+                "register_at bigint(20) ",
+                "headline varchar(256) ");
+
+        String sql = GenerateUtil.sqlList2Entity(attrList);
+        log.info("sqlList2Entity sql = {}",sql.toString());
+
+
+    }
+
+    private String getAttributeType(String type) {
+        if (type.contains("varchar")) {
+            return "private String ";
+        } else if (type.contains("bigint")) {
+            return "private Long ";
+        } else if (type.contains("int")) {
+            return "private Integer ";
+        } else {
+            return "private String ";
+        }
+    }
+
+    /**
+     * 拼接实体类
+     *
+     * @param s
+     * @param list
+     * @return
+     */
+    private StringBuilder get2CurrentString(StringBuilder s, List<String> list) {
+        s.append("/**").append(list.get(2)).append("*/").append("@Column(name = \"").append(list.get(0))
+                .append("\")").append("private ").append(getType(list.get(1))).append(" ").append(list.get(0)).append(";\n\n");
+        return s;
     }
 
 

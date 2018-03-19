@@ -17,9 +17,9 @@ public class TopInterviewQuestions {
         ListNode l1 = new ListNode(2);
 
         ListNode l2 = new ListNode(4);
-        ListNode l3 = new ListNode(3);
+       // ListNode l3 = new ListNode(3);
         l1.setNext(l2);
-        l2.setNext(l3);
+     //   l2.setNext(l3);
 
         ListNode l4 = new ListNode(5);
         ListNode l5 = new ListNode(6);
@@ -67,14 +67,6 @@ public class TopInterviewQuestions {
         ListNode(int val) {
             this.val = val;
         }
-
-//      public int getVal(){
-//          return this.val;
-//      }
-//
-//      public ListNode getNext(){
-//          return this.next;
-//      }
 
         public void setVal(int val) {
             this.val = val;
