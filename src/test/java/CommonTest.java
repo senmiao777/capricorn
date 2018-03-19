@@ -45,7 +45,8 @@ public class CommonTest {
         if (PASS.equals(test)) {
             log.info("testString2 PASS in ");
             test = FAIL;
-        } else if (FAIL.equals(test)) {
+        }
+        if (FAIL.equals(test)) {
             log.info("testString2 FAIL in ");
         }
     }
