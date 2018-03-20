@@ -38,6 +38,14 @@ public class CommonTest {
 
     private String PASS = "PASS";
     private String FAIL = "FAIL";
+    @Test
+    public void testString23() {
+        String str = "ab:cde";
+
+        int i = str.indexOf(":");
+        log.info("i = {}",i);
+        log.info("str = {}",str.substring(i));
+    }
 
     @Test
     public void testString2() {

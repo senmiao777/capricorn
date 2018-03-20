@@ -33,6 +33,18 @@ public class BlindDateComment {
     private String area;
 
     /**
+     * 学历
+     */
+    @Column(name = "user_education")
+    private String education;
+
+    /**
+     * 职业
+     */
+    @Column(name = "age")
+    private String age;
+
+    /**
      * 职业
      */
     @Column(name = "occupation")
@@ -65,7 +77,8 @@ public class BlindDateComment {
     /**
      * 用户连接
      */
-    private String url_token;
+    @Column(name = "url_token")
+    private String urlToken;
 
     /**
      * 头像链接
@@ -100,12 +113,12 @@ public class BlindDateComment {
     /**
      * 创建时间
      */
-    @Column(name = "created_at")
+    @Column(name = "create_at")
     private Timestamp createdAt;
 
     /**
      * 更新时间
      */
-    @Column(name = "updated_at")
+    @Column(name = "update_at")
     private Timestamp updatedAt;
 }
