@@ -77,13 +77,13 @@ public class BlindDateComment {
      * 本次评论所填写性别
      */
     @Column(name = "gender")
-    private Integer gender;
+    private String gender;
 
     /**
      * 注册时填写性别
      */
     @Column(name = "register_gender")
-    private Integer registerGender;
+    private String registerGender;
 
     /**
      * 注册时间
