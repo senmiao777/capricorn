@@ -35,7 +35,6 @@ public class GenerateUtil {
             sql.append(NOTE).append(COLUMN).append(strings.get(0)).append("\")")
                     .append(getAttributeType(strings.get(1))).append(strings.get(0)).append(";\n\n");
         }
-        log.info("sql = {}", sql.toString());
         return sql.toString();
     }
 
