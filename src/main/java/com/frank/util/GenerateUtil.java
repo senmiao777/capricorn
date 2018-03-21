@@ -51,7 +51,7 @@ public class GenerateUtil {
             return "private Long ";
         } else if (type.contains("int")) {
             return "private Integer ";
-        } else if (type.contains("bigdecimal")) {
+        } else if (type.contains("decimal")) {
             return "private BigDecimal ";
         } else {
             return "private String ";
