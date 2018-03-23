@@ -1,6 +1,8 @@
 import com.alibaba.fastjson.JSON;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.repository.mysql.IncomeStatementRepository;
+import com.frank.util.GenerateUtil;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
@@ -46,6 +48,28 @@ public class CommonTest {
         log.info("i = {}",i);
         log.info("str = {}",str.substring(i));
     }
+
+    @Test
+    public void testCharAt() {
+//        String test = "abcdefg";
+//        final char c = test.charAt(1);
+//        log.info("charAt = {}",c);
+        List<String> list = Lists.newArrayList(  "uuid varchar(20) DEFAULT NULL COMMENT ",
+        "user_id bigint(20) DEFAULT NULL",
+                "product_id bigint(20) DEFAULT NULL COMMENT '产品ID'",
+                "total_amount decimal(20,2) DEFAULT '0.00' COMMENT '总额度'",
+        "available_amount decimal(20,2) DEFAULT '0.00' COMMENT '可用额度'",
+        "used_amount decimal(20,2) DEFAULT '0.00' COMMENT '已使用额度'",
+        "freeze_amount decimal(20,2) DEFAULT '0.00' COMMENT '冻结额度'",
+        "expire_at timestamp NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '失效时间（风控提供）'",
+                "remark varchar(255) DEFAULT '' COMMENT '备注'",
+                "is_active tinyint(1) DEFAULT '1' COMMENT '数据是否有效标志位'");
+
+        final String s = GenerateUtil.sqlList2Entity(list);
+        log.info("GenerateUtil={}",s);
+
+    }
+
 
     @Test
     public void testString2() {
