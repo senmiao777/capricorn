@@ -115,4 +115,57 @@ public class SynchronizedTest {
         }
         log.info("---  just for test end");
     }
+
+    @Test
+    public void testAlternative() {
+        final Object lock = new Object();
+        Thread job1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 30; i++) {
+                    synchronized (lock) {
+
+                        log.info("----------1-----------");
+                        lock.notifyAll();
+                        try {
+                            for(int j = 1;j<3;j++){
+                                log.info("1");
+                            }
+                            lock.wait();
+
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
+            }
+        });
+        Thread job2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 20; i++) {
+                    synchronized (lock) {
+
+                        log.info("``````````````````2111111111111");
+                        lock.notifyAll();
+                        try {
+                            for(int j = 1;j<3;j++){
+                                log.info("2");
+                            }
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+            }
+        });
+
+        job1.start();
+        job2.start();
+
+    }
 }
