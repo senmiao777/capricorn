@@ -18,4 +18,7 @@ public interface BlindDateCommentRepository extends JpaRepository<BlindDateComme
     @Query(value = "SELECT * from blind_date_comment where area != ?1", nativeQuery = true)
     List<BlindDateComment> findByAreaNot(String area);
 
+    @Query(value = "SELECT * from blind_date_comment where requirement = 'requirement'", nativeQuery = true)
+    List<BlindDateComment> modifyEdu();
+
 }

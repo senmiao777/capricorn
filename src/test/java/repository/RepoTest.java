@@ -2,6 +2,7 @@ package repository;
 
 import com.frank.entity.mysql.BlindDateComment;
 import com.frank.repository.mysql.BlindDateCommentRepository;
+import com.google.common.base.Splitter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,31 +41,55 @@ public class RepoTest {
         String requirement = "";
 
 
-        List<BlindDateComment> areas = commentRepository.findByAreaNot("area");
+        List<BlindDateComment> areas = commentRepository.modifyEdu();
         log.info("areas.size()={}", areas.size());
         for (BlindDateComment c : areas) {
-            area = modify(c.getArea());
-            edu = modify(c.getEducation());
-            age = modify(c.getAge());
-            occupation = modify(c.getOccupation());
-            requirement = modify(c.getRequirement());
+//            area = modify(c.getContent());
+//            edu = modify(c.getContent());
+//            age = modify(c.getAge());
+//            occupation = modify(c.getOccupation());
+            requirement = modify(c.getContent());
 
 
-            c.setAge(age);
-            c.setArea(area);
-            c.setOccupation(occupation);
-            c.setEducation(edu);
+//            c.setAge(age);
+//            c.setArea(area);
+//            c.setOccupation(occupation);
+//              c.setEducation(edu);
             c.setRequirement(requirement);
-            commentRepository.save(c);
+            BlindDateComment save = commentRepository.save(c);
+            log.info("save id ={}", save.getId());
+
         }
 
     }
 
-    private String modify(String str) {
-        if (str.contains(":")) {
-            str = str.substring(str.indexOf(":") + 1);
+    private void delete(BlindDateComment comment) {
+        List<String> strings = Splitter.on(",").splitToList(comment.getContent());
+        if (strings.size() >= 4) {
+            return;
         }
-        return str.trim();
+
+        List<String> strings2 = Splitter.on(" ").splitToList(comment.getContent());
+        if (strings2.size() >= 4) {
+            return;
+        }
+
+        comment.setArea("abc");
+        BlindDateComment save = commentRepository.save(comment);
+        log.info("save id ={}", save.getId());
+
+
+    }
+
+    private String modify(String str) {
+
+        int i = str.indexOf("要求");
+        if (i > 0) {
+            str = str.substring(i + 2);
+            return str;
+        }
+
+        return "requirement";
 
     }
 

@@ -41,7 +41,7 @@ public class BlindDateComment {
     /**
      * 职业
      */
-    @Column(name = "age")
+    @Column(name = "user_age")
     private String age;
 
     /**

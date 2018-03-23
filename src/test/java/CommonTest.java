@@ -40,9 +40,9 @@ public class CommonTest {
     private String FAIL = "FAIL";
     @Test
     public void testString23() {
-        String str = "ab:cde";
+        String str = "暂唯一要求是身高要180以上的";
 
-        int i = str.indexOf(":");
+        int i = str.indexOf("要求");
         log.info("i = {}",i);
         log.info("str = {}",str.substring(i));
     }
