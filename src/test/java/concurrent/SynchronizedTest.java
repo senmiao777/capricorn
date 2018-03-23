@@ -116,6 +116,11 @@ public class SynchronizedTest {
         log.info("---  just for test end");
     }
 
+    /**
+     * 两个线程交替执行
+     * wait
+     * notifyAll
+     */
     @Test
     public void testAlternative() {
         final Object lock = new Object();
