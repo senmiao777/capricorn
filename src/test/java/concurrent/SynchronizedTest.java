@@ -120,6 +120,8 @@ public class SynchronizedTest {
      * 两个线程交替执行
      * wait
      * notifyAll
+     *
+     * name
      */
     @Test
     public void testAlternative() {
