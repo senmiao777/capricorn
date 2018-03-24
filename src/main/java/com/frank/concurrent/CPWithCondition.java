@@ -12,6 +12,12 @@ import java.util.concurrent.locks.ReentrantLock;
  * @version 1.0
  * @date 2018/3/24 0024 下午 3:05
  */
+
+/**
+ * condition
+ * 干嘛用呢，比较精确地控制现成的唤醒，休眠。
+ * 队列满了的时候，生产者等待，唤醒消费者；反之，。。。
+ */
 @Slf4j
 public class CPWithCondition {
     private Lock lock = new ReentrantLock();
@@ -29,7 +35,7 @@ public class CPWithCondition {
             }
 
             int random = RandomUtils.nextInt(10, 100);
-           // Thread.sleep(random);
+            // Thread.sleep(random);
 
             int value = pool[cnum];
 
@@ -38,8 +44,8 @@ public class CPWithCondition {
             count--;
             notFull.signal();
             cnum++;
-            if(cnum == 10){
-                cnum =0;
+            if (cnum == 10) {
+                cnum = 0;
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -56,7 +62,7 @@ public class CPWithCondition {
                 notFull.await();
             }
             int random = RandomUtils.nextInt(10, 50);
-           // Thread.sleep(random);
+            // Thread.sleep(random);
 
             pool[pnum] = random;
 
@@ -65,8 +71,8 @@ public class CPWithCondition {
             count++;
             notEmpty.signal();
             pnum++;
-            if(pnum == 10){
-                pnum =0;
+            if (pnum == 10) {
+                pnum = 0;
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -74,24 +80,29 @@ public class CPWithCondition {
             lock.unlock();
         }
     }
+
     static CPWithCondition condition = new CPWithCondition();
+
     public static void main(String[] args) {
         // 启动10个“写线程”，向BoundedBuffer中不断的写数据(写入0-9)；
         // 启动10个“读线程”，从BoundedBuffer中不断的读数据。
 
-        for (int i=0; i<10; i++) {
-            new PutThread("p"+i, i).start();
-            new TakeThread("t"+i).start();
-    }
+        for (int i = 0; i < 10; i++) {
+            new PutThread("p" + i, i).start();
+            new TakeThread("t" + i).start();
+        }
 
 
     }
+
     static class PutThread extends Thread {
         private int num;
+
         public PutThread(String name, int num) {
             super(name);
             this.num = num;
         }
+
         @Override
         public void run() {
             try {
@@ -106,6 +117,7 @@ public class CPWithCondition {
         public TakeThread(String name) {
             super(name);
         }
+
         @Override
         public void run() {
             try {
