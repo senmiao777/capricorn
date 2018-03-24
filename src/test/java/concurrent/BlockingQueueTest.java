@@ -1,6 +1,5 @@
 package concurrent;
 
-import com.frank.concurrent.CPWithCondition;
 import com.frank.concurrent.Consumer;
 import com.frank.concurrent.Producer;
 import lombok.extern.slf4j.Slf4j;
@@ -24,42 +23,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Slf4j
 public class BlockingQueueTest {
 
-    @Test
-    public void testCondition(){
-        CPWithCondition condition = new CPWithCondition();
-        class PutThread extends Thread {
-            private int num;
-            public PutThread(String name, int num) {
-                super(name);
-                this.num = num;
-            }
-            public void run() {
-                try {
-                    Thread.sleep(1);    // 线程休眠1ms
-                    condition.produce();        // 向BoundedBuffer中写入数据
-                } catch (InterruptedException e) {
-                }
-            }
-        }
-
-        class TakeThread extends Thread {
-            public TakeThread(String name) {
-                super(name);
-            }
-            public void run() {
-                try {
-                    Thread.sleep(10);                    // 线程休眠1ms
-                    condition.consume();    // 从BoundedBuffer中取出数据
-                } catch (InterruptedException e) {
-                }
-            }
-        }
-
-        for (int i=0; i<10; i++) {
-            new PutThread("p"+i, i).start();
-            new TakeThread("t"+i).start();
-        }
-    }
 
     @Test
     public void dormant() {
