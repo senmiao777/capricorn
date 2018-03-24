@@ -2,6 +2,7 @@ package concurrent;
 
 import com.frank.concurrent.SyncTest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.annotation.Rollback;
@@ -120,12 +121,13 @@ public class SynchronizedTest {
      * 两个线程交替执行
      * wait
      * notifyAll
-     *
+     * <p>
      * name
      */
     @Test
     public void testAlternative() {
         final Object lock = new Object();
+        final int status = 0;
         Thread job1 = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -135,10 +137,11 @@ public class SynchronizedTest {
                         log.info("----------1-----------");
                         lock.notifyAll();
                         try {
-                            for(int j = 1;j<3;j++){
-                                log.info("1");
+                            log.info("job1 第{}次执行", i + 1);
+                            if (status == 1) {
+                                lock.wait();
                             }
-                            lock.wait();
+
 
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -158,9 +161,7 @@ public class SynchronizedTest {
                         log.info("``````````````````2111111111111");
                         lock.notifyAll();
                         try {
-                            for(int j = 1;j<3;j++){
-                                log.info("2");
-                            }
+                            log.info("job2 第{}次执行", i + 1);
                             lock.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -174,5 +175,112 @@ public class SynchronizedTest {
         job1.start();
         job2.start();
 
+    }
+
+    public static int status = 3;
+
+    @Test
+    public void testOutput() {
+        final Object lock = new Object();
+
+
+        Thread odd = new Thread(new Runnable() {
+            int num = 1;
+            // 计数
+            int count = 1;
+
+            @Override
+            public void run() {
+
+                while (num < 100) {
+                    synchronized (lock) {
+                        /**
+                         * 这种写法很容易死锁
+                         * 拿到锁之后判断不符合条件，直接等待；而符合条件的已经出去等待状态->死锁
+                         */
+                        if (status == 1) {
+                            log.info("第{}个奇数是{}", count, num);
+                            num = num + 2;
+                            count++;
+                            // lock.notifyAll();
+                            status = 2;
+                        } else {
+                            lock.notifyAll();
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                    }
+                }
+            }
+        });
+
+        Thread even = new Thread(new Runnable() {
+            int num = 2;
+            // 计数
+            int count = 1;
+
+            @Override
+            public void run() {
+
+                while (num < 100) {
+                    synchronized (lock) {
+                        if (status == 2) {
+                            log.info("第{}个偶数是{}", count, num);
+                            num = num + 2;
+                            count++;
+                            status = 3;
+                        } else {
+                            lock.notifyAll();
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                    }
+                }
+            }
+        });
+
+        Thread other = new Thread(new Runnable() {
+            int num = 2;
+            // 计数
+            int count = 1;
+
+            @Override
+            public void run() {
+
+                while (num < 100) {
+                    synchronized (lock) {
+                        if (status == 3) {
+                            log.info("第{}个other是{}", count, RandomUtils.nextInt(100, 200));
+                            num = num + 2;
+                            status = 1;
+                            count++;
+                        } else {
+                            lock.notifyAll();
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                    }
+                }
+            }
+        });
+
+        odd.start();
+        even.start();
+        other.start();
     }
 }
