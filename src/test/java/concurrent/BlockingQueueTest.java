@@ -1,15 +1,10 @@
 package concurrent;
 
+import com.frank.concurrent.CPWithCondition;
 import com.frank.concurrent.Consumer;
 import com.frank.concurrent.Producer;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -21,13 +16,50 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @version 1.0
  * @date 2018/1/29 0029 下午 9:50
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootApplication
-@ComponentScan(basePackages = "com.frank")
-@SpringBootTest(classes = BlockingQueueTest.class)
-@Rollback(false)
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@SpringBootApplication
+//@ComponentScan(basePackages = "com.frank")
+//@SpringBootTest(classes = BlockingQueueTest.class)
+//@Rollback(false)
 @Slf4j
 public class BlockingQueueTest {
+
+    @Test
+    public void testCondition(){
+        CPWithCondition condition = new CPWithCondition();
+        class PutThread extends Thread {
+            private int num;
+            public PutThread(String name, int num) {
+                super(name);
+                this.num = num;
+            }
+            public void run() {
+                try {
+                    Thread.sleep(1);    // 线程休眠1ms
+                    condition.produce();        // 向BoundedBuffer中写入数据
+                } catch (InterruptedException e) {
+                }
+            }
+        }
+
+        class TakeThread extends Thread {
+            public TakeThread(String name) {
+                super(name);
+            }
+            public void run() {
+                try {
+                    Thread.sleep(10);                    // 线程休眠1ms
+                    condition.consume();    // 从BoundedBuffer中取出数据
+                } catch (InterruptedException e) {
+                }
+            }
+        }
+
+        for (int i=0; i<10; i++) {
+            new PutThread("p"+i, i).start();
+            new TakeThread("t"+i).start();
+        }
+    }
 
     @Test
     public void dormant() {

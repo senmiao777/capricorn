@@ -42,6 +42,7 @@ public class CommonTest {
     private String FAIL = "FAIL";
     @Test
     public void testString23() {
+
         String str = "暂唯一要求是身高要180以上的";
 
         int i = str.indexOf("要求");

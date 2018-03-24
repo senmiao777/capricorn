@@ -24,6 +24,8 @@ import java.util.Vector;
 @Slf4j
 public class SynchronizedTest {
 
+
+
     @Test
     public void abc(){
         Alternate alternate = new Alternate();
