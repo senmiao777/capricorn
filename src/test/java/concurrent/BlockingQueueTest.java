@@ -30,7 +30,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class BlockingQueueTest {
 
     @Test
-    public void test() {
+    public void dormant() {
         // 声明一个容量为10的缓存队列
         BlockingQueue<String> queue = new LinkedBlockingQueue<>(10);
       //  queue.put("2");

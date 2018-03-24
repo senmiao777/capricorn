@@ -1,5 +1,6 @@
 package concurrent;
 
+import com.frank.concurrent.Alternate;
 import com.frank.concurrent.SyncTest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
@@ -22,6 +23,17 @@ import java.util.Vector;
 @Rollback(false)
 @Slf4j
 public class SynchronizedTest {
+
+    @Test
+    public void abc(){
+        Alternate alternate = new Alternate();
+        Thread one = new Thread(alternate);
+        Thread two = new Thread(alternate);
+        Thread three = new Thread(alternate);
+        one.start();
+        two.start();
+        three.start();
+    }
 
     /**
      * static synchronized 修饰方法测试
@@ -197,6 +209,7 @@ public class SynchronizedTest {
                         /**
                          * 这种写法很容易死锁
                          * 拿到锁之后判断不符合条件，直接等待；而符合条件的已经出去等待状态->死锁
+                         * 现在这样依旧会死锁， 3 在等待， 但是锁一直在1 和 2 之间
                          */
                         if (status == 1) {
                             log.info("第{}个奇数是{}", count, num);

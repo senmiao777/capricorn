@@ -40,23 +40,24 @@ public class Producer implements Runnable {
 
     @Override
     public void run() {
-        log.info("[Producer] 启动生产者线程...");
+        final int producerName = RandomUtils.nextInt(100, 1000);
+        log.info("[Producer-{}]启动生产者线程...", producerName);
         int sleepMillis;
         String data;
         while (runSwitch) {
             sleepMillis = RandomUtils.nextInt(DOWN, UP);
             data = new StringBuilder(String.valueOf(count.incrementAndGet())).append(UNDERLINE).append(UUID.randomUUID()).toString();
             try {
-                log.info("[Producer]正在生产数据, data : {} 将放入队列,costTime={}", data, sleepMillis);
+                log.info("[Producer-{}]正在生产数据, data : {} 将放入队列,costTime={}", producerName, data, sleepMillis);
                 Thread.sleep(sleepMillis);
                 if (!queue.offer(data, 160, TimeUnit.MILLISECONDS)) {
-                    log.info("[Producer]向队列放入数据失败!!!!!!!!!!!!!!!, data = {} ", data);
+                    log.info("[Producer-{}]向队列放入数据失败!!!!!!!!!!!!!!!, data = {} ", producerName, data);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
-                log.info("[Producer]InterruptedException, data = {} e={}", data, ExceptionUtils.getStackTrace(e));
+                log.info("[Producer-{}]InterruptedException, data = {} e={}", producerName, data, ExceptionUtils.getStackTrace(e));
             } finally {
-                log.info("[Producer] 停止生产,退出生产者线程", data);
+                log.info("[Producer-{}] 停止生产,退出生产者线程", producerName, data);
             }
 
         }
