@@ -15,8 +15,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Alternate implements Runnable {
 
     private Lock lock = new ReentrantLock();
-    private int t = 0;
-    private int j = 1;
+    private int t = 1;
+    private int j = 0;
     Condition first = lock.newCondition();
     Condition second = lock.newCondition();
     Condition third = lock.newCondition();
@@ -24,7 +24,7 @@ public class Alternate implements Runnable {
     public void one() {
         lock.lock();
         try {
-            if (j != 0) {
+            while (j != 0) {
                 first.await();
             }
             log.info("first--------------");
@@ -40,7 +40,7 @@ public class Alternate implements Runnable {
     public void two() {
         lock.lock();
         try {
-            if (j != 1) {
+            while (j != 1) {
                 second.await();
             }
             log.info("second--------------");
@@ -57,7 +57,7 @@ public class Alternate implements Runnable {
     public void three() {
         lock.lock();
         try {
-            if (j != 2) {
+            while (j != 2) {
                 third.await();
             }
             log.info("third--------------");
@@ -74,10 +74,10 @@ public class Alternate implements Runnable {
     @Override
     public void run() {
         for (int i = 0; i < 10; i++) {
-            if (t == 0) {
+            if (t == 1) {
                 one();
                 t = (t + 1) % 3;
-            } else if (t == 1) {
+            } else if (t == 2) {
 
                 two();
                 t = (t + 1) % 3;
