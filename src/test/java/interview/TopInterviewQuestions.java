@@ -4,6 +4,9 @@ import com.frank.enums.Common;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author frank
  * @version 1.0
@@ -11,15 +14,61 @@ import org.junit.Test;
  */
 @Slf4j
 public class TopInterviewQuestions {
+    /**
+     * Given a string, find the length of the longest substring without repeating characters.
+     * <p>
+     * Examples:
+     * <p>
+     * Given "abcabcbb", the answer is "abc", which the length is 3.
+     * <p>
+     * Given "bbbbb", the answer is "b", with the length of 1.
+     * <p>
+     * Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
+     */
+    @Test
+    public void longestSubstring() {
+        String str1 = "abcabccdbacb";
+        int length = findLength(str1);
+        log.info("length={}", length);
+
+    }
+
+    /**
+     * 滑动窗口
+     *
+     * @param str
+     * @return
+     */
+    private int findLength(String str) {
+        int length = str.length();
+        if (length == 0) {
+            return 0;
+        }
+        int max = 0;
+        int j = 0;
+        Map<Character, Integer> map = new HashMap<>(length);
+        for (int i = 0; i < length; i++) {
+            if (map.containsKey(str.charAt(i))) {
+                // 加一
+                j = Math.max(j, map.get(str.charAt(i)) + 1);
+            }
+
+            map.put(str.charAt(i), i);
+            max = Math.max(max, i - j + 1);
+
+        }
+        return max;
+    }
+
     @Test
     public void addTwoNumbers() {
         log.info(Common.LOG_BEGIN.getValue());
         ListNode l1 = new ListNode(2);
 
         ListNode l2 = new ListNode(4);
-       // ListNode l3 = new ListNode(3);
+        // ListNode l3 = new ListNode(3);
         l1.setNext(l2);
-     //   l2.setNext(l3);
+        //   l2.setNext(l3);
 
         ListNode l4 = new ListNode(5);
         ListNode l5 = new ListNode(6);
@@ -33,19 +82,19 @@ public class TopInterviewQuestions {
         sum = sum / 10;
         ListNode current = head;
         //ListNode t;
-        ListNode currentNode = head ;
-        while (sum / 10 > 0 || sum % 10 >0) {
+        ListNode currentNode = head;
+        while (sum / 10 > 0 || sum % 10 > 0) {
             ListNode t = new ListNode(sum % 10);
             currentNode.setNext(t);
             currentNode = t;
-            sum = sum /10;
+            sum = sum / 10;
         }
         ListNode next = head;
-       do{
+        do {
 
-           log.info("{}->",next.val);
-           next = next.getNext();
-       }while (next !=null);
+            log.info("{}->", next.val);
+            next = next.getNext();
+        } while (next != null);
         log.info(Common.LOG_END.getValue());
     }
 
