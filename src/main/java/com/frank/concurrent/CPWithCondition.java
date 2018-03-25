@@ -83,9 +83,7 @@ public class CPWithCondition {
 
     static CPWithCondition condition = new CPWithCondition();
 
-    public static void main(String[] args) {
-        // 启动10个“写线程”，向BoundedBuffer中不断的写数据(写入0-9)；
-        // 启动10个“读线程”，从BoundedBuffer中不断的读数据。
+    /*public static void main(String[] args) {
 
         for (int i = 0; i < 10; i++) {
             new PutThread("p" + i, i).start();
@@ -93,7 +91,7 @@ public class CPWithCondition {
         }
 
 
-    }
+    }*/
 
     static class PutThread extends Thread {
         private int num;
