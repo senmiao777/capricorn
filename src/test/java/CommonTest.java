@@ -10,6 +10,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.expression.Expression;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.test.annotation.Rollback;
 
 import java.math.BigDecimal;
@@ -40,6 +42,26 @@ public class CommonTest {
 
     private String PASS = "PASS";
     private String FAIL = "FAIL";
+
+    @Test
+    public void testSPEL(){
+        final String spel = "#this[0]+':'+#this[1]";
+
+        Expression expression = new SpelExpressionParser().parseExpression(spel);
+        Object[] args = new Object[2];
+        args[0] = "sudfsd";
+        args[1] = 12L;
+        String value = expression.getValue(args, String.class);
+        log.info("value={}",value);
+        Expression expression2 = new SpelExpressionParser().parseExpression("4>0");
+        Boolean value2 = expression2.getValue(Boolean.class);
+        log.info("value2={}",value2);
+    }
+
+    public String getKey(String uuid,Long productId){
+        String spel = "#{" +uuid +":"+productId+"}";
+        return spel;
+    }
     @Test
     public void testString23() {
 
