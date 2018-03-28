@@ -14,6 +14,44 @@ import java.util.Map;
  */
 @Slf4j
 public class TopInterviewQuestions {
+
+    @Test
+    public void reverseInteger() {
+        int number = 1234589000;
+        final int reverse = reverse(number);
+        log.info("reverse={}", reverse);
+    }
+
+    private int reverse(int number) {
+        boolean negative = false;
+        if (number < 0) {
+            negative = true;
+        }
+
+        number = Math.abs(number);
+
+        if (number < 10) {
+            if (negative) {
+                return -number;
+            }
+            return number;
+        }
+        int result = 0;
+        int remainder = 0;
+        /**
+         * 有多少位呢，我也不知道
+         * 每循环一次，就乘以10就可以了，不需要关心有多少位
+         * number > 10 避免最高位一直循环
+         */
+        while (number / 10 > 0 && number >= 10) {
+            remainder = number % 10;
+            result = result * 10 + remainder;
+            number = number / 10;
+        }
+
+        return negative ? -(result * 10 + number) : result * 10 + number;
+    }
+
     /**
      * Given a string, find the length of the longest substring without repeating characters.
      * <p>

@@ -17,6 +17,7 @@ import org.springframework.test.annotation.Rollback;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -56,6 +57,12 @@ public class CommonTest {
         Expression expression2 = new SpelExpressionParser().parseExpression("4>0");
         Boolean value2 = expression2.getValue(Boolean.class);
         log.info("value2={}",value2);
+
+        Map<String,String> map = new HashMap<>(3);
+        map.put("k1","v1");
+        Expression expression3 = new SpelExpressionParser().parseExpression("#this.get('k1')");
+        String va = expression3.getValue(map,String.class);
+        log.info("va={}",va);
     }
 
     public String getKey(String uuid,Long productId){
