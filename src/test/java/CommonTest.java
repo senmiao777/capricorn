@@ -18,6 +18,7 @@ import org.springframework.test.annotation.Rollback;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,9 +69,14 @@ public class CommonTest {
         User user = new User();
         user.setAge(19);
         user.setUserType(1);
+        //String s= "#this.userType+':'+#this.age";
+        List<User> list = new ArrayList<>(1);
+        list.add(user);
+       // String s= "#this.userType+':'+#this.age";
         String s= "#this[0].userType+':'+#this[0].age";
+      //  String s= "#this.userType";
         Expression expression6 = new SpelExpressionParser().parseExpression(s);
-        String v6 = expression6.getValue(user,String.class);
+        String v6 = expression6.getValue(list,String.class);
         log.info("v6={}",v6);
     }
 
