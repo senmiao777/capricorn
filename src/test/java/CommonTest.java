@@ -1,5 +1,6 @@
 import com.alibaba.fastjson.JSON;
 import com.frank.entity.mysql.IncomeStatement;
+import com.frank.entity.mysql.User;
 import com.frank.repository.mysql.IncomeStatementRepository;
 import com.frank.util.GenerateUtil;
 import com.google.common.collect.Lists;
@@ -63,6 +64,14 @@ public class CommonTest {
         Expression expression3 = new SpelExpressionParser().parseExpression("#this.get('k1')");
         String va = expression3.getValue(map,String.class);
         log.info("va={}",va);
+
+        User user = new User();
+        user.setAge(19);
+        user.setUserType(1);
+        String s= "#this[0].userType+':'+#this[0].age";
+        Expression expression6 = new SpelExpressionParser().parseExpression(s);
+        String v6 = expression6.getValue(user,String.class);
+        log.info("v6={}",v6);
     }
 
     public String getKey(String uuid,Long productId){
