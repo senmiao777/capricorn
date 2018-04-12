@@ -16,6 +16,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.test.annotation.Rollback;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -45,6 +46,14 @@ public class CommonTest {
 
     private String PASS = "PASS";
     private String FAIL = "FAIL";
+
+    @Test
+    public void testBigDicimal(){
+        BigDecimal amount = new BigDecimal("123");
+        log.info("amount={}",amount);
+        final BigDecimal bigDecimal = amount.setScale(6, RoundingMode.HALF_UP);
+        log.info("bigDecimal={}",bigDecimal);
+    }
 
     @Test
     public void testSPEL(){
