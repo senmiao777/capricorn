@@ -5,6 +5,7 @@ import com.frank.repository.mysql.IncomeStatementRepository;
 import com.frank.util.GenerateUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -19,10 +20,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -48,11 +46,59 @@ public class CommonTest {
     private String FAIL = "FAIL";
 
     @Test
+    public void testDiff(){
+
+        //TimerWheel t= null;
+
+        Set<Long> bigSister = Sets.newHashSet(100805158L,
+                100805258L,
+                100805020L,
+                100805203L,
+                100805382L,
+                100804935L,
+                100802758L,
+                99994399L,
+                100805607L,
+                100805525L,
+                100805667L,
+                100805726L,
+                100805298L,
+                100304156L,
+                100522966L,
+                100340073L,
+                100349365L,
+                100248126L,
+                100014907L,
+                99002327L,
+                100806033L);
+
+        Set<Long> mine = Sets.newHashSet(100805298L,
+                100522966L,
+                100340073L,
+                100349365L,
+                100248126L,
+                100014907L,
+                99002327L,
+                100806033L,
+                100805667L,
+                100805726L,
+                100304156L);
+
+        log.info("removeAll={}",bigSister.removeAll(mine));
+        log.info("removeAll={}",bigSister);
+
+     //   log.info("containsAll={}",bigSister.containsAll(mine));
+
+    }
+
+    @Test
     public void testBigDicimal(){
         BigDecimal amount = new BigDecimal("123");
         log.info("amount={}",amount);
         final BigDecimal bigDecimal = amount.setScale(6, RoundingMode.HALF_UP);
         log.info("bigDecimal={}",bigDecimal);
+
+        log.info("bigDecimal={}",bigDecimal.multiply(new BigDecimal("30")));
     }
 
     @Test
