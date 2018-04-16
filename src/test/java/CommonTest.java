@@ -93,6 +93,11 @@ public class CommonTest {
 
     @Test
     public void testBigDicimal(){
+Character c = ' ';
+       String s = " ";
+
+        log.info("result={}",c.equals(s.charAt(0)));
+
         BigDecimal amount = new BigDecimal("123");
         log.info("amount={}",amount);
         final BigDecimal bigDecimal = amount.setScale(6, RoundingMode.HALF_UP);
