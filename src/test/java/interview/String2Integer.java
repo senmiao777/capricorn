@@ -47,6 +47,8 @@ public class String2Integer {
                     continue;
                 } else if (str.charAt(i) == '-') {
                     sign = -1;
+                } else if (str.charAt(i) >= '0' && str.charAt(i) <= '9') {
+                    continue;
                 } else {
                     return 0;
                 }
