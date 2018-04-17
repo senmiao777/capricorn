@@ -1,72 +1,68 @@
 package interview;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.assertj.core.util.Lists;
 import org.junit.Test;
-
-import java.util.List;
 
 /**
  * Created by QuantGroup on 2018/4/16.
  */
 @Slf4j
 public class String2Integer {
-
-    // 初始化数组
-    public static final List<Character> NUMBER = Lists.newArrayList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
-
-    public static final Character BLANK = ' ';
-
-    public static final Character ADD = '+';
-
-    public static final Character MINUS = '-';
-
     @Test
-    public void test() {
-        log.info(" NUMBER.contains(c)={}", NUMBER.contains("1".charAt(0)));
+    public void string2Integer() {
+        log.info(" ".charAt(0) == ' ' ? "true" : "false");
+        char c = "a".charAt(0);
+        log.info("char = {}", c + 0);
+        // String s = " -123+- c456789123456";
+        String s = " -+- c";
+        int result = string2Integer(s);
+        log.info("result ={}", result);
     }
 
-    private Integer string2Integer(String str) {
-        if (StringUtils.isBlank(str)) {
-            return Integer.valueOf(0);
-        }
-        final int length = str.length();
-        boolean numberBegin = false;
-
-        // 默认是正数
-        boolean negtive = false;
-        Character temp;
-        Integer result = 0;
-
-        for (int i = 0; i < length; i++) {
-            temp = str.charAt(i);
-            // 找到数字起始的点
-            if (!numberBegin && MINUS.equals(temp)) {
-                negtive = true;
-                numberBegin = true;
-                continue;
-            }
-
-            if (!numberBegin && ADD.equals(temp)) {
-                numberBegin = true;
-                continue;
-            }
-
-            if (NUMBER.contains(temp)) {
-                result = result * 10 + temp;
-            }
-            //TODO  超过INT_MAX (2147483647) or INT_MIN (-2147483648) 没思路处理
-            // TODO 各种判断有点low啊
-            /**
-             * TODO sddsd
-             * ddd
-             * dd
-             */
+    private int string2Integer(String str) {
+        if (str == null || str.isEmpty()) {
+            return 0;
         }
 
+        /**
+         * 默认正数
+         */
+        int sign = 1;
 
-        return 0;
+        /**
+         * 字符位置
+         */
+        int i = 0;
 
+        while (str.charAt(i) == ' ') {
+            i++;
+        }
+
+        if (str.charAt(i) == '-') {
+            // 负号
+            sign = -1;
+            i++;
+        }
+
+        // 如果为正号，符号位保持不变，下标加一
+        if (str.charAt(i) == '+') {
+            i++;
+        }
+
+        int result = 0;
+
+        /**
+         * str.charAt(i) - '0' 这才是得到的数值 str.charAt(i) 得到的是ASCII码的值 a= 97
+         */
+        for (; i < str.length(); i++) {
+            if (str.charAt(i) < '0' || str.charAt(i) > '9') {
+                continue;
+            }
+            if (result > Integer.MAX_VALUE / 10 || result == Integer.MAX_VALUE / 10 && (str.charAt(i) - '0') > 7) {
+                return sign > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            }
+            result = result * 10 + (str.charAt(i) - '0');
+        }
+        return sign > 0 ? result : result * -1;
     }
 }
