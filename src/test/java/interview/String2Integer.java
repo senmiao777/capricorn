@@ -13,8 +13,8 @@ public class String2Integer {
         log.info(" ".charAt(0) == ' ' ? "true" : "false");
         char c = "a".charAt(0);
         log.info("char = {}", c + 0);
-        // String s = " -123+- c456789123456";
-        String s = " -+- c";
+        String s = " a-123+- c4567891";
+        // String s = " -+- c";
         int result = string2Integer(s);
         log.info("result ={}", result);
     }
@@ -28,33 +28,30 @@ public class String2Integer {
          * 默认正数
          */
         int sign = 1;
-
-        /**
-         * 字符位置
-         */
-        int i = 0;
-
-        while (str.charAt(i) == ' ') {
-            i++;
-        }
-
-        if (str.charAt(i) == '-') {
-            // 负号
-            sign = -1;
-            i++;
-        }
-
-        // 如果为正号，符号位保持不变，下标加一
-        if (str.charAt(i) == '+') {
-            i++;
-        }
-
         int result = 0;
 
         /**
          * str.charAt(i) - '0' 这才是得到的数值 str.charAt(i) 得到的是ASCII码的值 a= 97
          */
-        for (; i < str.length(); i++) {
+        int t = 0;
+        boolean first = true;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == ' ') {
+                t++;
+                continue;
+            }
+            // 第一个不是空格的字符
+            if (t == i && first) {
+                first = false;
+                if (str.charAt(i) == '+') {
+                    continue;
+                } else if (str.charAt(i) == '-') {
+                    sign = -1;
+                } else {
+                    return 0;
+                }
+            }
+
             if (str.charAt(i) < '0' || str.charAt(i) > '9') {
                 continue;
             }
