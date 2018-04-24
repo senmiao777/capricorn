@@ -25,6 +25,11 @@ public class String2Integer {
     @Test
     public void test() {
         log.info(" NUMBER.contains(c)={}", NUMBER.contains("1".charAt(0)));
+        String s = "  234234 sdf d3467";
+
+        final Integer integer = string2Integer(s);
+        log.info("integer={}", integer);
+
     }
 
     private Integer string2Integer(String str) {
@@ -54,19 +59,19 @@ public class String2Integer {
             }
 
             if (NUMBER.contains(temp)) {
-                result = result * 10 + temp;
+                result = result * 10 + (int)temp;
             }
             //TODO  超过INT_MAX (2147483647) or INT_MIN (-2147483648) 没思路处理
             // TODO 各种判断有点low啊
             /**
              * TODO sddsd
              * ddd
-             * dd
+             *
              */
         }
 
 
-        return 0;
+        return result;
 
     }
 }
