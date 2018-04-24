@@ -16,6 +16,70 @@ import java.util.Map;
  */
 @Slf4j
 public class ArrayEasyTest {
+
+    @Test
+    public void string2Integer() {
+        log.info(" ".charAt(0) == ' ' ? "true" : "false");
+        char c = "a".charAt(0);
+        log.info("char = {}", c + 0);
+        String s = " -123456789";
+        int result = string2Integer(s);
+        log.info("result ={}", result);
+    }
+
+    private int string2Integer(String str) {
+        if (str == null || str.isEmpty()) {
+            return 0;
+        }
+
+        /**
+         * 默认正数
+         */
+        int sign = 1;
+
+        /**
+         * 字符位置
+         */
+        int i = 0;
+
+        while (str.charAt(i) == ' ') {
+            i++;
+        }
+
+        if (str.charAt(i) == '-') {
+            // 负号
+            sign = -1;
+            i++;
+        }
+
+        // 如果为正号，符号位保持不变，下标加一
+        if (str.charAt(i) == '+') {
+            i++;
+        }
+
+        int result = 0;
+        /**
+         * Integer.MIN_VALUE = -2147483648
+         Integer.MAX_VALUE = 2147483647
+         */
+
+        /**
+         * 注意，是 >= 0 <= 9
+         * str.charAt(i) - '0' 这才是得到的数值 str.charAt(i) 得到的是ASCII码的值 a= 97
+         */
+        while (i < str.length() && (str.charAt(i) >= '0' && str.charAt(i) <= '9')) {
+            /**
+             * result / 10 > max 开始是这么写的，已经爆了
+             */
+            if (result > Integer.MAX_VALUE / 10 || result == Integer.MAX_VALUE / 10 && (str.charAt(i) - '0') > 7) {
+                return sign > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            }
+            result = result * 10 + (str.charAt(i) - '0');
+            i++;
+        }
+        return sign > 0 ? result : result * -1;
+    }
+
     @Test
     public void moveZeroes2() {
         log.info(Common.LOG_BEGIN.getValue());
@@ -57,7 +121,7 @@ public class ArrayEasyTest {
             }
         }
 
-        for(int i = index;i<n;i++){
+        for (int i = index; i < n; i++) {
             nums[i] = 0;
         }
         return index;
