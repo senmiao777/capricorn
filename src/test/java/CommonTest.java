@@ -45,10 +45,61 @@ public class CommonTest {
     private String PASS = "PASS";
     private String FAIL = "FAIL";
 
-    class Vo{
+    class Vo {
         String amount;
         List<Integer> list;
 
+    }
+
+    class Time {
+        private Date start;
+        private Date end;
+
+        public Time(Date start, Date end) {
+            if (start.getTime() > end.getTime()) {
+                try {
+                    throw new Exception("数据异常");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            this.start = start;
+            this.end = end;
+        }
+
+        @Override
+        public String toString() {
+            return "Time{" +
+                    "start=" + start +
+                    ", end=" + end +
+                    '}';
+        }
+
+        public Date getStart() {
+            return start;
+        }
+
+        public void setStart(Date start) {
+            this.start = start;
+        }
+
+        public Date getEnd() {
+            return end;
+        }
+
+        public void setEnd(Date end) {
+            this.end = end;
+        }
+    }
+
+    @Test
+    public void unsafeCopy() {
+        Date start = new Date();
+        Date end = new Date();
+        Time time = new Time(start, end);
+        log.info("time={}", time);
+        end = new Date(1524392629000L);
+        log.info("1524392629000 time={}", time);
     }
 
     @Test
@@ -61,7 +112,7 @@ public class CommonTest {
         log.info("map={}", JSON.toJSONString(map));
 
         Map<String, Set<Integer>> map2 = new HashMap<>(5);
-        Set<Integer> one2 = Sets.newHashSet(1, 2, 3);
+        Set<Integer> one2 = Sets.newHashSet(1, 2, 3, 2);
         Set<Integer> two2 = Sets.newHashSet(1, 2, 3);
         map2.put("2000", one2);
         map2.put("4000", two2);
@@ -73,39 +124,31 @@ public class CommonTest {
 
         //TimerWheel t= null;
 
-        Set<Long> bigSister = Sets.newHashSet(100805158L,
-                100805258L,
-                100805020L,
-                100805203L,
-                100805382L,
-                100804935L,
-                100802758L,
-                99994399L,
-                100805607L,
-                100805525L,
-                100805667L,
-                100805726L,
-                100805298L,
-                100304156L,
-                100522966L,
-                100340073L,
-                100349365L,
-                100248126L,
-                100014907L,
-                99002327L,
-                100806033L);
+        Set<String> bigSister = Sets.newHashSet("SP100048313941366128910653",
+                "SP100890807501582539332578",
+                "SP100037052451357347870258",
+                "SP100006291951332772831013",
+                "SP999407319912734193182643",
+                "SP997341996010969304572867",
+                "SP100825076691606646049932",
+                "SP100823686721592163394610",
+                "SP997161108710796669561233",
+                "SP100821935731579566619780",
+                "SP992828282410671523593759",
+                "SP100817290351542216662539",
+                "SP100781104611487998545094",
+                "SP100626160601427377228474",
+                "SP100603522361397208405850",
+                "SP974649527072358897510906");
 
-        Set<Long> mine = Sets.newHashSet(100805298L,
-                100522966L,
-                100340073L,
-                100349365L,
-                100248126L,
-                100014907L,
-                99002327L,
-                100806033L,
-                100805667L,
-                100805726L,
-                100304156L);
+        Set<String> mine = Sets.newHashSet("SP100603522361397208405850",
+                "SP100626160601427377228474",
+                "SP100781104611487998545094",
+                "SP100817290351542216662539",
+                "SP100821935731579566619780",
+                "SP100823686721592163394610",
+                "SP100825076691606646049932",
+                "SP100890807501582539332578");
 
         log.info("removeAll={}", bigSister.removeAll(mine));
         log.info("removeAll={}", bigSister);
