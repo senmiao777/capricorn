@@ -45,69 +45,135 @@ public class CommonTest {
     private String PASS = "PASS";
     private String FAIL = "FAIL";
 
+    class Vo {
+        String amount;
+        List<Integer> list;
+
+    }
+
+    class Time {
+        private Date start;
+        private Date end;
+
+        public Time(Date start, Date end) {
+            if (start.getTime() > end.getTime()) {
+                try {
+                    throw new Exception("数据异常");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            this.start = start;
+            this.end = end;
+        }
+
+        @Override
+        public String toString() {
+            return "Time{" +
+                    "start=" + start +
+                    ", end=" + end +
+                    '}';
+        }
+
+        public Date getStart() {
+            return start;
+        }
+
+        public void setStart(Date start) {
+            this.start = start;
+        }
+
+        public Date getEnd() {
+            return end;
+        }
+
+        public void setEnd(Date end) {
+            this.end = end;
+        }
+    }
+
     @Test
-    public void testDiff(){
+    public void unsafeCopy() {
+        Date start = new Date();
+        Date end = new Date();
+        Time time = new Time(start, end);
+        log.info("time={}", time);
+        end = new Date(1524392629000L);
+        log.info("1524392629000 time={}", time);
+    }
+
+    @Test
+    public void testMap() {
+        Map<String, List<Integer>> map = new HashMap<>(5);
+        List<Integer> one = Lists.newArrayList(1, 2, 3);
+        List<Integer> two = Lists.newArrayList(1, 2, 3);
+        map.put("2000", one);
+        map.put("4000", two);
+        log.info("map={}", JSON.toJSONString(map));
+
+        Map<String, Set<Integer>> map2 = new HashMap<>(5);
+        Set<Integer> one2 = Sets.newHashSet(1, 2, 3, 2);
+        Set<Integer> two2 = Sets.newHashSet(1, 2, 3);
+        map2.put("2000", one2);
+        map2.put("4000", two2);
+        log.info("map={}", JSON.toJSONString(map2));
+    }
+
+    @Test
+    public void testDiff() {
 
         //TimerWheel t= null;
 
-        Set<Long> bigSister = Sets.newHashSet(100805158L,
-                100805258L,
-                100805020L,
-                100805203L,
-                100805382L,
-                100804935L,
-                100802758L,
-                99994399L,
-                100805607L,
-                100805525L,
-                100805667L,
-                100805726L,
-                100805298L,
-                100304156L,
-                100522966L,
-                100340073L,
-                100349365L,
-                100248126L,
-                100014907L,
-                99002327L,
-                100806033L);
+        Set<String> bigSister = Sets.newHashSet("SP100048313941366128910653",
+                "SP100890807501582539332578",
+                "SP100037052451357347870258",
+                "SP100006291951332772831013",
+                "SP999407319912734193182643",
+                "SP997341996010969304572867",
+                "SP100825076691606646049932",
+                "SP100823686721592163394610",
+                "SP997161108710796669561233",
+                "SP100821935731579566619780",
+                "SP992828282410671523593759",
+                "SP100817290351542216662539",
+                "SP100781104611487998545094",
+                "SP100626160601427377228474",
+                "SP100603522361397208405850",
+                "SP974649527072358897510906");
 
-        Set<Long> mine = Sets.newHashSet(100805298L,
-                100522966L,
-                100340073L,
-                100349365L,
-                100248126L,
-                100014907L,
-                99002327L,
-                100806033L,
-                100805667L,
-                100805726L,
-                100304156L);
+        Set<String> mine = Sets.newHashSet("SP100603522361397208405850",
+                "SP100626160601427377228474",
+                "SP100781104611487998545094",
+                "SP100817290351542216662539",
+                "SP100821935731579566619780",
+                "SP100823686721592163394610",
+                "SP100825076691606646049932",
+                "SP100890807501582539332578");
 
-        log.info("removeAll={}",bigSister.removeAll(mine));
-        log.info("removeAll={}",bigSister);
+        log.info("removeAll={}", bigSister.removeAll(mine));
+        log.info("removeAll={}", bigSister);
 
-     //   log.info("containsAll={}",bigSister.containsAll(mine));
+        //   log.info("containsAll={}",bigSister.containsAll(mine));
 
     }
 
     @Test
-    public void testBigDicimal(){
-Character c = ' ';
-       String s = " ";
+    public void testBigDicimal() {
+        Character c = ' ';
+        String s = " ";
 
-        log.info("result={}",c.equals(s.charAt(0)));
+        log.info("result={}", c.equals(s.charAt(0)));
 
         BigDecimal amount = new BigDecimal("123");
-        log.info("amount={}",amount);
+        log.info("amount={}", amount);
         final BigDecimal bigDecimal = amount.setScale(6, RoundingMode.HALF_UP);
-        log.info("bigDecimal={}",bigDecimal);
+        log.info("bigDecimal={}", bigDecimal);
 
-        log.info("bigDecimal={}",bigDecimal.multiply(new BigDecimal("30")));
+        log.info("bigDecimal={}", bigDecimal.multiply(new BigDecimal("30")));
     }
 
     @Test
-    public void testSPEL(){
+    public void testSPEL() {
         final String spel = "#this[0]+':'+#this[1]";
 
         Expression expression = new SpelExpressionParser().parseExpression(spel);
@@ -115,16 +181,16 @@ Character c = ' ';
         args[0] = "sudfsd";
         args[1] = 12L;
         String value = expression.getValue(args, String.class);
-        log.info("value={}",value);
+        log.info("value={}", value);
         Expression expression2 = new SpelExpressionParser().parseExpression("4>0");
         Boolean value2 = expression2.getValue(Boolean.class);
-        log.info("value2={}",value2);
+        log.info("value2={}", value2);
 
-        Map<String,String> map = new HashMap<>(3);
-        map.put("k1","v1");
+        Map<String, String> map = new HashMap<>(3);
+        map.put("k1", "v1");
         Expression expression3 = new SpelExpressionParser().parseExpression("#this.get('k1')");
-        String va = expression3.getValue(map,String.class);
-        log.info("va={}",va);
+        String va = expression3.getValue(map, String.class);
+        log.info("va={}", va);
 
         User user = new User();
         user.setAge(19);
@@ -132,26 +198,27 @@ Character c = ' ';
         //String s= "#this.userType+':'+#this.age";
         List<User> list = new ArrayList<>(1);
         list.add(user);
-       // String s= "#this.userType+':'+#this.age";
-        String s= "#this[0].userType+':'+#this[0].age";
-      //  String s= "#this.userType";
+        // String s= "#this.userType+':'+#this.age";
+        String s = "#this[0].userType+':'+#this[0].age";
+        //  String s= "#this.userType";
         Expression expression6 = new SpelExpressionParser().parseExpression(s);
-        String v6 = expression6.getValue(list,String.class);
-        log.info("v6={}",v6);
+        String v6 = expression6.getValue(list, String.class);
+        log.info("v6={}", v6);
     }
 
-    public String getKey(String uuid,Long productId){
-        String spel = "#{" +uuid +":"+productId+"}";
+    public String getKey(String uuid, Long productId) {
+        String spel = "#{" + uuid + ":" + productId + "}";
         return spel;
     }
+
     @Test
     public void testString23() {
 
         String str = "暂唯一要求是身高要180以上的";
 
         int i = str.indexOf("要求");
-        log.info("i = {}",i);
-        log.info("str = {}",str.substring(i));
+        log.info("i = {}", i);
+        log.info("str = {}", str.substring(i));
     }
 
     @Test
@@ -159,19 +226,19 @@ Character c = ' ';
 //        String test = "abcdefg";
 //        final char c = test.charAt(1);
 //        log.info("charAt = {}",c);
-        List<String> list = Lists.newArrayList(  "uuid varchar(20) DEFAULT NULL COMMENT ",
-        "user_id bigint(20) DEFAULT NULL",
+        List<String> list = Lists.newArrayList("uuid varchar(20) DEFAULT NULL COMMENT ",
+                "user_id bigint(20) DEFAULT NULL",
                 "product_id bigint(20) DEFAULT NULL COMMENT '产品ID'",
                 "total_amount decimal(20,2) DEFAULT '0.00' COMMENT '总额度'",
-        "available_amount decimal(20,2) DEFAULT '0.00' COMMENT '可用额度'",
-        "used_amount decimal(20,2) DEFAULT '0.00' COMMENT '已使用额度'",
-        "freeze_amount decimal(20,2) DEFAULT '0.00' COMMENT '冻结额度'",
-        "expire_at timestamp NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '失效时间（风控提供）'",
+                "available_amount decimal(20,2) DEFAULT '0.00' COMMENT '可用额度'",
+                "used_amount decimal(20,2) DEFAULT '0.00' COMMENT '已使用额度'",
+                "freeze_amount decimal(20,2) DEFAULT '0.00' COMMENT '冻结额度'",
+                "expire_at timestamp NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '失效时间（风控提供）'",
                 "remark varchar(255) DEFAULT '' COMMENT '备注'",
                 "is_active tinyint(1) DEFAULT '1' COMMENT '数据是否有效标志位'");
 
         final String s = GenerateUtil.sqlList2Entity(list);
-        log.info("GenerateUtil={}",s);
+        log.info("GenerateUtil={}", s);
 
     }
 
