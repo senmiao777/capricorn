@@ -1,9 +1,12 @@
 package jvm;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,26 +63,88 @@ public class MemoryAssignStrategy {
 
     }
 
+    /**
+     * -Xms100m -Xmx100M -XX:+UseSerialGC
+     */
     @Test
     public void systemGc() {
         try {
             fillHeap(1000);
+            System.gc();
         } catch (InterruptedException e) {
             log.error("fillHeap e={}", ExceptionUtils.getStackTrace(e));
         }
+    }
+
+    public static void createBusyThread() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    int i = RandomUtils.nextInt(5, 30);
+                    log.info("random is ={}", i);
+                    try {
+                        Thread.sleep(i);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, "BusyThread");
+        thread.start();
+    }
+
+    public static void createLockthread(final Object lock) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (lock) {
+                    try {
+                        lock.wait();
+                        log.info("been notified");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, "Lockthread");
+        thread.start();
+    }
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        br.readLine();
+        createBusyThread();
+
+        br.readLine();
+        Object o = new Object();
+        createLockthread(o);
+
+
+//        try {
+//            fillHeap(1000);
+//            System.gc();
+//        } catch (InterruptedException e) {
+//            log.error("fillHeap e={}", ExceptionUtils.getStackTrace(e));
+//        }
     }
 
     static class OOMObject {
         public byte[] placeHolder = new byte[64 * 1024];
     }
 
-    private void fillHeap(int number) throws InterruptedException {
+    private static void fillHeap(int number) throws InterruptedException {
         List<OOMObject> list = new ArrayList<>(number);
-        for (int i = 0; i < number; i++) {
+        for (int i = 1; i < number; i++) {
             Thread.sleep(50);
+            log.info("running times ={}", i);
             list.add(new OOMObject());
         }
-        System.gc();
+        //  System.gc();
+        //Thread.sleep(100);
+        log.info("after gc ");
     }
+
+
 }
 
