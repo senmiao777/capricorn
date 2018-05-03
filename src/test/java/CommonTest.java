@@ -6,6 +6,7 @@ import com.frank.util.GenerateUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -18,6 +19,7 @@ import org.springframework.test.annotation.Rollback;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -36,6 +38,26 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CommonTest {
 
+    /**
+     * 罗马数字与值对应关系
+     */
+    private static final Map<String, Integer> ROMAN_VALUE_MAP = new HashMap<>();
+
+    /**
+     * 罗马数字减法规则
+     */
+
+    //int millis = 30*24*60*60*1000;
+    static {
+        ROMAN_VALUE_MAP.put("I", 1);
+        ROMAN_VALUE_MAP.put("V", 5);
+        ROMAN_VALUE_MAP.put("X", 10);
+        ROMAN_VALUE_MAP.put("L", 50);
+        ROMAN_VALUE_MAP.put("C", 100);
+        ROMAN_VALUE_MAP.put("D", 500);
+        ROMAN_VALUE_MAP.put("M", 1000);
+    }
+
     @Autowired
     private RedisTemplate redisTemplate;
 
@@ -44,6 +66,58 @@ public class CommonTest {
 
     private String PASS = "PASS";
     private String FAIL = "FAIL";
+
+    enum Suit {
+        CLUB, DIAMOND
+    }
+
+    enum Rank {
+        ACE, DEUCE, THREE
+    }
+
+    @ToString
+    static class Card {
+        private Suit suit;
+        private Rank rank;
+
+        Card(Suit suit, Rank rank) {
+            this.suit = suit;
+            this.rank = rank;
+        }
+    }
+
+
+    /**
+     * 迭代器测试
+     */
+    @Test
+    public void testCollection() {
+        List<Suit> suits = Arrays.asList(Suit.values());
+        List<Rank> ranks = Arrays.asList(Rank.values());
+        List<Card> deck = new ArrayList<>();
+        for (Iterator<Suit> i = suits.iterator(); i.hasNext(); ) {
+            final Suit next = i.next();
+            final Iterator<Rank> iterator = ranks.iterator();
+            for (; iterator.hasNext(); ) {
+                deck.add(new Card(next, iterator.next()));
+            }
+        }
+        log.info("deck={}", deck);
+    }
+
+    @Test
+    public void timestamp() {
+        final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+        log.info("time={}", timestamp);
+        long i = 30L * 24L * 60L * 60L * 1000L;
+        log.info("i ={}", i);
+        final long currentTimeMillis = System.currentTimeMillis();
+        Timestamp localDateTime = new Timestamp(currentTimeMillis + i);
+
+        log.info("30 timestamp1={}", localDateTime);
+
+    }
 
     class Vo {
         String amount;
@@ -56,6 +130,10 @@ public class CommonTest {
         private Date end;
 
         public Time(Date start, Date end) {
+            /**
+             * TODO
+             * 保护性拷贝
+             */
             if (start.getTime() > end.getTime()) {
                 try {
                     throw new Exception("数据异常");
@@ -98,7 +176,7 @@ public class CommonTest {
         Date end = new Date();
         Time time = new Time(start, end);
         log.info("time={}", time);
-        end = new Date(1524392629000L);
+        end.setYear(100);
         log.info("1524392629000 time={}", time);
     }
 
