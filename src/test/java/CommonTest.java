@@ -41,21 +41,34 @@ public class CommonTest {
     /**
      * 罗马数字与值对应关系
      */
-    private static final Map<String, Integer> ROMAN_VALUE_MAP = new HashMap<>();
+    private static final Map<Character, Integer> ROMAN_VALUE_MAP = new HashMap<>();
 
     /**
      * 罗马数字减法规则
+     * I can be placed before V (5) and X (10) to make 4 and 9.
+     * X can be placed before L (50) and C (100) to make 40 and 90.
+     * C can be placed before D (500) and M (1000) to make 400 and 900.
      */
+    private static final Map<Character, Character> RULE_MAP = new HashMap<>();
 
     //int millis = 30*24*60*60*1000;
     static {
-        ROMAN_VALUE_MAP.put("I", 1);
-        ROMAN_VALUE_MAP.put("V", 5);
-        ROMAN_VALUE_MAP.put("X", 10);
-        ROMAN_VALUE_MAP.put("L", 50);
-        ROMAN_VALUE_MAP.put("C", 100);
-        ROMAN_VALUE_MAP.put("D", 500);
-        ROMAN_VALUE_MAP.put("M", 1000);
+        ROMAN_VALUE_MAP.put('I', 1);
+        ROMAN_VALUE_MAP.put('V', 5);
+        ROMAN_VALUE_MAP.put('X', 10);
+        ROMAN_VALUE_MAP.put('L', 50);
+        ROMAN_VALUE_MAP.put('C', 100);
+        ROMAN_VALUE_MAP.put('D', 500);
+        ROMAN_VALUE_MAP.put('M', 1000);
+
+        RULE_MAP.put('V', 'I');
+        RULE_MAP.put('X', 'I');
+
+        RULE_MAP.put('L', 'X');
+        RULE_MAP.put('C', 'X');
+
+        RULE_MAP.put('D', 'C');
+        RULE_MAP.put('M', 'C');
     }
 
     @Autowired
@@ -66,6 +79,24 @@ public class CommonTest {
 
     private String PASS = "PASS";
     private String FAIL = "FAIL";
+
+
+    @Test
+    public void roman2int(){
+        String roman = "MCMXCIV";
+        int length = roman.length();
+        Character currentCharacter = null;
+        Integer currentValue = null;
+        // 一边遍历一边往map里放
+        for(int i = 0 ; i<length;i++){
+            currentCharacter = roman.charAt(i);
+            currentValue = ROMAN_VALUE_MAP.get(currentCharacter);
+
+        }
+        //roman.charAt()
+    }
+
+
 
     enum Suit {
         CLUB, DIAMOND
