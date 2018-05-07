@@ -38,53 +38,30 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CommonTest {
 
-    /**
-     * 罗马数字与值对应关系
-     */
-    private static final Map<String, Integer> ROMAN_VALUE_MAP = new HashMap<>();
+    enum Roman {
+        M("M", 1000, "M对应值为1000"),
+        D("D", 500, "D对应值为500"),
+        C("C", 100, "C对应值为100。C can be placed before D (500) and M (1000) to make 400 and 900"),
+        L("L", 50, "L对应值为50"),
+        X("X", 10, "X对应值为10。X can be placed before L (50) and C (100) to make 40 and 90"),
+        V("V", 5, "V对应值为5"),
+        I("I", 1, "I对应值为1。I can be placed before V (5) and X (10) to make 4 and 9"),
+        IV("IV", 4, "IV对应值为4"),
+        IX("IX", 9, "IX对应值为9"),
+        XL("XL", 40, "XL对应值为40"),
+        XC("XC", 90, "XC对应值为90"),
+        CD("CD", 400, "CD对应值为400"),
+        CM("CM", 900, "CM对应值为900");
 
-    /**
-     * 罗马数字减法规则
-     * I can be placed before V (5) and X (10) to make 4 and 9.
-     * X can be placed before L (50) and C (100) to make 40 and 90.
-     * C can be placed before D (500) and M (1000) to make 400 and 900.
-     */
-    private static final Map<Character, Character> RULE_MAP = new HashMap<>();
+        private String key;
+        private int value;
+        private String desc;
 
-    //int millis = 30*24*60*60*1000;
-    static {
-        ROMAN_VALUE_MAP.put("I", 1);
-        ROMAN_VALUE_MAP.put("V", 5);
-        ROMAN_VALUE_MAP.put("X", 10);
-        ROMAN_VALUE_MAP.put("L", 50);
-        ROMAN_VALUE_MAP.put("C", 100);
-        ROMAN_VALUE_MAP.put("D", 500);
-        ROMAN_VALUE_MAP.put("M", 1000);
-
-        ROMAN_VALUE_MAP.put("IV", 4);
-        ROMAN_VALUE_MAP.put("IX", 9);
-        ROMAN_VALUE_MAP.put("XL", 40);
-        ROMAN_VALUE_MAP.put("XC", 90);
-        ROMAN_VALUE_MAP.put("CD", 400);
-        ROMAN_VALUE_MAP.put("CM", 900);
-
-        /**
-         * I can be placed before V (5) and X (10) to make 4 and 9.
-         */
-        RULE_MAP.put('V', 'I');
-        RULE_MAP.put('X', 'I');
-
-        /**
-         * X can be placed before L (50) and C (100) to make 40 and 90.
-         */
-        RULE_MAP.put('L', 'X');
-        RULE_MAP.put('C', 'X');
-
-        /**
-         * C can be placed before D (500) and M (1000) to make 400 and 900.
-         */
-        RULE_MAP.put('D', 'C');
-        RULE_MAP.put('M', 'C');
+        Roman(String key, int value, String desc) {
+            this.key = key;
+            this.value = value;
+            this.desc = desc;
+        }
     }
 
     @Autowired
@@ -100,16 +77,114 @@ public class CommonTest {
     @Test
     public void roman2int() {
         String roman = "MCMXCIV";
+        log.info("roman2int={}", Roman.M.desc);
+        //roman.charAt()
+    }
+
+    private int roman2IntValue(String roman) {
         int length = roman.length();
-        Character currentCharacter = null;
+
+        if (length == 0) {
+            return 0;
+        }
+
+        int result = 0;
+
+        String currentCharacter = null;
+        String nextCharacter = null;
         Integer currentValue = null;
         // 一边遍历一边往map里放
+        // key 位置，value 该位置对应的字符
+        Map<Integer, Character> positionCharacter = new HashMap<>();
+
         for (int i = 0; i < length; i++) {
-            currentCharacter = roman.charAt(i);
-            currentValue = ROMAN_VALUE_MAP.get(currentCharacter);
+            currentCharacter = String.valueOf(roman.charAt(i));
+            if (Roman.M.key.equals(currentCharacter)) {
+                result = result + Roman.M.value;
+                continue;
+            }
+
+            if (Roman.D.key.equals(currentCharacter.toString())) {
+                result = result + Roman.D.value;
+                continue;
+            }
+
+            if (Roman.C.key.equals(currentCharacter.toString())) {
+
+                if (++i == length) {
+                    result = result + Roman.C.value;
+                    break;
+                }
+                nextCharacter = String.valueOf(roman.charAt(i));
+                if (Roman.D.key.equals(nextCharacter)) {
+                    result = result + Roman.CD.value;
+                    continue;
+                }
+
+                if (Roman.M.key.equals(nextCharacter)) {
+                    result = result + Roman.CM.value;
+                    continue;
+                }
+
+                result = result + Roman.D.value;
+                i--;
+
+            }
+
+            if (Roman.L.key.equals(currentCharacter.toString())) {
+                result = result + Roman.L.value;
+                continue;
+            }
+
+            if (Roman.X.key.equals(currentCharacter.toString())) {
+                if (++i == length) {
+                    result = result + Roman.X.value;
+                    break;
+                }
+                nextCharacter = String.valueOf(roman.charAt(i));
+                if (Roman.L.key.equals(nextCharacter)) {
+                    result = result + Roman.XL.value;
+                    continue;
+                }
+
+                if (Roman.C.key.equals(nextCharacter)) {
+                    result = result + Roman.XC.value;
+                    continue;
+                }
+
+                result = result + Roman.X.value;
+                i--;
+            }
+
+            if (Roman.V.key.equals(currentCharacter.toString())) {
+                result = result + Roman.V.value;
+                continue;
+            }
+
+
+            if (Roman.I.key.equals(currentCharacter.toString())) {
+                if (++i == length) {
+                    result = result + Roman.I.value;
+                    break;
+                }
+                nextCharacter = String.valueOf(roman.charAt(i));
+                if (Roman.V.key.equals(nextCharacter)) {
+                    result = result + Roman.IV.value;
+                    continue;
+                }
+
+                if (Roman.X.key.equals(nextCharacter)) {
+                    result = result + Roman.IX.value;
+                    continue;
+                }
+
+                result = result + Roman.I.value;
+                i--;
+            }
+
 
         }
-        //roman.charAt()
+        return result;
     }
 
 
