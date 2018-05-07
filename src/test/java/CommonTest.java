@@ -92,10 +92,6 @@ public class CommonTest {
 
         String currentCharacter = null;
         String nextCharacter = null;
-        Integer currentValue = null;
-        // 一边遍历一边往map里放
-        // key 位置，value 该位置对应的字符
-        Map<Integer, Character> positionCharacter = new HashMap<>();
 
         for (int i = 0; i < length; i++) {
             currentCharacter = String.valueOf(roman.charAt(i));
