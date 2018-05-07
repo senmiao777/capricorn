@@ -77,7 +77,7 @@ public class CommonTest {
     @Test
     public void roman2int() {
         String roman = "MCMXCIV";
-        log.info("roman2int={}", Roman.M.desc);
+        log.info("roman2int={}", roman2IntValue(roman));
         //roman.charAt()
     }
 
@@ -126,7 +126,7 @@ public class CommonTest {
                     continue;
                 }
 
-                result = result + Roman.D.value;
+                result = result + Roman.C.value;
                 i--;
 
             }
