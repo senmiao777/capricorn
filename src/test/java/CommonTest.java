@@ -6,6 +6,7 @@ import com.frank.util.GenerateUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -18,6 +19,7 @@ import org.springframework.test.annotation.Rollback;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -36,6 +38,32 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CommonTest {
 
+    enum Roman {
+        M("M", 1000, "M对应值为1000"),
+        D("D", 500, "D对应值为500"),
+        C("C", 100, "C对应值为100。C can be placed before D (500) and M (1000) to make 400 and 900"),
+        L("L", 50, "L对应值为50"),
+        X("X", 10, "X对应值为10。X can be placed before L (50) and C (100) to make 40 and 90"),
+        V("V", 5, "V对应值为5"),
+        I("I", 1, "I对应值为1。I can be placed before V (5) and X (10) to make 4 and 9"),
+        IV("IV", 4, "IV对应值为4"),
+        IX("IX", 9, "IX对应值为9"),
+        XL("XL", 40, "XL对应值为40"),
+        XC("XC", 90, "XC对应值为90"),
+        CD("CD", 400, "CD对应值为400"),
+        CM("CM", 900, "CM对应值为900");
+
+        private String key;
+        private int value;
+        private String desc;
+
+        Roman(String key, int value, String desc) {
+            this.key = key;
+            this.value = value;
+            this.desc = desc;
+        }
+    }
+
     @Autowired
     private RedisTemplate redisTemplate;
 
@@ -44,6 +72,242 @@ public class CommonTest {
 
     private String PASS = "PASS";
     private String FAIL = "FAIL";
+
+    /**
+     * Input: [1,3,5,6], 5
+     * Output: 2
+     * <p>
+     * Example 2:
+     * <p>
+     * Input: [1,3,5,6], 2
+     * Output: 1
+     * <p>
+     * Example 3:
+     * <p>
+     * Input: [1,3,5,6], 7
+     * Output: 4
+     * <p>
+     * Example 4:
+     * <p>
+     * Input: [1,3,5,6], 0
+     * Output: 0
+     */
+
+    @Test
+    public void findIndex() {
+        //int[] array = new int[]{1, 2, 3, 4, 5, 6, 7, 9, 10, 11};
+        int[] array = new int[]{1, 3, 5, 6};
+        log.info("findIndex={}", position(array, 0));
+    }
+
+    private int position(int[] array, int target) {
+        final int length = array.length;
+
+        if (length == 0) {
+            return 0;
+        }
+
+        /**
+         * 小于最小值
+         */
+        if (array[0] > target) {
+            return 0;
+        }
+
+        /**
+         * 大于最大值
+         */
+        if (array[length - 1] < target) {
+            return length;
+        }
+
+        int low = 0;
+        int high = length - 1;
+        int mid = 0;
+
+        while (low <= high) {
+            mid = (high + low) / 2;
+            if (array[mid] == target) {
+                return mid;
+            }
+
+            if (array[mid] < target) {
+                low = mid + 1;
+            }
+
+            if (array[mid] > target) {
+                high = mid - 1;
+            }
+
+            if (high <= low || high <= mid) {
+                return Math.max(low, mid);
+            }
+
+        }
+        return 999;
+    }
+
+    @Test
+    public void roman2int() {
+        String roman = "MCMXCIV";
+        log.info("roman2int={}", roman2IntValue(roman));
+        //roman.charAt()
+    }
+
+    private int roman2IntValue(String roman) {
+        int length = roman.length();
+
+        if (length == 0) {
+            return 0;
+        }
+
+        int result = 0;
+
+        String currentCharacter = null;
+        String nextCharacter = null;
+
+        for (int i = 0; i < length; i++) {
+            currentCharacter = String.valueOf(roman.charAt(i));
+            if (Roman.M.key.equals(currentCharacter)) {
+                result = result + Roman.M.value;
+                continue;
+            }
+
+            if (Roman.D.key.equals(currentCharacter.toString())) {
+                result = result + Roman.D.value;
+                continue;
+            }
+
+            if (Roman.C.key.equals(currentCharacter.toString())) {
+
+                if (++i == length) {
+                    result = result + Roman.C.value;
+                    break;
+                }
+                nextCharacter = String.valueOf(roman.charAt(i));
+                if (Roman.D.key.equals(nextCharacter)) {
+                    result = result + Roman.CD.value;
+                    continue;
+                }
+
+                if (Roman.M.key.equals(nextCharacter)) {
+                    result = result + Roman.CM.value;
+                    continue;
+                }
+
+                result = result + Roman.C.value;
+                i--;
+
+            }
+
+            if (Roman.L.key.equals(currentCharacter.toString())) {
+                result = result + Roman.L.value;
+                continue;
+            }
+
+            if (Roman.X.key.equals(currentCharacter.toString())) {
+                if (++i == length) {
+                    result = result + Roman.X.value;
+                    break;
+                }
+                nextCharacter = String.valueOf(roman.charAt(i));
+                if (Roman.L.key.equals(nextCharacter)) {
+                    result = result + Roman.XL.value;
+                    continue;
+                }
+
+                if (Roman.C.key.equals(nextCharacter)) {
+                    result = result + Roman.XC.value;
+                    continue;
+                }
+
+                result = result + Roman.X.value;
+                i--;
+            }
+
+            if (Roman.V.key.equals(currentCharacter.toString())) {
+                result = result + Roman.V.value;
+                continue;
+            }
+
+
+            if (Roman.I.key.equals(currentCharacter.toString())) {
+                if (++i == length) {
+                    result = result + Roman.I.value;
+                    break;
+                }
+                nextCharacter = String.valueOf(roman.charAt(i));
+                if (Roman.V.key.equals(nextCharacter)) {
+                    result = result + Roman.IV.value;
+                    continue;
+                }
+
+                if (Roman.X.key.equals(nextCharacter)) {
+                    result = result + Roman.IX.value;
+                    continue;
+                }
+
+                result = result + Roman.I.value;
+                i--;
+            }
+
+
+        }
+        return result;
+    }
+
+
+    enum Suit {
+        CLUB, DIAMOND
+    }
+
+    enum Rank {
+        ACE, DEUCE, THREE
+    }
+
+    @ToString
+    static class Card {
+        private Suit suit;
+        private Rank rank;
+
+        Card(Suit suit, Rank rank) {
+            this.suit = suit;
+            this.rank = rank;
+        }
+    }
+
+
+    /**
+     * 迭代器测试
+     */
+    @Test
+    public void testCollection() {
+        List<Suit> suits = Arrays.asList(Suit.values());
+        List<Rank> ranks = Arrays.asList(Rank.values());
+        List<Card> deck = new ArrayList<>();
+        for (Iterator<Suit> i = suits.iterator(); i.hasNext(); ) {
+            final Suit next = i.next();
+            final Iterator<Rank> iterator = ranks.iterator();
+            for (; iterator.hasNext(); ) {
+                deck.add(new Card(next, iterator.next()));
+            }
+        }
+        log.info("deck={}", deck);
+    }
+
+    @Test
+    public void timestamp() {
+        final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+        log.info("time={}", timestamp);
+        long i = 30L * 24L * 60L * 60L * 1000L;
+        log.info("i ={}", i);
+        final long currentTimeMillis = System.currentTimeMillis();
+        Timestamp localDateTime = new Timestamp(currentTimeMillis + i);
+
+        log.info("30 timestamp1={}", localDateTime);
+
+    }
 
     class Vo {
         String amount;
@@ -56,6 +320,10 @@ public class CommonTest {
         private Date end;
 
         public Time(Date start, Date end) {
+            /**
+             * TODO
+             * 保护性拷贝
+             */
             if (start.getTime() > end.getTime()) {
                 try {
                     throw new Exception("数据异常");
@@ -98,7 +366,7 @@ public class CommonTest {
         Date end = new Date();
         Time time = new Time(start, end);
         log.info("time={}", time);
-        end = new Date(1524392629000L);
+        end.setYear(100);
         log.info("1524392629000 time={}", time);
     }
 
