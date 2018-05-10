@@ -73,6 +73,79 @@ public class CommonTest {
     private String PASS = "PASS";
     private String FAIL = "FAIL";
 
+    /**
+     * Input: [1,3,5,6], 5
+     * Output: 2
+     * <p>
+     * Example 2:
+     * <p>
+     * Input: [1,3,5,6], 2
+     * Output: 1
+     * <p>
+     * Example 3:
+     * <p>
+     * Input: [1,3,5,6], 7
+     * Output: 4
+     * <p>
+     * Example 4:
+     * <p>
+     * Input: [1,3,5,6], 0
+     * Output: 0
+     */
+
+    @Test
+    public void findIndex() {
+        //int[] array = new int[]{1, 2, 3, 4, 5, 6, 7, 9, 10, 11};
+        int[] array = new int[]{1, 3, 5, 6};
+        log.info("findIndex={}", position(array, 0));
+    }
+
+    private int position(int[] array, int target) {
+        final int length = array.length;
+
+        if (length == 0) {
+            return 0;
+        }
+
+        /**
+         * 小于最小值
+         */
+        if (array[0] > target) {
+            return 0;
+        }
+
+        /**
+         * 大于最大值
+         */
+        if (array[length - 1] < target) {
+            return length;
+        }
+
+        int low = 0;
+        int high = length - 1;
+        int mid = 0;
+
+        while (low <= high) {
+            mid = (high + low) / 2;
+            if (array[mid] == target) {
+                return mid;
+            }
+
+            if (array[mid] < target) {
+                low = mid + 1;
+            }
+
+            if (array[mid] > target) {
+                high = mid - 1;
+            }
+
+            if (high <= low || high <= mid) {
+                return Math.max(low, mid);
+            }
+
+        }
+        return 999;
+    }
 
     @Test
     public void roman2int() {
