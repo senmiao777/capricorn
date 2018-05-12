@@ -97,7 +97,7 @@ public class CommonTest {
     public void findIndex() {
         //int[] array = new int[]{1, 2, 3, 4, 5, 6, 7, 9, 10, 11};
         int[] array = new int[]{1, 3, 5, 6};
-        log.info("findIndex={}", position(array, 0));
+        log.info("findIndex={}", position(array, 1));
     }
 
     private int position(int[] array, int target) {
@@ -138,18 +138,17 @@ public class CommonTest {
             if (array[mid] > target) {
                 high = mid - 1;
             }
+        }
 
-            if (high <= low || high <= mid) {
-                return Math.max(low, mid);
-            }
-
+        if (high <= low || high <= mid) {
+            return Math.max(low, mid);
         }
         return 999;
     }
 
     @Test
     public void roman2int() {
-        String roman = "MCMXCIV";
+        String roman = "XLV";
         log.info("roman2int={}", roman2IntValue(roman));
         //roman.charAt()
     }
