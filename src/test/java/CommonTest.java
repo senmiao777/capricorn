@@ -189,27 +189,8 @@ public class CommonTest {
     @Test
     public void findIndex() {
         //int[] array = new int[]{1, 2, 3, 4, 5, 6, 7, 9, 10, 11};
-//        int[] array = new int[]{1, 3, 5, 6};
-//        log.info("findIndex={}", position(array, 0));
-
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        final long time = timestamp.getTime();
-        final Date date = new Date(time);
-
-        java.util.concurrent.locks.Lock lock;
-
-        long thirty = 30L * 24L * 60L * 60L * 1000L;
-        log.info("thirty={}", thirty);
-        log.info("timestamp={},date={}", timestamp, date);
-
-        final long time2 = timestamp.getTime() + thirty;
-        Timestamp timestamp2 = new Timestamp(time2);
-        final Date date2 = new Date(time + thirty);
-        log.info("time2={}，date2={}", timestamp2, date2);
-
-        log.info("date={}", new Date(1514736000000L));
-
-        //  Date DEFAULT_DATE = new Date(1514736000000L);
+        int[] array = new int[]{1, 3, 5, 6};
+        log.info("findIndex={}", position(array, 1));
     }
 
     private int position(int[] array, int target) {
@@ -250,18 +231,17 @@ public class CommonTest {
             if (array[mid] > target) {
                 high = mid - 1;
             }
-
-            if (high <= low || high <= mid) {
-                return Math.max(low, mid);
-            }
-
         }
-        return -1;
+
+        if (high <= low || high <= mid) {
+            return Math.max(low, mid);
+        }
+        return 999;
     }
 
     @Test
     public void roman2int() {
-        String roman = "MCMXCIV";
+        String roman = "XLV";
         log.info("roman2int={}", roman2IntValue(roman));
         //roman.charAt()
     }
