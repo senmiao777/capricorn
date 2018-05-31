@@ -23,6 +23,10 @@ import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 /**
@@ -92,12 +96,120 @@ public class CommonTest {
      * Input: [1,3,5,6], 0
      * Output: 0
      */
+    /**
+     * 单线程嵌套调用，发生死锁
+     */
+    @Test
+    public void threadPoolTest() {
+        final ExecutorService executorService = Executors.newFixedThreadPool(1);
+
+
+        executorService.execute(new Runnable() {
+
+            @Override
+            public void run() {
+
+                log.info("outter in---");
+                final Future<?> submit = executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        log.info("111 in---");
+                    }
+                });
+                final Object o;
+                try {
+                    o = submit.get();
+                    log.info("Object={}", o);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+
+                try {
+                    log.info(" outter AAAAA---");
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(RandomUtils.nextInt(10, 50));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        log.info("222 in---");
+                    }
+                });
+                executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(RandomUtils.nextInt(10, 50));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        log.info("333 in---");
+                    }
+                });
+                executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(RandomUtils.nextInt(10, 50));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        log.info("444 in---");
+                    }
+                });
+                log.info("outter finish---");
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        log.info("main finish---");
+    }
 
     @Test
     public void findIndex() {
         //int[] array = new int[]{1, 2, 3, 4, 5, 6, 7, 9, 10, 11};
-        int[] array = new int[]{1, 3, 5, 6};
-        log.info("findIndex={}", position(array, 0));
+//        int[] array = new int[]{1, 3, 5, 6};
+//        log.info("findIndex={}", position(array, 0));
+
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        final long time = timestamp.getTime();
+        final Date date = new Date(time);
+
+        java.util.concurrent.locks.Lock lock;
+
+        long thirty = 30L * 24L * 60L * 60L * 1000L;
+        log.info("thirty={}", thirty);
+        log.info("timestamp={},date={}", timestamp, date);
+
+        final long time2 = timestamp.getTime() + thirty;
+        Timestamp timestamp2 = new Timestamp(time2);
+        final Date date2 = new Date(time + thirty);
+        log.info("time2={}，date2={}", timestamp2, date2);
+
+        log.info("date={}", new Date(1514736000000L));
+
+        //  Date DEFAULT_DATE = new Date(1514736000000L);
     }
 
     private int position(int[] array, int target) {
@@ -144,7 +256,7 @@ public class CommonTest {
             }
 
         }
-        return 999;
+        return -1;
     }
 
     @Test
