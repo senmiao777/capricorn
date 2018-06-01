@@ -23,10 +23,7 @@ import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 /**
@@ -77,25 +74,37 @@ public class CommonTest {
     private String PASS = "PASS";
     private String FAIL = "FAIL";
 
-    /**
-     * Input: [1,3,5,6], 5
-     * Output: 2
-     * <p>
-     * Example 2:
-     * <p>
-     * Input: [1,3,5,6], 2
-     * Output: 1
-     * <p>
-     * Example 3:
-     * <p>
-     * Input: [1,3,5,6], 7
-     * Output: 4
-     * <p>
-     * Example 4:
-     * <p>
-     * Input: [1,3,5,6], 0
-     * Output: 0
-     */
+
+    @Test
+    public void testEquals(){
+        Map<String,String> map = new HashMap<>(6);
+        map.put("k1","v1");
+        map.put("k2","v2");
+        map.put("k3","v3");
+        for(Map.Entry<String,String> e : map.entrySet()){
+            log.info("key={},value={}",e.getKey(),e.getValue());
+        }
+
+        log.info("---华丽的分割线---");
+
+        map.forEach((k,v)->{
+            log.info("key={},value={}",k,v);
+        });
+    }
+
+    @Test
+    public void threadPoolTest2() {
+        final ExecutorService executorService = Executors.newFixedThreadPool(1);
+        class TestTask implements Callable<String>{
+
+            @Override
+            public String call() throws Exception {
+               // executorService.submit()
+                return null;
+            }
+        }
+
+    }
     /**
      * 单线程嵌套调用，发生死锁
      */
@@ -186,6 +195,27 @@ public class CommonTest {
         log.info("main finish---");
     }
 
+
+
+    /**
+     * Input: [1,3,5,6], 5
+     * Output: 2
+     * <p>
+     * Example 2:
+     * <p>
+     * Input: [1,3,5,6], 2
+     * Output: 1
+     * <p>
+     * Example 3:
+     * <p>
+     * Input: [1,3,5,6], 7
+     * Output: 4
+     * <p>
+     * Example 4:
+     * <p>
+     * Input: [1,3,5,6], 0
+     * Output: 0
+     */
     @Test
     public void findIndex() {
         //int[] array = new int[]{1, 2, 3, 4, 5, 6, 7, 9, 10, 11};
