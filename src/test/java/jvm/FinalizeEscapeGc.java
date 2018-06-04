@@ -3,6 +3,10 @@ package jvm;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory;
+import java.util.List;
+
 /**
  * @author frank
  * @version 1.0
@@ -19,6 +23,16 @@ public class FinalizeEscapeGc {
         log.info("FinalizeEscapeGc finalize executed");
         FinalizeEscapeGc.HOOK = this;
     }
+
+    @Test
+    public void testJVM() {
+        List<GarbageCollectorMXBean> list = ManagementFactory.getGarbageCollectorMXBeans();
+        for(GarbageCollectorMXBean c : list) {
+            log.info("GarbageCollectorMXBean name = {}",c.getName());
+        }
+    }
+
+
 
     @Test
     public void test() {
