@@ -89,7 +89,7 @@ public class OverrideAndOverloadTest {
          * 这时发生了自动装箱，'a'被包装为他的封装类型java.lang.Character
          *
          * ...如果有接收Serializable类型的sayHello,会输出Serializable sayHello i=a
-         * 这个不知道是什么情况了吧，'a' 为什么会转成Serializable类型呢
+         * 这个不知道是什么情况了吧，'a' 为什么会转成Serializable类型呢？
          * 解释一波：当自动装箱之后找不到装箱类，但是找到了装箱类实现的接口类型，于是又发生了一次自动类型转换.
          * public final class Character implements java.io.Serializable, Comparable<Character>
          *
