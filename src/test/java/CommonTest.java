@@ -10,6 +10,9 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -74,6 +77,18 @@ public class CommonTest {
     private String PASS = "PASS";
     private String FAIL = "FAIL";
 
+    private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
+    private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+    @Test
+    public void testJoda(){
+        String timeStr = "20180101";
+        final String dateTime2 = formatTime(timeStr);
+        log.info("dateTime2={}",dateTime2);
+    }
+
+    private String formatTime(String time){
+        return DateTime.parse(time, FORMATTER).toString(FORMATTER_RESULT);
+    }
 
     @Test
     public void testEquals(){
