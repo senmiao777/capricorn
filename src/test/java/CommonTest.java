@@ -27,6 +27,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -79,11 +81,46 @@ public class CommonTest {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+
+    @Test
+    public void tesPhone(){
+        String phone = "\u202ds132404dfef1177s8s\u202cs";
+        log.info("dateTime2={}", phone = phone.replaceAll("[^\\d]",""));
+        log.info("dateTime={}",isPhoneNoValid(phone));
+//
+//
+//        final String trim = phone.trim();
+//
+//        log.info("dateTime2={}",isPhoneNoValid(trim));
+
+
+
+    }
+
+    public static boolean isPhoneNoValid(String phoneNo) {
+        if (phoneNo == null) {
+            return false;
+        }
+        String phoneNoPattern = "^1\\d{10}$";
+        return Pattern.matches(phoneNoPattern, phoneNo);
+    }
+
+
+    private String testR(String str){
+        String regEx="[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(str);
+        return m.replaceAll("").trim();
+    }
+
+
+
     @Test
     public void testJoda(){
         String timeStr = "20180101";
-        final String dateTime2 = formatTime(timeStr);
-        log.info("dateTime2={}",dateTime2);
+//        final String dateTime2 = formatTime(timeStr);
+//        log.info("dateTime2={}",dateTime2);
+        timeStr.replaceAll("[^\\d]","13");
     }
 
     private String formatTime(String time){
