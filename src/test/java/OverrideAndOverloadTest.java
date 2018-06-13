@@ -11,12 +11,23 @@ import java.io.Serializable;
 @Slf4j
 public class OverrideAndOverloadTest {
     abstract class Human {
+        public void sayHi() {
+            log.info("Human sayHi~");
+        }
     }
 
     class Man extends Human {
+        @Override
+        public void sayHi() {
+            log.info("Man sayHi~");
+        }
     }
 
     class Woman extends Human {
+        @Override
+        public void sayHi() {
+            log.info("Woman sayHi~");
+        }
     }
 
     public void sayHello(Human human) {
@@ -97,5 +108,23 @@ public class OverrideAndOverloadTest {
          */
 
         t.sayHello('a');
+
+
+        /**
+         * 动态分派 override 重写/覆盖
+         */
+
+        Human m = new Man();
+        Human w = new Woman();
+        m.sayHi();
+        w.sayHi();
+        m = new Woman();
+        m.sayHi();
+        /**
+         * invokevirtual（字节码文件中的指令）指令执行的第一步就是在运行期间确定方法调用者的实际类型，
+         * 所以，两次调用中的invokevirtual指令把符号引用解析到了不同的直接引用上，这个过程就是Java语言中覆盖（重写）的本质。
+         * 这种在运行期根据实际类型确定方法执行版本的分派过程称为动态分派。
+         */
+
     }
 }
