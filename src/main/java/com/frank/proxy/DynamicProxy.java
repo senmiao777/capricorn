@@ -66,6 +66,6 @@ public class DynamicProxy implements InvocationHandler {
     }
 
     public void after(Method method, Object[] args) {
-        log.info(" before calling method={},args={}", method, args);
+        log.info(" after calling method={},args={}", method, args);
     }
 }
