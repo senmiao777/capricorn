@@ -58,7 +58,8 @@ public class ProxyTest {
         demoServiceProxy.call();
 
         log.info("----------华丽的分割线-----------");
-        demoServiceProxy.call("测试代理");
+        final String str = demoServiceProxy.call("测试代理");
+        log.info("call str = {}",str);
         final Class<? extends DemoService> clazz = demoServiceProxy.getClass();
         log.info("---------------------subject.getClass()={}", clazz);
         log.info("---------------------subject.getClass().isInterface()={}", clazz.isInterface());
