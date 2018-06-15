@@ -66,7 +66,7 @@ public class ProxyTest {
          * 从工厂获取代理，整的和真事儿一样
          * 其实就是在里边new了一个对象返回了，封装的一小步，逼格的一大步
          */
-        final DynamicProxy2 proxy2 = MyProxyFactory.getProxy2();
+        final DynamicProxy2 proxy2 = MyProxyFactory.createProxy2();
 
         /**
          * 传入目标对象，得到了代理对象
