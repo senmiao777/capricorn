@@ -16,6 +16,10 @@ public class DynamicProxy2 implements InvocationHandler {
 
     Object originObject;
 
+    /**
+     * @param currentObject 要被代理的目标对象
+     * @return 代理对象
+     */
     public Object proxy(Object currentObject) {
         this.originObject = currentObject;
         return Proxy.newProxyInstance(originObject.getClass().getClassLoader(), originObject.getClass().getInterfaces(), this);

@@ -5,6 +5,7 @@ import com.frank.interceptor.TimeBeforeAdvice;
 import com.frank.proxy.CglibProxy;
 import com.frank.proxy.DynamicProxy;
 import com.frank.proxy.DynamicProxy2;
+import com.frank.proxy.MyProxyFactory;
 import com.frank.service.ConcurrentService;
 import com.frank.service.DemoService;
 import com.frank.service.impl.DemoServiceImpl;
@@ -35,7 +36,11 @@ public class ProxyTest {
         DemoServiceImpl serviceImpl = new DemoServiceImpl();
         Class cls = serviceImpl.getClass();
 
-        log.info("DemoServiceImpl classLoader={},interfaces={}",cls.getClassLoader(),cls.getInterfaces());
+        log.info("DemoServiceImpl classLoader={},interfaces={}", cls.getClassLoader(), cls.getInterfaces());
+
+        /**
+         * 下边的两行代码在DynamicProxy2里做了封装，看起来更简洁明了
+         */
         InvocationHandler invocationHandler = new DynamicProxy(serviceImpl);
         // 抽象角色：真实对象和代理对象的共同接口
         DemoService service = (DemoService) Proxy.newProxyInstance(cls.getClassLoader(), cls.getInterfaces(), invocationHandler);
@@ -52,17 +57,32 @@ public class ProxyTest {
     public void testDynamicProxy2() {
         log.info(Common.LOG_BEGIN.getValue());
 
-
+        /**
+         * 将要被代理的目标对象
+         */
         DemoServiceImpl serviceImpl = new DemoServiceImpl();
-        DemoService demoServiceProxy = (DemoService)new DynamicProxy2().proxy(serviceImpl);
+
+        /**
+         * 从工厂获取代理，整的和真事儿一样
+         * 其实就是在里边new了一个对象返回了，封装的一小步，逼格的一大步
+         */
+        final DynamicProxy2 proxy2 = MyProxyFactory.getProxy2();
+
+        /**
+         * 传入目标对象，得到了代理对象
+         */
+        DemoService demoServiceProxy = (DemoService) proxy2.proxy(serviceImpl);
+
         demoServiceProxy.call();
 
         log.info("----------华丽的分割线-----------");
+
         final String str = demoServiceProxy.call("测试代理");
-        log.info("call str = {}",str);
+        log.info("call str = {}", str);
+
         final Class<? extends DemoService> clazz = demoServiceProxy.getClass();
-        log.info("---------------------subject.getClass()={}", clazz);
-        log.info("---------------------subject.getClass().isInterface()={}", clazz.isInterface());
+        log.info("demoServiceProxy.getClass()={}", clazz);
+        log.info("demoServiceProxy.isInterface()={}", clazz.isInterface());
 
         log.info(Common.LOG_END.getValue());
     }
@@ -84,8 +104,8 @@ public class ProxyTest {
         //指定JdkDynamicAopProxy进行代理；
         factory.setInterfaces(demoService.getClass().getInterfaces());
         factory.setTarget(demoService);
-        factory.addAdvice(0,new TimeBeforeAdvice());
-        factory.addAdvice(1,new LogBeforeAdvice());
+        factory.addAdvice(0, new TimeBeforeAdvice());
+        factory.addAdvice(1, new LogBeforeAdvice());
         factory.addAdvice(new TimeAfterAdvice());
         final DemoService proxy = (DemoService) factory.getProxy();
         proxy.call("testSpringDynamicProxy");
@@ -103,8 +123,8 @@ public class ProxyTest {
         factory.setTarget(demoService);
         //  虽然指定了代理的接口，但由于setOptimize(true)，所以还是使用了Cglib2AopProxy代理；
         factory.setOptimize(true);
-        factory.addAdvice(0,new TimeBeforeAdvice());
-        factory.addAdvice(1,new LogBeforeAdvice());
+        factory.addAdvice(0, new TimeBeforeAdvice());
+        factory.addAdvice(1, new LogBeforeAdvice());
         final DemoService proxy = (DemoService) factory.getProxy();
         proxy.call("testSpringDynamicProxy");
         // 输出结果proxy class=class com.frank.service.impl.DemoServiceImpl$$EnhancerBySpringCGLIB$$35c57a8e

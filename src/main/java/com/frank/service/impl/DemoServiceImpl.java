@@ -15,12 +15,12 @@ public class DemoServiceImpl implements DemoService {
 
     @Override
     public void call() {
-        log.info("[DemoServiceImpl]From real service");
+        log.info("[DemoServiceImpl]call() From real service");
     }
 
     @Override
     public String call(String msg) {
-        log.info("[DemoServiceImpl]From real service msg={}", msg);
+        log.info("[DemoServiceImpl]call(String msg) From real service msg={}", msg);
         return msg.concat("call method call(String msg)");
     }
 }
