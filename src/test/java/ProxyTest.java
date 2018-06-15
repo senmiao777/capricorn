@@ -4,6 +4,7 @@ import com.frank.interceptor.TimeAfterAdvice;
 import com.frank.interceptor.TimeBeforeAdvice;
 import com.frank.proxy.CglibProxy;
 import com.frank.proxy.DynamicProxy;
+import com.frank.proxy.DynamicProxy2;
 import com.frank.service.ConcurrentService;
 import com.frank.service.DemoService;
 import com.frank.service.impl.DemoServiceImpl;
@@ -34,12 +35,31 @@ public class ProxyTest {
         DemoServiceImpl serviceImpl = new DemoServiceImpl();
         Class cls = serviceImpl.getClass();
 
+        log.info("DemoServiceImpl classLoader={},interfaces={}",cls.getClassLoader(),cls.getInterfaces());
         InvocationHandler invocationHandler = new DynamicProxy(serviceImpl);
         // 抽象角色：真实对象和代理对象的共同接口
         DemoService service = (DemoService) Proxy.newProxyInstance(cls.getClassLoader(), cls.getInterfaces(), invocationHandler);
         service.call();
         service.call("测试代理");
         final Class<? extends DemoService> clazz = service.getClass();
+        log.info("---------------------subject.getClass()={}", clazz);
+        log.info("---------------------subject.getClass().isInterface()={}", clazz.isInterface());
+
+        log.info(Common.LOG_END.getValue());
+    }
+
+    @Test
+    public void testDynamicProxy2() {
+        log.info(Common.LOG_BEGIN.getValue());
+
+
+        DemoServiceImpl serviceImpl = new DemoServiceImpl();
+        DemoService demoServiceProxy = (DemoService)new DynamicProxy2().proxy(serviceImpl);
+        demoServiceProxy.call();
+
+        log.info("----------华丽的分割线-----------");
+        demoServiceProxy.call("测试代理");
+        final Class<? extends DemoService> clazz = demoServiceProxy.getClass();
         log.info("---------------------subject.getClass()={}", clazz);
         log.info("---------------------subject.getClass().isInterface()={}", clazz.isInterface());
 
