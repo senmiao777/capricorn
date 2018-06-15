@@ -26,11 +26,11 @@ public class TimeAfterAdvice implements AfterReturningAdvice {
     public void afterReturning(Object arg0, Method arg1, Object[] arg2,
                                Object arg3) throws Throwable {
         final Long before = time.get();
-        log.info("[TimeBeforeAdvice]before={}", before);
-        log.info("[TimeBeforeAdvice]time={}", LocalDateTime.now());
-        log.info("[TimeBeforeAdvice]method={}", arg1);
-        log.info("[TimeBeforeAdvice]args={}", arg2);
-        log.info("[TimeBeforeAdvice]object={}", arg3);
+        log.info("[TimeAfterAdvice]before={}", before);
+        log.info("[TimeAfterAdvice]time={}", LocalDateTime.now());
+        log.info("[TimeAfterAdvice]method={}", arg1);
+        log.info("[TimeAfterAdvice]args={}", arg2);
+        log.info("[TimeAfterAdvice]object={}", arg3);
     }
 
 
