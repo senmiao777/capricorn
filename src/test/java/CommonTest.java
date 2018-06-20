@@ -23,8 +23,10 @@ import org.springframework.test.annotation.Rollback;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
+import java.text.Format;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.Matcher;
@@ -83,16 +85,33 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
     @Test
-    public void tesPhone(){
+    public void testJDKFormatter() {
+        String timeStr = "20180101";
+        final TemporalAccessor parse = java.time.format.DateTimeFormatter.BASIC_ISO_DATE.parse(timeStr);
+        final String s = parse.toString();
+        log.info("s={}", s);
+
+        final Format format = java.time.format.DateTimeFormatter.BASIC_ISO_DATE.toFormat();
+        log.info("format={}", format);
+
+        //java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd").
+
+
+
+
+
+    }
+
+    @Test
+    public void tesPhone() {
         String phone = "\u202ds132404dfef1177s8s\u202cs";
-        log.info("dateTime2={}", phone = phone.replaceAll("[^\\d]",""));
-        log.info("dateTime={}",isPhoneNoValid(phone));
+        log.info("dateTime2={}", phone = phone.replaceAll("[^\\d]", ""));
+        log.info("dateTime={}", isPhoneNoValid(phone));
 //
 //
 //        final String trim = phone.trim();
 //
 //        log.info("dateTime2={}",isPhoneNoValid(trim));
-
 
 
     }
@@ -106,57 +125,57 @@ public class CommonTest {
     }
 
 
-    private String testR(String str){
-        String regEx="[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+    private String testR(String str) {
+        String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
         Pattern p = Pattern.compile(regEx);
         Matcher m = p.matcher(str);
         return m.replaceAll("").trim();
     }
 
 
-
     @Test
-    public void testJoda(){
+    public void testJoda() {
         String timeStr = "20180101";
 //        final String dateTime2 = formatTime(timeStr);
 //        log.info("dateTime2={}",dateTime2);
-        timeStr.replaceAll("[^\\d]","13");
+        timeStr.replaceAll("[^\\d]", "13");
     }
 
-    private String formatTime(String time){
+    private String formatTime(String time) {
         return DateTime.parse(time, FORMATTER).toString(FORMATTER_RESULT);
     }
 
     @Test
-    public void testEquals(){
-        Map<String,String> map = new HashMap<>(6);
-        map.put("k1","v1");
-        map.put("k2","v2");
-        map.put("k3","v3");
-        for(Map.Entry<String,String> e : map.entrySet()){
-            log.info("key={},value={}",e.getKey(),e.getValue());
+    public void testEquals() {
+        Map<String, String> map = new HashMap<>(6);
+        map.put("k1", "v1");
+        map.put("k2", "v2");
+        map.put("k3", "v3");
+        for (Map.Entry<String, String> e : map.entrySet()) {
+            log.info("key={},value={}", e.getKey(), e.getValue());
         }
 
         log.info("---华丽的分割线---");
 
-        map.forEach((k,v)->{
-            log.info("key={},value={}",k,v);
+        map.forEach((k, v) -> {
+            log.info("key={},value={}", k, v);
         });
     }
 
     @Test
     public void threadPoolTest2() {
         final ExecutorService executorService = Executors.newFixedThreadPool(1);
-        class TestTask implements Callable<String>{
+        class TestTask implements Callable<String> {
 
             @Override
             public String call() throws Exception {
-               // executorService.submit()
+                // executorService.submit()
                 return null;
             }
         }
 
     }
+
     /**
      * 单线程嵌套调用，发生死锁
      */
@@ -246,7 +265,6 @@ public class CommonTest {
         }
         log.info("main finish---");
     }
-
 
 
     /**

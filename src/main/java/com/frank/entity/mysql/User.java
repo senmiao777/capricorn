@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -47,6 +48,16 @@ public class User implements Serializable {
 
    @Column(name = "update_at")
     private Date updateAt;
+
+   public static User generateUser(){
+       User user = new User();
+       user.setAge(RandomUtils.nextInt(15,80));
+       user.setCreateAt(new Date());
+       user.setUpdateAt(new Date());
+       user.setId(RandomUtils.nextLong());
+       user.setUserType(RandomUtils.nextInt(1,3));
+       return user;
+   }
 
 
    /*  @PreUpdate
