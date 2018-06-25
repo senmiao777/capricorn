@@ -3,7 +3,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -19,6 +21,13 @@ public class Java8Test {
 
     public String[] strs = {"new", "Java8", "new", "feature", "Stream", "API"};
     public int[] intStrs = {12, 136, 22, 35, 66};
+
+    @Test
+    public void testLambda(){
+       // (final String s1, final String s2) -> s1.concat(s2);
+        //(String first,String second) -> Integer.compare(first.length(),second.length());
+    }
+
 
     @Test
     public void getCount() {
@@ -107,13 +116,29 @@ public class Java8Test {
 
         /**
          * map,把输入流的每一个元素，映射为输出流的每一个元素
+         * 一对一
          */
         final int sum = userList.parallelStream().mapToInt(User::getAge).sum();
         log.info("lambda方式年龄求和={}", sum);
 
         final List<Long> idList = userList.parallelStream().map(User::getId).collect(Collectors.toList());
         log.info("获取ID集合={}", idList);
+        userList.parallelStream().filter(u -> u.getAge() > 20).map(User::getId).collect(Collectors.toList());
 
+
+        /**
+         * 方法引用
+         * 类::静态方法
+         * 类::实例方法
+         * 对象::实例方法
+         *
+         * Math::power   等同于 (x,y)->Math.power(x,y)
+         */
+        //final List<Long> idList3 = userList.parallelStream().map(User::getId).collect(Collectors.toList());
+        final List<Long> idList2 = userList.parallelStream().map(u -> u.getId()).collect(Collectors.toList());
+
+        final String s1 = Optional.ofNullable(user4.getUserName()).orElse("鉴权失败");
+        log.info("s ={}",s1);
 
     }
 }

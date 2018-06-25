@@ -55,6 +55,7 @@ public class User implements Serializable {
        user.setCreateAt(new Date());
        user.setUpdateAt(new Date());
        user.setId(RandomUtils.nextLong());
+       user.setUserName("ceshi");
        user.setUserType(RandomUtils.nextInt(1,3));
        return user;
    }
