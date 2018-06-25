@@ -3,9 +3,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -42,9 +40,9 @@ public class Java8Test {
 
         try {
             final User user2 = Optional.ofNullable(u2).orElseThrow(Exception::new);
-            log.info("user2 ={}",user2);
+            log.info("user2 ={}", user2);
         } catch (Exception e) {
-            log.info("Exception user2 e={}",e);
+            log.info("Exception user2 e={}", e);
         }
 
 
@@ -53,7 +51,11 @@ public class Java8Test {
 
     @Test
     public void testLambda() {
-        // (final String s1, final String s2) -> s1.concat(s2);
+        final Stream<String> strs3 = Stream.of(strs);
+        /**
+         * 指定类型，否则返回值是Object[]类型
+         */
+        final String[] strings = strs3.toArray(String[]::new);
         //(String first,String second) -> Integer.compare(first.length(),second.length());
     }
 
@@ -117,7 +119,32 @@ public class Java8Test {
     public void testTransfer() {
         Stream<String> stringStream = Stream.of(strs);
 
+
+        /**
+         * 转换为List
+         * Collectors.toList()
+         *
+         * 指定具体的实现类
+         * Collectors.toCollection(ArrayList::new)
+         */
         final List<String> collect = stringStream.collect(Collectors.toList());
+
+        Stream<String> stream2 = Stream.of(strs);
+        final ArrayList<String> collect1 = stream2.collect(Collectors.toCollection(ArrayList::new));
+
+        Stream<String> stream3 = Stream.of(strs);
+        final HashSet<String> collect2 = stream3.collect(Collectors.toCollection(HashSet::new));
+
+        final Stream<String> stream5 = Stream.of(strs);
+        final String collect3 = stream5.collect(Collectors.joining("#"));
+        log.info("collect3 ={}", collect3);
+
+        final Stream<String> stream6 = Stream.of(strs);
+        final IntSummaryStatistics summaryStatistics = stream6.collect(Collectors.summarizingInt(String::length));
+        final long count = summaryStatistics.getCount();
+        final long sum1 = summaryStatistics.getSum();
+        log.info("count ={},sum1={}", count, sum1);
+
         /**
          * java.lang.IllegalStateException: stream has already been operated upon or closed
          一个流只能被使用一次
@@ -165,6 +192,16 @@ public class Java8Test {
          */
         //final List<Long> idList3 = userList.parallelStream().map(User::getId).collect(Collectors.toList());
         final List<Long> idList2 = userList.parallelStream().map(u -> u.getId()).collect(Collectors.toList());
+
+
+        /**
+         * 转Map
+         */
+        final Map<Long, Integer> map1 = userList.stream().collect(Collectors.toMap(User::getId, User::getAge));
+        log.info("map1={}", map1);
+
+        final Map<Long, User> map2 = userList.stream().collect(Collectors.toMap(u1 -> u1.getId(), u2 -> u2));
+        log.info("map2={}", map2);
 
         final String s1 = Optional.ofNullable(user4.getUserName()).orElse("鉴权失败");
         log.info("s ={}", s1);
