@@ -23,8 +23,37 @@ public class Java8Test {
     public int[] intStrs = {12, 136, 22, 35, 66};
 
     @Test
-    public void testLambda(){
-       // (final String s1, final String s2) -> s1.concat(s2);
+    public void testOptional() {
+        User u = User.generateUser();
+        log.info("user = {}", u);
+        final Optional<User> u1 = Optional.ofNullable(u);
+        u1.ifPresent(t -> t.setUserName("ifPresent函数"));
+        log.info("Optional user = {}", u);
+
+        /**
+         * 当没有值时候的处理
+         */
+        User u2 = null;
+        final User user = Optional.ofNullable(u2).orElse(u);
+        log.info("user = {}", user);
+
+        final User user1 = Optional.ofNullable(u2).orElseGet(() -> User.generateUser());
+        log.info("user1 ={}", user1);
+
+        try {
+            final User user2 = Optional.ofNullable(u2).orElseThrow(Exception::new);
+            log.info("user2 ={}",user2);
+        } catch (Exception e) {
+            log.info("Exception user2 e={}",e);
+        }
+
+
+    }
+
+
+    @Test
+    public void testLambda() {
+        // (final String s1, final String s2) -> s1.concat(s2);
         //(String first,String second) -> Integer.compare(first.length(),second.length());
     }
 
@@ -138,7 +167,7 @@ public class Java8Test {
         final List<Long> idList2 = userList.parallelStream().map(u -> u.getId()).collect(Collectors.toList());
 
         final String s1 = Optional.ofNullable(user4.getUserName()).orElse("鉴权失败");
-        log.info("s ={}",s1);
+        log.info("s ={}", s1);
 
     }
 }
