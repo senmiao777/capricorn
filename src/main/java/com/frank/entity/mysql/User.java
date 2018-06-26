@@ -46,19 +46,19 @@ public class User implements Serializable {
     private Date createAt;
 
 
-   @Column(name = "update_at")
+    @Column(name = "update_at")
     private Date updateAt;
 
-   public static User generateUser(){
-       User user = new User();
-       user.setAge(RandomUtils.nextInt(15,80));
-       user.setCreateAt(new Date());
-       user.setUpdateAt(new Date());
-       user.setId(RandomUtils.nextLong());
-       user.setUserName("ceshi");
-       user.setUserType(RandomUtils.nextInt(1,3));
-       return user;
-   }
+    public static User generateUser() {
+        User user = new User();
+        user.setAge(RandomUtils.nextInt(15, 80));
+        user.setCreateAt(new Date());
+        user.setUpdateAt(new Date());
+        user.setId(RandomUtils.nextLong());
+        user.setUserName("ceshi");
+        user.setUserType(RandomUtils.nextInt(1, 4));
+        return user;
+    }
 
 
    /*  @PreUpdate

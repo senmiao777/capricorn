@@ -160,8 +160,10 @@ public class Java8Test {
         final User user2 = User.generateUser();
         final User user3 = User.generateUser();
         final User user4 = User.generateUser();
+        final User user5 = User.generateUser();
+        final User user6 = User.generateUser();
 
-        List<User> userList = Lists.newArrayList(user, user1, user2, user3, user4);
+        List<User> userList = Lists.newArrayList(user, user1, user2, user3, user4, user5, user6);
 
         int s = 0;
         for (User u : userList) {
@@ -181,6 +183,11 @@ public class Java8Test {
         log.info("获取ID集合={}", idList);
         userList.parallelStream().filter(u -> u.getAge() > 20).map(User::getId).collect(Collectors.toList());
 
+        /**
+         * 根据userType分组
+         */
+        final Map<Integer, List<User>> collect4 = userList.stream().collect(Collectors.groupingBy(User::getUserType));
+        log.info("根据userType分组 collect4={}", collect4);
 
         /**
          * 方法引用
