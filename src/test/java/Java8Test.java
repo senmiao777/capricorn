@@ -189,6 +189,19 @@ public class Java8Test {
         final Map<Integer, List<User>> collect4 = userList.stream().collect(Collectors.groupingBy(User::getUserType));
         log.info("根据userType分组 collect4={}", collect4);
 
+
+        /**
+         * 当分类函数返回的是一个Boolean类型返回值的函数，流元素会被分为两组，一组是TRUE的，一组是FALSE的，
+         * 这时候，使用partitioningBy会比groupingBy更有效率
+         * 实际用途：查一次库，获取所有和该用户相关的数据，isActive=1的分一组，isActive=0的分一组
+         */
+        final Map<Boolean, List<User>> collect5 =
+                userList.stream().collect(Collectors.partitioningBy(a -> a.getUserType().intValue() == 1));
+        log.info("根据userType分组 是1的一组，非1的一组 collect5={}", collect5);
+        /**
+         * true 即符合你上述条件的
+         */
+        final List<User> users = collect5.get(true);
         /**
          * 方法引用
          * 类::静态方法
