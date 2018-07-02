@@ -21,12 +21,33 @@ public class Java8Test {
     public int[] intStrs = {12, 136, 22, 35, 66};
 
     @Test
+    public void testOptional2() {
+        test(3);
+    }
+
+    private void test(int num){
+        int t = 3;
+        if(num == 1){
+            t=1;
+            log.info("1111");
+
+        }else if(num == 2){
+            t=2;
+            log.info("1111");
+        }else {
+            return;
+        }
+        log.info("here t={}",t);
+    }
+
+    @Test
     public void testOptional() {
         User u = User.generateUser();
         log.info("user = {}", u);
         final Optional<User> u1 = Optional.ofNullable(u);
+        final Optional<Long> aLong = u1.map(User::getId);
         u1.ifPresent(t -> t.setUserName("ifPresent函数"));
-        log.info("Optional user = {}", u);
+
 
         /**
          * 当没有值时候的处理
@@ -35,17 +56,32 @@ public class Java8Test {
         final User user = Optional.ofNullable(u2).orElse(u);
         log.info("user = {}", user);
 
-        final User user1 = Optional.ofNullable(u2).orElseGet(() -> User.generateUser());
-        log.info("user1 ={}", user1);
+        log.info("user2 ={}", getId(u2));
+        
+        List<String> list = new ArrayList<>(20);
+        final boolean add = list.add("23");
 
         try {
             final User user2 = Optional.ofNullable(u2).orElseThrow(Exception::new);
+            Optional.ofNullable(u2).ifPresent(a->{});
+           // Optional.ofNullable(u2).map(a ->{log.info(":");return null;}).orElse(log.info(""););
             log.info("user2 ={}", user2);
         } catch (Exception e) {
             log.info("Exception user2 e={}", e);
         }
 
 
+    }
+
+    private Long getId(User u) {
+        log.info("Optional user = {}", u);
+        Optional.ofNullable(u).map(a -> {
+            log.info("22");
+            return null;
+        }).orElse( 1L
+
+        );
+        return 1L;
     }
 
 
@@ -202,6 +238,8 @@ public class Java8Test {
          * true 即符合你上述条件的
          */
         final List<User> users = collect5.get(true);
+
+
         /**
          * 方法引用
          * 类::静态方法
@@ -213,6 +251,8 @@ public class Java8Test {
         //final List<Long> idList3 = userList.parallelStream().map(User::getId).collect(Collectors.toList());
         final List<Long> idList2 = userList.parallelStream().map(u -> u.getId()).collect(Collectors.toList());
 
+
+        final Map<Integer, Optional<User>> collect6 = userList.stream().collect(Collectors.groupingBy(User::getUserType, Collectors.maxBy(Comparator.comparing(User::getId))));
 
         /**
          * 转Map

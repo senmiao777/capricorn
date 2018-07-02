@@ -84,6 +84,14 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
+
+
+    @Test
+    public void testOthers() {
+        final String join = String.join("/", "user", "info", "id");
+        log.info("join={}",join);
+    }
+
     @Test
     public void testJDKFormatter() {
         String timeStr = "20180101";

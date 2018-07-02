@@ -35,13 +35,13 @@ public class Benefit {
      * 截止日期
      */
     @Column(name = "end_date")
-   private Date endDate;
+    private Date endDate;
 
     /**
      * 报表截止日期
      */
     @Column(name = "end_date_rep")
-   private Date endDateRep;
+    private Date endDateRep;
 
     /**
      * 机构内部ID
