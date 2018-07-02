@@ -33,6 +33,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+
+
 /**
  * @author frank
  * @version 1.0
@@ -85,11 +87,10 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
 
-
     @Test
     public void testOthers() {
         final String join = String.join("/", "user", "info", "id");
-        log.info("join={}",join);
+        log.info("join={}", join);
     }
 
     @Test
@@ -103,9 +104,6 @@ public class CommonTest {
         log.info("format={}", format);
 
         //java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd").
-
-
-
 
 
     }

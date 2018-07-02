@@ -61,7 +61,7 @@ public abstract class MotorVehicle {
         stop();
     }
 
-    public boolean isAlarm() {
+    protected boolean isAlarm() {
         return isAlarm;
     }
 
