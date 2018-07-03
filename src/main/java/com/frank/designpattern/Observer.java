@@ -9,4 +9,6 @@ package com.frank.designpattern;
  */
 public interface Observer {
 
+    void action(String msg);
+
 }

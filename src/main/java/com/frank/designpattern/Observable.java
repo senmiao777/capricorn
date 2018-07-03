@@ -25,7 +25,13 @@ public interface Observable {
     /**
      * 通知观察者
      *
-     * @param observer
+     * @param msg
      */
-    void notifyObservers(Observer observer);
+    void notifyObservers(String msg);
+
+
+    enum OperationType{
+        EAT,
+
+    }
 }
