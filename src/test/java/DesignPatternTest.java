@@ -1,5 +1,6 @@
 import com.frank.designpattern.Ford;
 import com.frank.designpattern.Hummer;
+import com.frank.designpattern.MotorVehicle;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -12,10 +13,10 @@ import org.junit.Test;
 public class DesignPatternTest {
     @Test
     public void test() {
-        Ford ford = new Ford();
+        MotorVehicle ford = new Ford();
         ford.run();
 
-        Hummer hummer = new Hummer();
+        MotorVehicle hummer = new Hummer();
         hummer.run();
 
         hummer.setAlarm(true);
