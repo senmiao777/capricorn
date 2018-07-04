@@ -1,5 +1,4 @@
-import com.frank.designpattern.Ford;
-import com.frank.designpattern.Hummer;
+import com.frank.designpattern.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -10,6 +9,10 @@ import org.junit.Test;
  */
 @Slf4j
 public class DesignPatternTest {
+
+    /**
+     * 模板模式
+     */
     @Test
     public void test() {
         Ford ford = new Ford();
@@ -22,4 +25,28 @@ public class DesignPatternTest {
         hummer.run();
 
     }
+
+    /**
+     * 观察者模式
+     */
+    @Test
+    public void test2() {
+
+        Observer police = new Police();
+        Observer cia = new CIA();
+        Observable criminal = new Criminal();
+
+        criminal.addObserver(police);
+        criminal.addObserver(cia);
+
+        criminal.eat("apple");
+        criminal.sleep("十分钟");
+
+        Observable demon = new Demon();
+        demon.addObserver(cia);
+        demon.sleep("一年");
+
+
+    }
+
 }

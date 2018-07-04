@@ -8,12 +8,12 @@ import java.util.List;
 /**
  * @author frank
  * @version 1.0
- * @date 2018/7/3
+ * @date 2018/7/4
  * <p>
- * 被观察者-罪犯
+ * 被观察者-恶魔
  */
 @Slf4j
-public class Criminal implements Observable {
+public class Demon implements Observable {
 
     List<Observer> observers = new ArrayList<>();
 
@@ -53,13 +53,13 @@ public class Criminal implements Observable {
 
     @Override
     public void eat(String food) {
-        log.info("Criminal eat {}", food);
+        log.info("Demon eat {}", food);
         notifyObservers(new Notice(OperationType.EAT, getClass().toString(), food));
     }
 
     @Override
     public void sleep(String time) {
-        log.info("Criminal sleep {}", time);
+        log.info("Demon sleep {}", time);
         notifyObservers(new Notice(OperationType.SLEEP, getClass().toString(), time));
     }
 

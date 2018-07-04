@@ -29,8 +29,20 @@ public interface Observable {
      */
     void notifyObservers(Notice msg);
 
+    /**
+     * 吃方法
+     * @param food
+     */
+    void eat(String food);
 
-    enum OperationType{
+    /**
+     * 睡方法
+     * @param time
+     */
+    void sleep(String time);
+
+
+    enum OperationType {
         /**
          * 吃
          */
@@ -39,7 +51,7 @@ public interface Observable {
         SLEEP;
     }
 
-    class Notice{
+    class Notice {
         private OperationType operationType;
         private String observable;
         private Object obj;
