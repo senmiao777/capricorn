@@ -27,11 +27,40 @@ public interface Observable {
      *
      * @param msg
      */
-    void notifyObservers(String msg);
+    void notifyObservers(Notice msg);
 
 
     enum OperationType{
+        /**
+         * 吃
+         */
         EAT,
+        DRINK,
+        SLEEP;
+    }
 
+    class Notice{
+        private OperationType operationType;
+        private String observable;
+        private Object obj;
+
+
+        public Notice(OperationType operationType, String observable, Object obj) {
+            this.operationType = operationType;
+            this.observable = observable;
+            this.obj = obj;
+        }
+
+        public OperationType getOperationType() {
+            return operationType;
+        }
+
+        public String getObservable() {
+            return observable;
+        }
+
+        public Object getObj() {
+            return obj;
+        }
     }
 }

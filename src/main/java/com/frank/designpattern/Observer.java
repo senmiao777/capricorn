@@ -8,7 +8,5 @@ package com.frank.designpattern;
  * 被观察者
  */
 public interface Observer {
-
-    void action(String msg);
-
+    void action(Observable.Notice notice);
 }
