@@ -3,6 +3,8 @@ package com.frank.designpattern;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 
+import java.util.Observer;
+
 /**
  * @author frank
  * @version 1.0
@@ -14,7 +16,8 @@ public class CIA implements Observer {
 
     @Async("testTaskPoolExecutor")
     @Override
-    public void action(Observable.Notice notice) {
-        log.info("CIA监听到{} {}活动，内容{}", notice.getObservable(), notice.getOperationType(), notice.getObj());
+    public void update(java.util.Observable o, Object notice) {
+        log.info("CIA监听到{} 内容{}", o.toString(), notice.toString());
     }
+
 }
