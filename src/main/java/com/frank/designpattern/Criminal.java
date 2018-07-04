@@ -60,7 +60,11 @@ public class Criminal implements Observable {
     @Override
     public void sleep(String time) {
         log.info("Criminal sleep {}", time);
+        /**
+         * 被观察者要等待观察者处理完成之后才能继续往下走，考虑性能问题
+         */
         notifyObservers(new Notice(OperationType.SLEEP, getClass().toString(), time));
+        log.info("do next things");
     }
 
 
