@@ -34,7 +34,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
-
 /**
  * @author frank
  * @version 1.0
@@ -89,6 +88,11 @@ public class CommonTest {
 
     @Test
     public void testOthers() {
+
+        List<Long> PING_AN_CHANNELS = Lists.newArrayList(159384L, 159483L);
+        long createFrom = 159384L;
+        final boolean contains = PING_AN_CHANNELS.contains(Long.valueOf(createFrom));
+        log.info("contains={}",contains);
         final String join = String.join("/", "user", "info", "id");
         log.info("join={}", join);
     }
