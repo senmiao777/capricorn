@@ -1,6 +1,7 @@
 import com.alibaba.fastjson.JSON;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.User;
+import com.frank.other.SingleTon;
 import com.frank.repository.mysql.IncomeStatementRepository;
 import com.frank.util.GenerateUtil;
 import com.google.common.collect.Lists;
@@ -85,6 +86,14 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
+    @Test
+    public void testOthers2() {
+
+
+        log.info("count1={}" , SingleTon.count1);
+        log.info("count2={}" , SingleTon.count2);
+
+    }
 
     @Test
     public void testOthers() {
@@ -92,7 +101,7 @@ public class CommonTest {
         List<Long> PING_AN_CHANNELS = Lists.newArrayList(159384L, 159483L);
         long createFrom = 159384L;
         final boolean contains = PING_AN_CHANNELS.contains(Long.valueOf(createFrom));
-        log.info("contains={}",contains);
+        log.info("contains={}", contains);
         final String join = String.join("/", "user", "info", "id");
         log.info("join={}", join);
     }
