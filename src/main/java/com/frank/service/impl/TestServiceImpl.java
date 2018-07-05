@@ -4,7 +4,7 @@ import com.frank.service.Aservice;
 import com.frank.service.Bservice;
 
 /**
- * Created by QuantGroup on 2018/6/22.
+ * Created by frank on 2018/6/22.
  */
 public class TestServiceImpl implements Aservice, Bservice {
     /**

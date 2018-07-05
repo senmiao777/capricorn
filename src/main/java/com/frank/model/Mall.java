@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 /**
- * Created by QuantGroup on 2018/2/2.
+ * Created by frank on 2018/2/2.
  *
  */
 public class Mall {
