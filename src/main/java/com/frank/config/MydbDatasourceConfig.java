@@ -109,7 +109,7 @@ public class MydbDatasourceConfig {
 
     @Primary
     @Bean(name = "mydbEntityManager")
-    public LocalContainerEntityManagerFactoryBean clothoEntityManager(EntityManagerFactoryBuilder builder) throws Throwable {
+    public LocalContainerEntityManagerFactoryBean myEntityManager(EntityManagerFactoryBuilder builder) throws Throwable {
         return builder.dataSource(mydbDataSource())
                 .packages("com.frank.entity")
                 .persistenceUnit(uniquename)
