@@ -20,12 +20,17 @@ public class ForkJoinTest {
 
     @Test
     public void t() {
-        final CountTask countTask = new CountTask(1, 100);
-        ForkJoinPool forkJoinPool = new ForkJoinPool();
+
+        final CountTask countTask = new CountTask(1, 1000);
+        ForkJoinPool forkJoinPool = new ForkJoinPool(2);
         final ForkJoinTask<Integer> submit = forkJoinPool.submit(countTask);
         try {
             final Integer sum = submit.get();
             log.info("sum ={}", sum);
+
+            if (countTask.isCompletedAbnormally()) {
+                log.info("e={}", countTask.getException());
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

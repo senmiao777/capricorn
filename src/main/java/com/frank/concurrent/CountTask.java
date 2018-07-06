@@ -18,6 +18,12 @@ import java.util.concurrent.RecursiveTask;
  * RecursiveTask ：用于有返回结果的任务。
  * ForkJoinPool ：ForkJoinTask需要通过ForkJoinPool来执行，任务分割出的子任务会添加到当前工作线程所维护的双端队列中，
  * 进入队列的头部。当一个工作线程的队列里暂时没有任务时，它会随机从其他工作线程的队列的尾部获取一个任务。
+ * <p>
+ * ForkJoinTask和一般的Task主要区别是ForkJoinTask需要实现compute方法
+ * 当任务数量小于阈值的时候，直接执行；当任务数量大于阈值的时候，分成两个子任务。
+ * 每个子任务在调用fork方法的时候，又会进入compute方法。
+ * 。。。
+ * 如此递归去，直到任务小于阈值，直接执行。
  */
 @Slf4j
 public class CountTask extends RecursiveTask<Integer> {
@@ -27,7 +33,7 @@ public class CountTask extends RecursiveTask<Integer> {
      * 美 [ˈθreʃhoʊld]
      * 阈值，临界值
      */
-    private static final int THRESHOLD = 15;
+    private static final int THRESHOLD = 50;
 
     private int start = 0;
     private int end = 0;
@@ -52,15 +58,27 @@ public class CountTask extends RecursiveTask<Integer> {
             final CountTask otherTask = new CountTask(middle + 1, end);
 
             final ForkJoinTask<Integer> fork1 = oneTask.fork();
+
             final ForkJoinTask<Integer> fork2 = otherTask.fork();
 
 
             final Integer join = oneTask.join();
             final Integer join1 = otherTask.join();
             sum = join + join1;
-            log.info("need fork sum={},start={},end={}", sum, start, end);
+            log.info("need fork sum={}({}+{}),start={},end={}", sum, join, join1, start, end);
 
         } else {
+
+//            if (start < 500) {
+//                final int time = RandomUtils.nextInt(500, 1000);
+//                try {
+//                    Thread.sleep(time);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+
+
             for (int i = start; i <= end; i++) {
                 sum += i;
             }
@@ -71,6 +89,7 @@ public class CountTask extends RecursiveTask<Integer> {
 
     /**
      * 是否需要fork
+     *
      * @param start
      * @param end
      * @return
