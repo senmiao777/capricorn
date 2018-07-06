@@ -27,7 +27,7 @@ public class CountTask extends RecursiveTask<Integer> {
      * 美 [ˈθreʃhoʊld]
      * 阈值，临界值
      */
-    private static final int THRESHOLD = 7;
+    private static final int THRESHOLD = 15;
 
     private int start = 0;
     private int end = 0;
