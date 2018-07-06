@@ -19,9 +19,6 @@ public class SingleTon {
     //public static int count2 = 0;
 
 
-    /**
-     * 静态代码块执行之前，静态变量已经完成赋值操作
-     */
 //    static {
 //        log.info("static SingleTon ,count1={},count2={}", count1, count2);
 //        count1 = 18;
