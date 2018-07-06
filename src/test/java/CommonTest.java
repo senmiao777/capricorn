@@ -85,6 +85,11 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
+    @Test
+    public void testOthers2() {
+        int a = 1 << 4;
+        log.info("a={}",a);
+    }
 
     @Test
     public void testOthers() {
@@ -92,7 +97,7 @@ public class CommonTest {
         List<Long> PING_AN_CHANNELS = Lists.newArrayList(159384L, 159483L);
         long createFrom = 159384L;
         final boolean contains = PING_AN_CHANNELS.contains(Long.valueOf(createFrom));
-        log.info("contains={}",contains);
+        log.info("contains={}", contains);
         final String join = String.join("/", "user", "info", "id");
         log.info("join={}", join);
     }
