@@ -1,6 +1,7 @@
 import com.alibaba.fastjson.JSON;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.User;
+import com.frank.other.SingleTon;
 import com.frank.repository.mysql.IncomeStatementRepository;
 import com.frank.util.GenerateUtil;
 import com.google.common.collect.Lists;
@@ -87,8 +88,11 @@ public class CommonTest {
 
     @Test
     public void testOthers2() {
-        int a = 1 << 4;
-        log.info("a={}",a);
+
+
+        log.info("count1={}" , SingleTon.count1);
+        log.info("count2={}" , SingleTon.count2);
+
     }
 
     @Test

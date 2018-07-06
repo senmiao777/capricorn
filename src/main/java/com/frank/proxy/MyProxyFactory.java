@@ -1,7 +1,7 @@
 package com.frank.proxy;
 
 /**
- * Created by QuantGroup on 2018/6/15.
+ * Created by frank on 2018/6/15.
  */
 public class MyProxyFactory {
     public static DynamicProxy2 createProxy2() {

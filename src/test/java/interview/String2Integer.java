@@ -8,7 +8,7 @@ import org.junit.Test;
 import java.util.List;
 
 /**
- * Created by QuantGroup on 2018/4/16.
+ * Created by frank on 2018/4/16.
  */
 @Slf4j
 public class String2Integer {

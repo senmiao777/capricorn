@@ -1,7 +1,7 @@
 package com.frank.service;
 
 /**
- * Created by QuantGroup on 2018/6/22.
+ * Created by frank on 2018/6/22.
  */
 
 public interface Bservice {
