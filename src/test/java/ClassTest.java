@@ -13,7 +13,7 @@ import java.io.UnsupportedEncodingException;
 public class ClassTest {
 
     static {
-        log.info("看到这句话说明累加在了，并且static代码块执行了");
+        log.info("看到这句话说明类加载了，并且static代码块执行了");
     }
 
     @Test
