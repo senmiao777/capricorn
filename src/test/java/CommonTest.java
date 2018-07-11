@@ -1,6 +1,7 @@
 import com.alibaba.fastjson.JSON;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.User;
+import com.frank.other.Node;
 import com.frank.other.SingleTon;
 import com.frank.repository.mysql.IncomeStatementRepository;
 import com.frank.util.GenerateUtil;
@@ -85,6 +86,44 @@ public class CommonTest {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+
+
+    @Test
+    public void testReverseNode() {
+        Node n5 = new Node(5,null);
+        Node n4 = new Node(4,n5);
+        Node n3 = new Node(3,n4);
+        Node n2 = new Node(2,n3);
+        Node n1 = new Node(1,n2);
+
+        Node head = n1;
+        while(head != null){
+            log.info("tmp data={}",head.getData());
+            head = head.getNext();
+        }
+
+
+        head = n1;
+        Node pre = reverse(head);
+
+        while(pre != null){
+            log.info("tmp data={}",pre.getData());
+            pre = pre.getNext();
+        }
+
+    }
+
+    private Node reverse(Node head){
+        Node pre = null;
+        Node current =head;
+        while(current != null){
+            Node next = current.getNext();
+            current.setNext(pre);
+            pre = current;
+            current = next;
+        }
+        return pre;
+    }
 
     @Test
     public void testOthers2() {
