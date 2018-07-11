@@ -89,7 +89,16 @@ public class CommonTest {
     @Test
     public void testOthers2() {
 
+        try {
+            Class<?> commonTest = Class.forName("CommonTest");
+            log.info("Class={}",commonTest);
 
+            ClassLoader classLoader = CommonTest.class.getClassLoader();
+            log.info("classLoader={}",classLoader);
+            classLoader.loadClass("ClassTest")
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         log.info("count1={}" , SingleTon.count1);
         log.info("count2={}" , SingleTon.count2);
 

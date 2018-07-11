@@ -11,6 +11,11 @@ import java.io.UnsupportedEncodingException;
 
 @Slf4j
 public class ClassTest {
+
+    static {
+        log.info("看到这句话说明累加在了，并且static代码块执行了");
+    }
+
     @Test
     public void testClazzCode() {
         int a = 100;
