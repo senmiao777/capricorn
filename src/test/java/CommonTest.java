@@ -95,7 +95,26 @@ public class CommonTest {
 
             ClassLoader classLoader = CommonTest.class.getClassLoader();
             log.info("classLoader={}",classLoader);
-            classLoader.loadClass("ClassTest")
+            /**
+             * classLoader.loadClass("XXClassName")
+             * 只将class文件加载到JVM，不会执行static代码块
+             */
+//            Class<?> classTest = classLoader.loadClass("ClassTest");
+//            log.info("classTest={}",classTest);
+
+            /**
+             * Class.forName("XXClassName");
+             * 会将class文件加载到JVM，并执行static代码块
+             *
+             * Class.forName("ClassTest", false, classLoader);
+             * 可以指定是否执行static代码块
+             *
+             */
+//            Class<?> classTest = Class.forName("ClassTest");
+//            log.info("classTest={}",classTest);
+
+            Class<?> classTest1 = Class.forName("ClassTest", true, classLoader);
+            log.info("classTest1={}",classTest1);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
