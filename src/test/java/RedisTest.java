@@ -42,6 +42,17 @@ public class RedisTest {
         redisTemplate.opsForValue().set("testPerfix:18110000001", 0L);
         Object k6 = redisTemplate.opsForValue().get("testPerfix:18110000001");
         System.out.println("result:" + k6);
+        /**
+         * setNx ,只有当key不存在的时候，才能将key创建
+         * 返回值是个布尔值，根据这个判断此时是否有并发调用
+         */
+        String key = "myKey";
+        String value = "whatever";
+        Boolean aBoolean = redisTemplate.getConnectionFactory().getConnection().setNX(key.getBytes(), value.getBytes());
+        Boolean expire = redisTemplate.expire(key, 3000, TimeUnit.MILLISECONDS);
+
+
+
     }
 
     @Test

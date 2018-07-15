@@ -89,6 +89,12 @@ public class CommonTest {
 
 
     @Test
+    public void testMap2() {
+        Hashtable t;
+        HashMap m;
+    }
+
+    @Test
     public void testReverseNode() {
         Node n5 = new Node(5,null);
         Node n4 = new Node(4,n5);
