@@ -35,7 +35,7 @@ public class UserServiceImpl implements IUserService {
     }
 
 
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     @Override
     public boolean batchSave(List<User> userList) {
         log.info("batchSave userList.size={}", userList.size());
@@ -43,9 +43,9 @@ public class UserServiceImpl implements IUserService {
         for (User u : userList) {
             log.info("userList 第{}次保存", count);
             userRepository.save(u);
-            if(count == 3){
-                throw new RuntimeException("userList RuntimeException");
-            }
+//            if(count == 3){
+//                throw new RuntimeException("userList RuntimeException");
+//            }
             count++;
         }
         return false;

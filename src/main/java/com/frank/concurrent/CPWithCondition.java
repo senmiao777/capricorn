@@ -31,6 +31,10 @@ public class CPWithCondition {
         lock.lock();
         try {
             if (count == 0) {
+                /**
+                 * 等于0，说明空了
+                 * 非空条件等待
+                 */
                 notEmpty.await();
             }
 
@@ -59,6 +63,9 @@ public class CPWithCondition {
         lock.lock();
         try {
             if (count == 10) {
+                /**
+                 * 满了，非满条件等待，非空条件唤醒
+                 */
                 notFull.await();
             }
             int random = RandomUtils.nextInt(10, 50);

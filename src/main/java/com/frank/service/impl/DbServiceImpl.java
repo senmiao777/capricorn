@@ -37,19 +37,16 @@ public class DbServiceImpl implements IDbService {
         benefitService.save(benefit);
         log.info("DbServiceImpl update benefit={}",benefit);
 
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         throw new RuntimeException("测试事务回滚");
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public void update(List<User> userList, Benefit benefit) {
-        userService.batchSave(userList);
-        log.info("DbServiceImpl update userList={}",userList.size());
         benefitService.save(benefit);
         log.info("DbServiceImpl update benefit={}",benefit);
+        userService.batchSave(userList);
+        log.info("DbServiceImpl update userList={}",userList.size());
+
     }
 }
