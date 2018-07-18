@@ -1,4 +1,4 @@
-package com.frank.designpattern;
+package com.frank.designpattern.observer;
 
 /**
  * @author frank

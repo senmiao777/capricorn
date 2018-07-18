@@ -28,10 +28,11 @@ public class HtmlController {
     private StockRepository stockRepository;
 
     @RequestMapping("/hello")
-    public String helloHtml(){
-      //  map.put("hello","hello");
-        return"/view/firstEchart";
+    public String helloHtml() {
+        //  map.put("hello","hello");
+        return "/view/firstEchart";
     }
+
 
 
 

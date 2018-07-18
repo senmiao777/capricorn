@@ -1,4 +1,4 @@
-package com.frank.designpattern;
+package com.frank.designpattern.template;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -140,9 +140,14 @@ public class CommonTest {
         return pre;
     }
 
+    private static final long THIRTY_DAY = 2592000000L;
     @Test
     public void testOthers2() {
+        final int nano = LocalDateTime.now().minusDays(30).getNano();
 
+        final Timestamp timestamp = new Timestamp(System.currentTimeMillis() - THIRTY_DAY);
+        log.info("nano={}" , nano);
+        log.info("timestamp={}" , timestamp);
         try {
             Class<?> commonTest = Class.forName("CommonTest");
             log.info("Class={}", commonTest);

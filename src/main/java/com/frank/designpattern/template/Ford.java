@@ -1,4 +1,4 @@
-package com.frank.designpattern;
+package com.frank.designpattern.template;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -6,16 +6,16 @@ import lombok.extern.slf4j.Slf4j;
  * @author frank
  * @version 1.0
  * @date 2018/7/2 0002 下午 10:00
- * 悍马汽车，继承汽车类
+ * 福特汽车，继承汽车类
  */
 @Slf4j
-public class Hummer extends MotorVehicle {
+public class Ford extends MotorVehicle {
     /**
      * 启动方法
      */
     @Override
     protected void start(){
-        log.info("Hummer start");
+        log.info("Ford start");
     };
 
     /**
@@ -23,7 +23,7 @@ public class Hummer extends MotorVehicle {
      */
     @Override
     protected void alarm(){
-        log.info("Hummer alarm");
+        log.info("Ford alarm");
     }
 
     /**
@@ -31,7 +31,7 @@ public class Hummer extends MotorVehicle {
      */
     @Override
     protected void move(){
-        log.info("Hummer move");
+        log.info("Ford move");
     }
 
     /**
@@ -39,8 +39,6 @@ public class Hummer extends MotorVehicle {
      */
     @Override
     protected void stop(){
-        log.info("Hummer stop");
+        log.info("Ford stop");
     }
-
-
 }
