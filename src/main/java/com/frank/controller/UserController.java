@@ -7,6 +7,7 @@ import com.frank.model.JsonResult;
 import com.frank.repository.mysql.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * 基本增删改查操作
@@ -70,6 +72,22 @@ public class UserController {
                                  @RequestParam String phone) {
 
         log.info("createUser userName={},age={}", userName, age);
+
+        try {
+            Class.forName("big.sister.Whatever");
+        } catch (ClassNotFoundException e) {
+            log.error("Class.forName e={}", ExceptionUtils.getStackTrace(e));
+           // return JsonResult.buildErrorResult("人为异常");
+        }
+        ClassLoader classLoader = UserController.class.getClassLoader();
+
+        try {
+            Class<?> aClass = classLoader.loadClass("big.sister.Whatever");
+        } catch (ClassNotFoundException e) {
+            log.error("classLoader.loadClass e={}", ExceptionUtils.getStackTrace(e));
+            return JsonResult.buildErrorResult("人为异常");
+        }
+        Map m;
 
         User user = new User();
         user.setAge(age);
