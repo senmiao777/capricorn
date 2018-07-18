@@ -5,7 +5,7 @@ package com.frank.designpattern.decorator;
  */
 
 /**
- * 最基本的组件，需要被包装的
+ * 最基本的组件，需要被包装的功能
  */
 public interface Component {
     void operation();

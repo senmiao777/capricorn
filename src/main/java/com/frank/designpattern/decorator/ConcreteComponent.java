@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 public class ConcreteComponent implements Component{
     @Override
     public void operation() {
-
+        //
+        System.out.println("ConcreteComponent operation");
+        //log.info("Hummer start");
     }
 }
