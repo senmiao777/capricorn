@@ -23,11 +23,6 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Override
-    public void transfer(User u1, User u2) {
-
-    }
-
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     @Override
     public User save(User user) {

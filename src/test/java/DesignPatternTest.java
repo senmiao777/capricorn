@@ -1,3 +1,6 @@
+import com.frank.designpattern.decorator.Component;
+import com.frank.designpattern.decorator.ConcreteComponent;
+import com.frank.designpattern.decorator.ConcreteDecoratorA;
 import com.frank.designpattern.template.Ford;
 import com.frank.designpattern.template.Hummer;
 import com.frank.designpattern.template.MotorVehicle;
@@ -12,6 +15,15 @@ import org.junit.Test;
  */
 @Slf4j
 public class DesignPatternTest {
+
+
+    @Test
+    public void testDecorator() {
+        Component component = new ConcreteComponent();
+        ConcreteDecoratorA concreteDecoratorA = new ConcreteDecoratorA(component);
+        concreteDecoratorA.operation();
+    }
+
 
     /**
      * 模板模式
