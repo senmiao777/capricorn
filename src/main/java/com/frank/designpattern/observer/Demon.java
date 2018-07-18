@@ -1,4 +1,4 @@
-package com.frank.designpattern;
+package com.frank.designpattern.observer;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,7 +55,7 @@ public class Demon extends Observable {
     public void eat(String food) {
         log.info("Demon eat {}", food);
         super.setChanged();
-        super.notifyObservers(new com.frank.designpattern.Observable.Notice(com.frank.designpattern.Observable.OperationType.EAT, getClass().toString(), food));
+        super.notifyObservers(new com.frank.designpattern.observer.Observable.Notice(com.frank.designpattern.observer.Observable.OperationType.EAT, getClass().toString(), food));
     }
 //
 //    @Override

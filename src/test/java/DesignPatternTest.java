@@ -1,7 +1,7 @@
-import com.frank.designpattern.*;
-import com.frank.designpattern.Ford;
-import com.frank.designpattern.Hummer;
-import com.frank.designpattern.MotorVehicle;
+import com.frank.designpattern.template.Ford;
+import com.frank.designpattern.template.Hummer;
+import com.frank.designpattern.template.MotorVehicle;
+import com.frank.designpattern.observer.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 

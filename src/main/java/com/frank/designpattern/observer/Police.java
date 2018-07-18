@@ -1,4 +1,4 @@
-package com.frank.designpattern;
+package com.frank.designpattern.observer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;

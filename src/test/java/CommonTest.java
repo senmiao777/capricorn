@@ -85,11 +85,14 @@ public class CommonTest {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-
+    private static final long THIRTY_DAY = 2592000000L;
     @Test
     public void testOthers2() {
+        final int nano = LocalDateTime.now().minusDays(30).getNano();
 
-
+        final Timestamp timestamp = new Timestamp(System.currentTimeMillis() - THIRTY_DAY);
+        log.info("nano={}" , nano);
+        log.info("timestamp={}" , timestamp);
         log.info("count1={}" , SingleTon.count1);
         log.info("count2={}" , SingleTon.count2);
 
