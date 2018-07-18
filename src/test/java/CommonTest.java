@@ -1,6 +1,7 @@
 import com.alibaba.fastjson.JSON;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.User;
+import com.frank.other.Node;
 import com.frank.other.SingleTon;
 import com.frank.repository.mysql.IncomeStatementRepository;
 import com.frank.util.GenerateUtil;
@@ -85,6 +86,51 @@ public class CommonTest {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+
+
+    @Test
+    public void testMap2() {
+        Hashtable t;
+        HashMap m;
+    }
+
+    @Test
+    public void testReverseNode() {
+        Node n5 = new Node(5,null);
+        Node n4 = new Node(4,n5);
+        Node n3 = new Node(3,n4);
+        Node n2 = new Node(2,n3);
+        Node n1 = new Node(1,n2);
+
+        Node head = n1;
+        while(head != null){
+            log.info("tmp data={}",head.getData());
+            head = head.getNext();
+        }
+
+
+        head = n1;
+        Node pre = reverse(head);
+
+        while(pre != null){
+            log.info("tmp data={}",pre.getData());
+            pre = pre.getNext();
+        }
+
+    }
+
+    private Node reverse(Node head){
+        Node pre = null;
+        Node current =head;
+        while(current != null){
+            Node next = current.getNext();
+            current.setNext(pre);
+            pre = current;
+            current = next;
+        }
+        return pre;
+    }
+
     private static final long THIRTY_DAY = 2592000000L;
     @Test
     public void testOthers2() {
@@ -93,6 +139,35 @@ public class CommonTest {
         final Timestamp timestamp = new Timestamp(System.currentTimeMillis() - THIRTY_DAY);
         log.info("nano={}" , nano);
         log.info("timestamp={}" , timestamp);
+        try {
+            Class<?> commonTest = Class.forName("CommonTest");
+            log.info("Class={}",commonTest);
+
+            ClassLoader classLoader = CommonTest.class.getClassLoader();
+            log.info("classLoader={}",classLoader);
+            /**
+             * classLoader.loadClass("XXClassName")
+             * 只将class文件加载到JVM，不会执行static代码块
+             */
+//            Class<?> classTest = classLoader.loadClass("ClassTest");
+//            log.info("classTest={}",classTest);
+
+            /**
+             * Class.forName("XXClassName");
+             * 会将class文件加载到JVM，并执行static代码块
+             *
+             * Class.forName("ClassTest", false, classLoader);
+             * 可以指定是否执行static代码块
+             *
+             */
+//            Class<?> classTest = Class.forName("ClassTest");
+//            log.info("classTest={}",classTest);
+
+            Class<?> classTest1 = Class.forName("ClassTest", true, classLoader);
+            log.info("classTest1={}",classTest1);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         log.info("count1={}" , SingleTon.count1);
         log.info("count2={}" , SingleTon.count2);
 

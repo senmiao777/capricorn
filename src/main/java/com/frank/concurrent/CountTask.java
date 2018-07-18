@@ -1,6 +1,7 @@
 package com.frank.concurrent;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
 
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveTask;
@@ -33,7 +34,7 @@ public class CountTask extends RecursiveTask<Integer> {
      * 美 [ˈθreʃhoʊld]
      * 阈值，临界值
      */
-    private static final int THRESHOLD = 50;
+    private static final int THRESHOLD = 5;
 
     private int start = 0;
     private int end = 0;
@@ -69,14 +70,14 @@ public class CountTask extends RecursiveTask<Integer> {
 
         } else {
 
-//            if (start < 500) {
-//                final int time = RandomUtils.nextInt(500, 1000);
-//                try {
-//                    Thread.sleep(time);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
+            if (start < 50) {
+                final int time = RandomUtils.nextInt(500, 1000);
+                try {
+                    Thread.sleep(time);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
 
 
             for (int i = start; i <= end; i++) {

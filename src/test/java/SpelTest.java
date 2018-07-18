@@ -25,8 +25,8 @@ import java.util.List;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootApplication
-@ComponentScan(basePackages ="com.frank")
-@SpringBootTest(classes= SpelTest.class)
+@ComponentScan(basePackages = "com.frank")
+@SpringBootTest(classes = SpelTest.class)
 @Rollback(false)
 @Slf4j
 public class SpelTest {
@@ -42,23 +42,29 @@ public class SpelTest {
     private String helloWorld;
 
 
-
     @Test
     public void test() {
         final SpelExpressionParser parser = new SpelExpressionParser();
         final List<User> all = userRepository.findAll();
-        log.info("helloWorld={}",helloWorld);
+        log.info("helloWorld={}", helloWorld);
         String spelOne = "#this[0].userName";
         String value = parser.parseExpression(spelOne).getValue(all, String.class);
-        log.info("userName={}",value);
+        log.info("userName={}", value);
+
+        /**
+         * 组合多个参数拼接为key
+         */
+        String spelTwo = "#this[0].userName+':'+#this[0].age";
+        String value2 = parser.parseExpression(spelTwo).getValue(all, String.class);
+        log.info("value2={}", value2);
+
         String str1 = parser.parseExpression("'Hello World !'").getValue(String.class);
 
         String str2 = parser.parseExpression("'123' matches '\\d{3}'").getValue(String.class);
 
-        log.info("str1={},str2={}",str1,str2);
+        log.info("str1={},str2={}", str1, str2);
 
     }
-
 
 
 }

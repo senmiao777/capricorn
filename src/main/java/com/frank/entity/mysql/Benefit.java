@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -49,6 +50,15 @@ public class Benefit {
     @Column(name = "party_id")
     @JSONField(name = "partyID")
     private String partyId;
+
+
+    public static Benefit generateBenefit() {
+        Benefit benefit = new Benefit();
+        benefit.setSecId("secid:".concat(String.valueOf(RandomUtils.nextInt())));
+        benefit.setEndDate(new Date());
+        benefit.setPartyId("partid:".concat(String.valueOf(RandomUtils.nextInt())));
+        return benefit;
+    }
 
    /* ticker	String	股票代码
     secShortName	String	证券简称

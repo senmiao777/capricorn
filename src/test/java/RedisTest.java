@@ -1,3 +1,7 @@
+import com.frank.entity.mysql.Benefit;
+import com.frank.entity.mysql.User;
+import com.frank.service.IDbService;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -27,6 +32,29 @@ public class RedisTest {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private IDbService dbService;
+
+    @Test
+    public void testt2() {
+        User u1 = User.generateUser();
+        User u2 = User.generateUser();
+        User u3 = User.generateUser();
+        User u4 = User.generateUser();
+
+        List<User> userList = Lists.newArrayList(u1,u2,u3,u4);
+
+        Benefit benefit = Benefit.generateBenefit();
+        dbService.update(userList, benefit);
+    }
+
+    @Test
+    public void testt() {
+        User u = User.generateUser();
+        Benefit benefit = Benefit.generateBenefit();
+        dbService.update(u, benefit);
+    }
+
     @Test
     public void testString() {
         redisTemplate.opsForValue().set("k2", "v2");
@@ -42,6 +70,16 @@ public class RedisTest {
         redisTemplate.opsForValue().set("testPerfix:18110000001", 0L);
         Object k6 = redisTemplate.opsForValue().get("testPerfix:18110000001");
         System.out.println("result:" + k6);
+        /**
+         * setNx ,只有当key不存在的时候，才能将key创建
+         * 返回值是个布尔值，根据这个判断此时是否有并发调用
+         */
+        String key = "myKey";
+        String value = "whatever";
+        Boolean aBoolean = redisTemplate.getConnectionFactory().getConnection().setNX(key.getBytes(), value.getBytes());
+        Boolean expire = redisTemplate.expire(key, 3000, TimeUnit.MILLISECONDS);
+
+
     }
 
     @Test
