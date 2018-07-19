@@ -1,3 +1,5 @@
+import com.frank.designpattern.adapter.Adapter;
+import com.frank.designpattern.adapter.Target;
 import com.frank.designpattern.decorator.Component;
 import com.frank.designpattern.decorator.ConcreteComponent;
 import com.frank.designpattern.decorator.ConcreteDecoratorA;
@@ -16,6 +18,12 @@ import org.junit.Test;
  */
 @Slf4j
 public class DesignPatternTest {
+
+    @Test
+    public void testAdapter() {
+        Target t = new Adapter();
+        t.targetOperation();
+    }
 
 
     @Test
