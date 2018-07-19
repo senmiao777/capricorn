@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * @author: sb
  * @time: 2018-07-18 15:12
+ * 具体的组件实现
  */
 @Slf4j
 public class ConcreteComponent implements Component {
