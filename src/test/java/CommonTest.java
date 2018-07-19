@@ -90,21 +90,30 @@ public class CommonTest {
 
     @Test
     public void testMap2() {
+
+        Integer a = 200;
+        Integer b = 200;
+        int c = 200;
+        log.info("Integer Integer result = {}", a == b);
+        log.info("Integer int result = {}", a == c);
+        Integer d = 20;
+        Integer e = 20;
+        log.info("Integer  -128~127之间，result = {}", d == e);
         Hashtable t;
         HashMap m;
     }
 
     @Test
     public void testReverseNode() {
-        Node n5 = new Node(5,null);
-        Node n4 = new Node(4,n5);
-        Node n3 = new Node(3,n4);
-        Node n2 = new Node(2,n3);
-        Node n1 = new Node(1,n2);
+        Node n5 = new Node(5, null);
+        Node n4 = new Node(4, n5);
+        Node n3 = new Node(3, n4);
+        Node n2 = new Node(2, n3);
+        Node n1 = new Node(1, n2);
 
         Node head = n1;
-        while(head != null){
-            log.info("tmp data={}",head.getData());
+        while (head != null) {
+            log.info("tmp data={}", head.getData());
             head = head.getNext();
         }
 
@@ -112,17 +121,17 @@ public class CommonTest {
         head = n1;
         Node pre = reverse(head);
 
-        while(pre != null){
-            log.info("tmp data={}",pre.getData());
+        while (pre != null) {
+            log.info("tmp data={}", pre.getData());
             pre = pre.getNext();
         }
 
     }
 
-    private Node reverse(Node head){
+    private Node reverse(Node head) {
         Node pre = null;
-        Node current =head;
-        while(current != null){
+        Node current = head;
+        while (current != null) {
             Node next = current.getNext();
             current.setNext(pre);
             pre = current;
@@ -141,10 +150,10 @@ public class CommonTest {
         log.info("timestamp={}" , timestamp);
         try {
             Class<?> commonTest = Class.forName("CommonTest");
-            log.info("Class={}",commonTest);
+            log.info("Class={}", commonTest);
 
             ClassLoader classLoader = CommonTest.class.getClassLoader();
-            log.info("classLoader={}",classLoader);
+            log.info("classLoader={}", classLoader);
             /**
              * classLoader.loadClass("XXClassName")
              * 只将class文件加载到JVM，不会执行static代码块
@@ -164,12 +173,12 @@ public class CommonTest {
 //            log.info("classTest={}",classTest);
 
             Class<?> classTest1 = Class.forName("ClassTest", true, classLoader);
-            log.info("classTest1={}",classTest1);
+            log.info("classTest1={}", classTest1);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        log.info("count1={}" , SingleTon.count1);
-        log.info("count2={}" , SingleTon.count2);
+        log.info("count1={}", SingleTon.count1);
+        log.info("count2={}", SingleTon.count2);
 
     }
 
