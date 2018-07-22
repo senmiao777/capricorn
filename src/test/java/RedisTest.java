@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -35,6 +37,18 @@ public class RedisTest {
     @Autowired
     private IDbService dbService;
 
+    @Autowired
+    private MailSender mailSender;
+
+    @Test
+    public void testSendMail() {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom("10426800368@qq.com");
+        simpleMailMessage.setTo("13240411778@163.com");
+        simpleMailMessage.setSubject("setSubject");
+        simpleMailMessage.setText("this is text");
+        mailSender.send(simpleMailMessage);
+    }
     @Test
     public void testt2() {
         User u1 = User.generateUser();
