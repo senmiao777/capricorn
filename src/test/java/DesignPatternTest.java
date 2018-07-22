@@ -1,10 +1,13 @@
+import com.frank.designpattern.adapter.Adapter;
+import com.frank.designpattern.adapter.Target;
 import com.frank.designpattern.decorator.Component;
 import com.frank.designpattern.decorator.ConcreteComponent;
 import com.frank.designpattern.decorator.ConcreteDecoratorA;
+import com.frank.designpattern.decorator.ConcreteDecoratorB;
+import com.frank.designpattern.observer.*;
 import com.frank.designpattern.template.Ford;
 import com.frank.designpattern.template.Hummer;
 import com.frank.designpattern.template.MotorVehicle;
-import com.frank.designpattern.observer.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -16,12 +19,23 @@ import org.junit.Test;
 @Slf4j
 public class DesignPatternTest {
 
+    @Test
+    public void testAdapter() {
+        Target t = new Adapter();
+        t.targetOperation();
+    }
+
 
     @Test
     public void testDecorator() {
         Component component = new ConcreteComponent();
-        ConcreteDecoratorA concreteDecoratorA = new ConcreteDecoratorA(component);
-        concreteDecoratorA.operation();
+        /**
+         * 想添加新的装饰，增加一个装饰器实现类就行了，高度可扩展
+         * 对原有组件没有任何影响
+         */
+        component = new ConcreteDecoratorA(component);
+        component = new ConcreteDecoratorB(component);
+        component.operation();
     }
 
 
