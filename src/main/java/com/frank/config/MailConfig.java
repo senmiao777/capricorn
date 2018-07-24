@@ -12,4 +12,6 @@ public class MailConfig {
 //        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
 //        return javaMailSender;
 //    }
+
+
 }
