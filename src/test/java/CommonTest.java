@@ -91,6 +91,13 @@ public class CommonTest {
     @Test
     public void testMap2() {
 
+
+        final String birthday = "20191231";
+        log.info("birthday.substring(0,4)={}", birthday.substring(0, 4));
+        log.info("birthday.substring(0,4)={}", birthday.substring(4, 6));
+        log.info("birthday.substring(0,4)={}", birthday.substring(6, 8));
+        final String s = formatBirthday(birthday);
+        log.info("birthday.s={}", s);
         Integer a = 200;
         Integer b = 200;
         int c = 200;
@@ -101,6 +108,13 @@ public class CommonTest {
         log.info("Integer  -128~127之间，result = {}", d == e);
         Hashtable t;
         HashMap m;
+    }
+
+
+    private String formatBirthday(String birthday) {
+        return new StringBuilder(birthday.substring(0, 4))
+                .append("-").append(birthday.substring(4, 6))
+                .append("-").append(birthday.substring(6, 8)).toString();
     }
 
     @Test
@@ -141,13 +155,14 @@ public class CommonTest {
     }
 
     private static final long THIRTY_DAY = 2592000000L;
+
     @Test
     public void testOthers2() {
         final int nano = LocalDateTime.now().minusDays(30).getNano();
 
         final Timestamp timestamp = new Timestamp(System.currentTimeMillis() - THIRTY_DAY);
-        log.info("nano={}" , nano);
-        log.info("timestamp={}" , timestamp);
+        log.info("nano={}", nano);
+        log.info("timestamp={}", timestamp);
         try {
             Class<?> commonTest = Class.forName("CommonTest");
             log.info("Class={}", commonTest);
