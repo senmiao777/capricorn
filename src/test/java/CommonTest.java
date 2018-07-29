@@ -90,7 +90,9 @@ public class CommonTest {
 
     @Test
     public void testMap2() {
-
+String  s  = "123年的ll";
+        String e1 = s.substring(0, s.indexOf("年"));
+        log.info("e1={}",e1);
         Integer a = 200;
         Integer b = 200;
         int c = 200;

@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.annotation.Rollback;
@@ -23,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootApplication
 @ComponentScan(basePackages = "com.frank")
-//@SpringBootTest(classes = StockTest.class)
+@SpringBootTest(classes = RedisTest.class)
 @Rollback(false)
 @Slf4j
 public class RedisTest {
