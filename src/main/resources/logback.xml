@@ -6,9 +6,9 @@
         </layout>
     </appender>
    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/logs/zeus.log</file>
+        <file>/usr/local/springboot/logs/capricorn.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/logs/zeus.log.%d{yyyy-MM-dd}.bak</fileNamePattern>
+            <fileNamePattern>/usr/local/springboot/logs/capricorn.log.%d{yyyy-MM-dd}.bak</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <layout class="ch.qos.logback.classic.PatternLayout">
