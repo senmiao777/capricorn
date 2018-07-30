@@ -49,36 +49,40 @@ public class RepoTest {
 
     @Test
     public void testAddData() {
-        Long id = 2L;
+        for (long i = 18L; i <= 100L; i++) {
+            String s = addData2ES(i);
+            log.info("data id = {}", s);
+        }
+
+    }
+
+    private String addData2ES(Long id) {
         BlindDateComment one = commentRepository.findOne(id);
-//        log.info("one={}", one);
-//        BlindDate b = new BlindDate();
-//        BeanUtils.copyProperties(one, b);
-//        log.info("BeanUtilsb={}", b);
+        if(one == null){
+           return "null";
+        }
 
         /**
          * java.lang.IllegalArgumentException: The number of object passed must be even but was [1]
+         * 因为传入的对象不是Map
          */
         String s = JSON.toJSONString(one);
-        log.info("s={}",s);
+        log.info("s={}", s);
 
         JSONObject jsonObject = JSON.parseObject(s);
-        log.info("jsonObject={}",jsonObject);
+        log.info("jsonObject={}", jsonObject);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             String json = objectMapper.writeValueAsString(one);
-            log.info("json={}",json);
-            log.info("equals={}",s.equals(json));
+            log.info("json={}", json);
+            log.info("equals={}", s.equals(json));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         IndexResponse response = client.prepareIndex(INDEX, TYPE, id.toString()).setSource(jsonObject).get();
 
         log.info("addData response status:{},id:{}", response.status().getStatus(), response.getId());
-        //    elasticsearchTemplate.
-//        BlindDate save = elasticsearchTemplate.save(b);
-//        log.info("save={}",save);
-        //transportClient.
+        return response.getId();
     }
 
     @Test

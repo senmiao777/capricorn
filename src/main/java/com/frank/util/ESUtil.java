@@ -115,7 +115,16 @@ public class ESUtil {
     public static String addData(JSONObject jsonObject, String index, String type, String id) {
 
         IndexResponse response = client.prepareIndex(index, type, id).setSource(jsonObject).get();
-
+//        try {
+//            client.prepareIndex(index, type, id).setSource(jsonBuilder().startObject().field("id","1")
+//                    .field("title","装饰模式")
+//                    .field("content","动态地扩展一个对象的功能")
+//                    .field("postdate","2018-02-03 14:38:10")
+//                    .field("url","csdn.net/79239072")
+//                    .endObject());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         log.info("addData response status:{},id:{}", response.status().getStatus(), response.getId());
 
         return response.getId();
