@@ -8,6 +8,7 @@ import com.frank.util.GenerateUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.util.concurrent.RateLimiter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
@@ -89,10 +90,51 @@ public class CommonTest {
 
 
     @Test
+    public void testRateLimiter() {
+        /**
+         * 每秒产生的令牌数量
+         * permitsPerSecond
+         */
+        RateLimiter rateLimiter = RateLimiter.create(2.0);
+
+        if(rateLimiter.tryAcquire()) { //未请求到limiter则立即返回false
+           // doSomething();
+        }else{
+            //doSomethingElse();
+        }
+    }
+
+    /**
+     * 限制线程池的执行速度
+     * final RateLimiter rateLimiter = RateLimiter.create(5000.0);
+     * @param tasks
+     * @param executor
+     */
+    void submitTasks(List<Runnable> tasks, Executor executor) {
+        for (Runnable task : tasks) {
+            //   rateLimiter.acquire(); // may wait
+            executor.execute(task);
+        }
+    }
+
+    /**
+     * 每发送N字节的数据，使用N个令牌
+     * 假如我们会产生一个数据流,然后我们想以每秒5kb的速度发送出去.
+     * 我们可以每获取一个令牌(permit)就发送一个byte的数据,这样我们就可以通过一个每秒5000个令牌的RateLimiter来实现:
+     *
+     * @param packet
+     */
+    void submitPacket(byte[] packet) {
+        //   rateLimiter.acquire(packet.length);
+        // xxService.doSomething(packet);
+    }
+
+
+    @Test
     public void testMap2() {
-String  s  = "123年的ll";
+        String s = "123年的ll";
         String e1 = s.substring(0, s.indexOf("年"));
-        log.info("e1={}",e1);
+        log.info("e1={}", e1);
         Integer a = 200;
         Integer b = 200;
         int c = 200;
@@ -143,13 +185,14 @@ String  s  = "123年的ll";
     }
 
     private static final long THIRTY_DAY = 2592000000L;
+
     @Test
     public void testOthers2() {
         final int nano = LocalDateTime.now().minusDays(30).getNano();
 
         final Timestamp timestamp = new Timestamp(System.currentTimeMillis() - THIRTY_DAY);
-        log.info("nano={}" , nano);
-        log.info("timestamp={}" , timestamp);
+        log.info("nano={}", nano);
+        log.info("timestamp={}", timestamp);
         try {
             Class<?> commonTest = Class.forName("CommonTest");
             log.info("Class={}", commonTest);
@@ -658,6 +701,7 @@ String  s  = "123年的ll";
         public void setEnd(Date end) {
             this.end = end;
         }
+
     }
 
     @Test

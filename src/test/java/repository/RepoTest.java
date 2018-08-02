@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.frank.entity.mysql.BlindDateComment;
+import com.frank.entity.mysql.Stock;
 import com.frank.repository.mysql.BlindDateCommentRepository;
+import com.frank.repository.mysql.StockRepository;
 import com.frank.util.ESUtil;
 import com.google.common.base.Splitter;
 import lombok.extern.slf4j.Slf4j;
@@ -39,9 +41,13 @@ public class RepoTest {
 
     public static final String INDEX = "learn";
     public static final String TYPE = "blinddate";
+    public static final String INDEX_STOCK = "stock";
+    public static final String TYPE_STOCK = "stock_base_info";
     @Autowired
     private BlindDateCommentRepository commentRepository;
 
+    @Autowired
+    private StockRepository stockRepository;
 
     @Autowired
     private TransportClient client;
@@ -49,17 +55,40 @@ public class RepoTest {
 
     @Test
     public void testAddData() {
-        for (long i = 18L; i <= 100L; i++) {
-            String s = addData2ES(i);
-            log.info("data id = {}", s);
+        Long begin = 201L;
+        Long end = begin + 100;
+        for (Long i =begin; i < end; i++) {
+            String s = addBlindDataData2ES(i);
+            log.info("s={}", s);
         }
+
+//        List<Stock> all = stockRepository.findAll();
+//        for (Stock s : all) {
+//            addStockDataData2ES(s);
+//            log.info("data id = {}", s.getId());
+//        }
+
 
     }
 
-    private String addData2ES(Long id) {
+    private String addStockDataData2ES(Stock one) {
+
+        String s = JSON.toJSONString(one);
+        log.info("s={}", s);
+
+        JSONObject jsonObject = JSON.parseObject(s);
+        log.info("jsonObject={}", jsonObject);
+
+        IndexResponse response = client.prepareIndex(INDEX_STOCK, TYPE_STOCK, one.getId().toString()).setSource(jsonObject).get();
+
+        log.info("addData response status:{},id:{}", response.status().getStatus(), response.getId());
+        return response.getId();
+    }
+
+    private String addBlindDataData2ES(Long id) {
         BlindDateComment one = commentRepository.findOne(id);
-        if(one == null){
-           return "null";
+        if (one == null) {
+            return "null";
         }
 
         /**
