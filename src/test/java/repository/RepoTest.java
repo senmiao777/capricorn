@@ -55,7 +55,7 @@ public class RepoTest {
 
     @Test
     public void testAddData() {
-        Long begin = 201L;
+        Long begin = 301L;
         Long end = begin + 100;
         for (Long i =begin; i < end; i++) {
             String s = addBlindDataData2ES(i);

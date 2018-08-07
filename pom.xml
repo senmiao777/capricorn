@@ -255,6 +255,14 @@
         <maven.test.skip>true</maven.test.skip>
     </properties>
 
+ <!--   <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>releases</name>
+            <url>http://127.0.0.1:8081/nexus/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>-->
+
     <build>
         <resources>
             <resource>
