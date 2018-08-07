@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.frank.entity.mysql.BlindDateComment;
+import com.frank.entity.mysql.Stock;
 import com.frank.repository.mysql.BlindDateCommentRepository;
+import com.frank.repository.mysql.StockRepository;
 import com.frank.util.ESUtil;
 import com.google.common.base.Splitter;
 import lombok.extern.slf4j.Slf4j;
@@ -39,9 +41,13 @@ public class RepoTest {
 
     public static final String INDEX = "learn";
     public static final String TYPE = "blinddate";
+    public static final String INDEX_STOCK = "stock";
+    public static final String TYPE_STOCK = "stock_base_info";
     @Autowired
     private BlindDateCommentRepository commentRepository;
 
+    @Autowired
+    private StockRepository stockRepository;
 
     @Autowired
     private TransportClient client;
@@ -49,36 +55,63 @@ public class RepoTest {
 
     @Test
     public void testAddData() {
-        Long id = 2L;
+        Long begin = 201L;
+        Long end = begin + 100;
+        for (Long i =begin; i < end; i++) {
+            String s = addBlindDataData2ES(i);
+            log.info("s={}", s);
+        }
+
+//        List<Stock> all = stockRepository.findAll();
+//        for (Stock s : all) {
+//            addStockDataData2ES(s);
+//            log.info("data id = {}", s.getId());
+//        }
+
+
+    }
+
+    private String addStockDataData2ES(Stock one) {
+
+        String s = JSON.toJSONString(one);
+        log.info("s={}", s);
+
+        JSONObject jsonObject = JSON.parseObject(s);
+        log.info("jsonObject={}", jsonObject);
+
+        IndexResponse response = client.prepareIndex(INDEX_STOCK, TYPE_STOCK, one.getId().toString()).setSource(jsonObject).get();
+
+        log.info("addData response status:{},id:{}", response.status().getStatus(), response.getId());
+        return response.getId();
+    }
+
+    private String addBlindDataData2ES(Long id) {
         BlindDateComment one = commentRepository.findOne(id);
-//        log.info("one={}", one);
-//        BlindDate b = new BlindDate();
-//        BeanUtils.copyProperties(one, b);
-//        log.info("BeanUtilsb={}", b);
+        if (one == null) {
+            return "null";
+        }
 
         /**
          * java.lang.IllegalArgumentException: The number of object passed must be even but was [1]
+         * 因为传入的对象不是Map
          */
         String s = JSON.toJSONString(one);
-        log.info("s={}",s);
+        log.info("s={}", s);
 
         JSONObject jsonObject = JSON.parseObject(s);
-        log.info("jsonObject={}",jsonObject);
+        log.info("jsonObject={}", jsonObject);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             String json = objectMapper.writeValueAsString(one);
-            log.info("json={}",json);
-            log.info("equals={}",s.equals(json));
+            log.info("json={}", json);
+            log.info("equals={}", s.equals(json));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         IndexResponse response = client.prepareIndex(INDEX, TYPE, id.toString()).setSource(jsonObject).get();
 
         log.info("addData response status:{},id:{}", response.status().getStatus(), response.getId());
-        //    elasticsearchTemplate.
-//        BlindDate save = elasticsearchTemplate.save(b);
-//        log.info("save={}",save);
-        //transportClient.
+        return response.getId();
     }
 
     @Test
