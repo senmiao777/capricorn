@@ -12,6 +12,7 @@ import com.google.common.util.concurrent.RateLimiter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -186,6 +187,16 @@ public class CommonTest {
 
     private static final long THIRTY_DAY = 2592000000L;
 
+    @Test
+    public void testOthers2w() {
+        List<Long> ids = new ArrayList<>(10);
+        ids.add(1L);
+        ids.add(12L);
+        ids.add(13L);
+String s  = "[1, 12, 13]";
+        final String join = StringUtils.join(ids, ",");
+        log.info("join={}", join);
+    }
     @Test
     public void testOthers2() {
         final int nano = LocalDateTime.now().minusDays(30).getNano();
