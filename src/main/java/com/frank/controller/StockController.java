@@ -117,11 +117,6 @@ public class StockController {
         Stock stock6 = stockRepository.findByStockCode(stockCode);
         log.info("stock={}", stock6);
 
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         Stock stock4 = stockRepository.findOne(1L);
         log.info("stock={}", stock4);
