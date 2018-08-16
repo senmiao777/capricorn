@@ -34,7 +34,9 @@ import java.sql.Timestamp;
 import java.text.Format;
 import java.text.ParseException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.concurrent.*;
@@ -55,6 +57,8 @@ import java.util.stream.Collectors;
 @Rollback(false)
 @Slf4j
 public class CommonTest {
+
+    private static final java.time.format.DateTimeFormatter YYYYMMDD = java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd");
 
     enum Roman {
         M("M", 1000, "M对应值为1000"),
@@ -203,6 +207,23 @@ public class CommonTest {
 
 
         }
+    }
+
+    @Test
+    public void testTime(){
+        String s = "19920114";
+        final LocalDate birth = LocalDate.parse(s, YYYYMMDD);
+        final Period period = birth.until(LocalDate.now());
+        log.info("period={}",period);
+        log.info("age={}",period.getYears());
+
+        final LocalDate start = LocalDate.of(1992, 10, 14);
+        final LocalDate end =LocalDate.of(2018,10,13);
+        final Period until = start.until(end);
+
+        log.info("age={}",until.getYears());
+
+
     }
 
     @Test
