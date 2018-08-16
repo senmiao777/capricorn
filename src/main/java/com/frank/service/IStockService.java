@@ -12,5 +12,7 @@ import java.util.List;
 public interface IStockService {
     Stock findByStockCode(String stockCode);
 
+    Stock findByStockName(String stockName);
+
     List<Stock> findByArea(String area);
 }

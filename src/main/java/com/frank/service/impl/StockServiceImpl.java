@@ -6,6 +6,7 @@ import com.frank.repository.mysql.StockRepository;
 import com.frank.service.IStockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -31,10 +32,18 @@ public class StockServiceImpl implements IStockService {
     //   @CachePut(value = "stock", key = "#stockCode")
     public Stock findByStockCode(String stockCode) {
         log.info("findByStockCode缓存未命中,stockCode={}", stockCode);
-        Stock s = stockRepository.findByStockCode(stockCode);
-        cacheManager.getCache(Common.STOCK.getValue()).putIfAbsent(stockCode, s);
+        Stock stock = stockRepository.findByStockCode(stockCode);
+        Cache cache = cacheManager.getCache(Common.STOCK.getValue());
+        cache.putIfAbsent(stockCode, stock);
+        cache.putIfAbsent(stock.getName(), stock);
         log.info("findByStockCode stockCode={}放入缓存", stockCode);
-        return s;
+        return stock;
+    }
+
+    @Override
+    @Cacheable(value = "stock", key = "#stockName")
+    public Stock findByStockName(String stockName) {
+        return stockRepository.findByStockName(stockName);
     }
 
     @Override
