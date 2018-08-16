@@ -9,6 +9,7 @@ import lombok.Getter;
  */
 @Getter
 public enum Common {
+    STOCK("stock"),
     /**
      * 开始执行，方便确定位置
      */

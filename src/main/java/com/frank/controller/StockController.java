@@ -5,6 +5,7 @@ import com.frank.entity.mysql.Stock;
 import com.frank.model.JsonResult;
 import com.frank.repository.mysql.IncomeStatementRepository;
 import com.frank.repository.mysql.StockRepository;
+import com.frank.service.IStockService;
 import com.google.common.util.concurrent.RateLimiter;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -39,6 +40,9 @@ public class StockController {
 
     @Autowired
     private StockRepository stockRepository;
+
+    @Autowired
+    private IStockService stockService;
 
     /**
      * 每秒发十个令牌
@@ -75,7 +79,7 @@ public class StockController {
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     public JsonResult info(@RequestParam String stockCode) {
 
-        log.info("stockCode={},等待时间={}", stockCode,rateLimiter.acquire());
+        log.info("stockCode={},等待时间={}", stockCode, rateLimiter.acquire());
         Stock stock = stockRepository.findByStockCode(stockCode);
         return JsonResult.buildSuccessResult(stock);
     }
@@ -90,12 +94,13 @@ public class StockController {
     @RequestMapping(value = "/info2", method = RequestMethod.GET)
     public JsonResult info2(@RequestParam String stockCode) {
 
-        log.info("stockCode={},等待时间={}", stockCode,rateLimiter.acquire());
-        if(!rateLimiter.tryAcquire(200L, TimeUnit.MICROSECONDS)){
+        log.info("stockCode={},等待时间={}", stockCode, rateLimiter.acquire());
+        if (!rateLimiter.tryAcquire(200L, TimeUnit.MICROSECONDS)) {
             log.info("去别的页面转转吧/抛异常，统一处理都行");
-            return  JsonResult.buildErrorResult("去别的页面转转吧");
+            return JsonResult.buildErrorResult("去别的页面转转吧");
         }
-        Stock stock = stockRepository.findByStockCode(stockCode);
+
+        Stock stock = stockService.findByStockCode(stockCode);
         return JsonResult.buildSuccessResult(stock);
     }
 
@@ -117,11 +122,6 @@ public class StockController {
         Stock stock6 = stockRepository.findByStockCode(stockCode);
         log.info("stock={}", stock6);
 
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         Stock stock4 = stockRepository.findOne(1L);
         log.info("stock={}", stock4);
