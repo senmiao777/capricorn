@@ -9,11 +9,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.RateLimiter;
+import io.netty.util.HashedWheelTimer;
+import io.netty.util.Timeout;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -22,12 +25,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.annotation.Rollback;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.Format;
+import java.text.ParseException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAccessor;
@@ -98,9 +103,9 @@ public class CommonTest {
          */
         RateLimiter rateLimiter = RateLimiter.create(2.0);
 
-        if(rateLimiter.tryAcquire()) { //未请求到limiter则立即返回false
-           // doSomething();
-        }else{
+        if (rateLimiter.tryAcquire()) { //未请求到limiter则立即返回false
+            // doSomething();
+        } else {
             //doSomethingElse();
         }
     }
@@ -108,6 +113,7 @@ public class CommonTest {
     /**
      * 限制线程池的执行速度
      * final RateLimiter rateLimiter = RateLimiter.create(5000.0);
+     *
      * @param tasks
      * @param executor
      */
@@ -186,6 +192,18 @@ public class CommonTest {
     }
 
     private static final long THIRTY_DAY = 2592000000L;
+    public static final java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    public static class Mytimer implements io.netty.util.TimerTask {
+
+        @Override
+        public void run(Timeout timeout) throws Exception {
+            System.out.println("timeout=" + timeout);
+            System.out.println("Mytimer task1 :" + LocalDateTime.now().format(formatter));
+
+
+        }
+    }
 
     @Test
     public void testOthers2w() {
@@ -193,10 +211,76 @@ public class CommonTest {
         ids.add(1L);
         ids.add(12L);
         ids.add(13L);
-String s  = "[1, 12, 13]";
+        String s = "[1, 12, 13]";
         final String join = StringUtils.join(ids, ",");
         log.info("join={}", join);
+
+        String b = "3702821992090912334534";
+        final String substring = new StringBuilder(b.substring(6, 10)).append("-").append(b.substring(10, 12)).append("-").append(b.substring(12, 14)).toString();
+        log.info("substring={}", substring);
+
+
+        String str = "1234567";
+        Integer intStr = 1234567;
+        final boolean equals = str.equals(intStr);
+        final boolean equals1 = intStr.equals(str);
+
+        log.info("equals={},equals1={}", equals, equals1);
+
+        String d = "2018-09-09";
+        final Date date;
+        try {
+            date = DateUtils.parseDate(d, "yyyy-MM-dd");
+            log.info("Date={}",date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+
     }
+
+    /**
+     * netty时间轮算法实现
+     * 同一个时间点的任务时串行执行的
+     */
+    @Test
+    public void e22() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        //vexecutor
+        final ThreadFactory threadFactory = Executors.defaultThreadFactory();
+        final io.netty.util.Timer timer = new HashedWheelTimer(executor, 5, TimeUnit.SECONDS, 2);
+
+        HashedWheelTimer hashedWheelTimer = new HashedWheelTimer(executor, 100, TimeUnit.MILLISECONDS);
+        log.info("start:{}", LocalDateTime.now().format(formatter));
+
+        hashedWheelTimer.newTimeout(timeout -> {
+            log.info("threadId={},task1 ={}", Thread.currentThread().getId(), LocalDateTime.now().format(formatter));
+            Thread.sleep(2000L);
+        }, 2, TimeUnit.SECONDS);
+        hashedWheelTimer.newTimeout(timeout -> {
+            log.info("threadId={},task2 ={}", Thread.currentThread().getId(), LocalDateTime.now().format(formatter));
+            Thread.sleep(1000L);
+        }, 2, TimeUnit.SECONDS);
+        hashedWheelTimer.newTimeout(timeout -> {
+            log.info("threadId={},task3 ={}", Thread.currentThread().getId(), LocalDateTime.now().format(formatter));
+        }, 2, TimeUnit.SECONDS);
+        hashedWheelTimer.newTimeout(timeout -> {
+            log.info("threadId={},task4 ={}", Thread.currentThread().getId(), LocalDateTime.now().format(formatter));
+        }, 3, TimeUnit.SECONDS);
+        log.info("mytimer 线程阻塞?= {}", LocalDateTime.now().format(formatter));
+
+        try {
+            Thread.sleep(9000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //log.info();
+    }
+
+
     @Test
     public void testOthers2() {
         final int nano = LocalDateTime.now().minusDays(30).getNano();
