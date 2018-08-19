@@ -105,6 +105,22 @@ public class StockController {
     }
 
     /**
+     * 根据股票名称查询该股票基本信息
+     *
+     * @param stockName
+     * @return
+     */
+    @RequestMapping(value = "/findByStockName", method = RequestMethod.GET)
+    public JsonResult findByStockName(@RequestParam String stockName) {
+
+        log.info("stockName={}", stockName);
+
+
+        Stock stock = stockService.findByStockName(stockName);
+        return JsonResult.buildSuccessResult(stock);
+    }
+
+    /**
      * 根据股票代码查询该股票基本信息
      *
      * @param stockCode
