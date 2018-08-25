@@ -18,7 +18,30 @@ public enum Common {
     /**
      * 结束执行，方便确定位置
      */
-    LOG_END("------- END -------");
+    LOG_END("------- END -------"),
+
+    /**
+     * 接口请求时间戳
+     */
+    REQUEST_AT("REQUEST_AT"),
+
+    /**
+     * 客户端IP
+     */
+    REAL_IP("X-Real-IP"),
+
+    /**
+     * 获取不到客户端IP时的默认返回值
+     */
+    DEFAULT_IP("000.000.000.000"),
+
+
+    /**
+     * 用于定位日志的随机串
+     */
+    TRACING_ID("TRACING_ID");
+
+
     private String value;
 
     /**
@@ -26,7 +49,7 @@ public enum Common {
      *
      * @param value
      */
-    private Common(String value) {
+    Common(String value) {
         this.value = value;
     }
 }

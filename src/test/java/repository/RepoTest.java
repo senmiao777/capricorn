@@ -108,7 +108,7 @@ public class RepoTest {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        IndexResponse response = client.prepareIndex(INDEX, TYPE, id.toString()).setSource(jsonObject).get();
+        IndexResponse response = client.prepareIndex("testindex", "testtable", id.toString()).setSource(jsonObject).get();
 
         log.info("addData response status:{},id:{}", response.status().getStatus(), response.getId());
         return response.getId();
