@@ -23,7 +23,7 @@ public class MyHandlerInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         request.setAttribute(Common.REQUEST_AT.getValue(), System.currentTimeMillis());
         MDC.put(Common.TRACING_ID.getValue(), String.valueOf(RandomUtils.nextInt(100000000, 999999999)));
-        log.info("请求开始url={},IP={}", request.getServletPath(), Objects.toString(request.getAttribute(Common.REAL_IP.getValue()), Common.DEFAULT_IP.getValue()));
+        log.info("请求开始url={},IP={}", request.getServletPath(), Objects.toString(request.getHeader(Common.REAL_IP.getValue()), Common.DEFAULT_IP.getValue()));
         return super.preHandle(request, response, handler);
     }
 

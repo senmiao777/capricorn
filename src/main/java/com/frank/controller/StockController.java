@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -92,7 +93,7 @@ public class StockController {
      * @return
      */
     @RequestMapping(value = "/info2", method = RequestMethod.GET)
-    public JsonResult info2(@RequestParam String stockCode) {
+    public JsonResult info2(@RequestParam String stockCode, HttpServletRequest request) {
 
         log.info("stockCode={},等待时间={}", stockCode, rateLimiter.acquire());
         if (!rateLimiter.tryAcquire(200L, TimeUnit.MICROSECONDS)) {
