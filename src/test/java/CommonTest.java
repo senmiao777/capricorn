@@ -156,6 +156,10 @@ public class CommonTest {
         log.info("Integer  -128~127之间，result = {}", d == e);
         Hashtable t;
         HashMap m;
+        // 2018-08-24 15:08:03
+        Date deadline = new Date(1535094483000L);
+        final Date date = DateUtils.addDays(deadline, -30);
+        log.info("deadline={},date={}",deadline,date);
     }
 
     @Test
@@ -211,6 +215,9 @@ public class CommonTest {
 
     @Test
     public void testTime(){
+        String idCard = "110111199809092345";
+        final LocalDate birth1 = LocalDate.parse(idCard.substring(6, 14), YYYYMMDD);
+        log.info("birth1={}",birth1);
         String s = "19920114";
         final LocalDate birth = LocalDate.parse(s, YYYYMMDD);
         final Period period = birth.until(LocalDate.now());
