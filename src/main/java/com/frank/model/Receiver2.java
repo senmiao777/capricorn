@@ -10,16 +10,15 @@ import org.springframework.stereotype.Component;
  * @author frank
  * @version 1.0
  * @date 2018/9/2 0002 下午 8:39
- *
  */
 @Component
 @Slf4j
-@RabbitListener(queues = "testQueue")
-public class Receiver {
+@RabbitListener(queues = "secondQueue")
+public class Receiver2 {
 
     @MDCLog
     @RabbitHandler
-    public void receiveMessage(String message) {
-        log.info("testQueue receiveMessage called.message={}", message);
+    public void receiveMethod(String message) {
+        log.info("secondQueue receiveMethod called.message={}", message);
     }
 }
