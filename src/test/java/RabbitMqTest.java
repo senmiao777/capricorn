@@ -30,8 +30,19 @@ public class RabbitMqTest {
     @Test
     public void testt2() {
         log.info("RabbitMqTest start");
-        rabbitTemplate.convertAndSend("假装是个json串");
+        for (int i = 1; i < 10; i++) {
+            rabbitTemplate.convertAndSend(String.format("第%d个json串", i));
+        }
+
+        try {
+            Thread.sleep(3000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         log.info("RabbitMqTest end");
+//        log.info("RabbitMqTest start rabbitTemplate={}", rabbitTemplate);
+//        Message msg = rabbitTemplate.receive("testQueue");
+//        log.info("RabbitMqTest end msg={}", msg);
     }
 
     @Test

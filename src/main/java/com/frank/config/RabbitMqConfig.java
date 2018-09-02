@@ -20,6 +20,8 @@ public class RabbitMqConfig implements RabbitListenerConfigurer {
 
     @Value("${my.rabbitmq.queue}")
     private String queueName;
+    @Value("${my.rabbitmq.secondQueue}")
+    private String secondQueue;
     @Value("${my.rabbitmq.exchange}")
     private String myExchange;
     @Value("${my.rabbitmq.connection.host}")
@@ -34,7 +36,7 @@ public class RabbitMqConfig implements RabbitListenerConfigurer {
     private String virtualHost;
 
 
-    @Bean(name="connectionFactory")
+    @Bean(name = "connectionFactory")
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory(host, port);
         connectionFactory.setChannelCacheSize(1024);
@@ -49,8 +51,8 @@ public class RabbitMqConfig implements RabbitListenerConfigurer {
         return connectionFactory;
     }
 
-    @Bean(name= "myAmqpAdmin")
-    public AmqpAdmin amqpAdmin(@Qualifier("connectionFactory")ConnectionFactory connectionFactory) {
+    @Bean(name = "myAmqpAdmin")
+    public AmqpAdmin amqpAdmin(@Qualifier("connectionFactory") ConnectionFactory connectionFactory) {
         return new RabbitAdmin(connectionFactory);
     }
 
@@ -65,15 +67,27 @@ public class RabbitMqConfig implements RabbitListenerConfigurer {
         return new Queue(queueName);
     }
 
+    @Bean(name = "secondQueue")
+    public Queue secondQueue() {
+        return new Queue(secondQueue);
+    }
+
     @Bean(name = "myBinding")
-    public Binding binding(@Qualifier("myAmqpAdmin")AmqpAdmin amqpAdmin, @Qualifier("myQueue")Queue myQueue, @Qualifier("myExchange") FanoutExchange fanoutExchange) {
+    public Binding binding(@Qualifier("myAmqpAdmin") AmqpAdmin amqpAdmin, @Qualifier("myQueue") Queue myQueue, @Qualifier("myExchange") FanoutExchange fanoutExchange) {
         Binding binding = BindingBuilder.bind(myQueue).to(fanoutExchange);
-        amqpAdmin.declareBinding(binding);
+        //  amqpAdmin.declareBinding(binding);
+        return binding;
+    }
+
+    @Bean(name = "myBinding2")
+    public Binding binding2(@Qualifier("myAmqpAdmin") AmqpAdmin amqpAdmin, @Qualifier("secondQueue") Queue secondQueue, @Qualifier("myExchange") FanoutExchange fanoutExchange) {
+        Binding binding = BindingBuilder.bind(secondQueue).to(fanoutExchange);
+        //  amqpAdmin.declareBinding(binding);
         return binding;
     }
 
     @Bean(name = "rabbitTemplate")
-    public RabbitTemplate notifyTemplate(@Qualifier("connectionFactory")ConnectionFactory connectionFactory) {
+    public RabbitTemplate notifyTemplate(@Qualifier("connectionFactory") ConnectionFactory connectionFactory) {
         RabbitTemplate template = new RabbitTemplate(connectionFactory);
         template.setExchange(myExchange);
         //template.setBeforePublishPostProcessors(mqBeforeInterceptor());
@@ -97,9 +111,42 @@ public class RabbitMqConfig implements RabbitListenerConfigurer {
         return factory;
     }
 
+//    @Bean
+//    SimpleMessageListenerContainer container(@Qualifier("connectionFactory") ConnectionFactory connectionFactory,
+//                                             @Qualifier("listenerAdapter") MessageListenerAdapter listenerAdapter
+//    ) {
+//        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+//        container.setConnectionFactory(connectionFactory);
+//        container.setQueueNames(queueName, secondQueue);
+//        container.setMessageListener(listenerAdapter);
+//        /**
+//         * 会把上一个覆盖
+//         * 通过方法就能看出来是单数
+//         */
+//        // container.setMessageListener(l2);
+//        return container;
+//    }
+
+    /**
+     * 自定义的监听类，当收到消息的时候，自动消费
+     *
+     * @param receiver
+     * @return
+     */
+//    @Bean
+//    MessageListenerAdapter listenerAdapter(Receiver receiver) {
+//        return new MessageListenerAdapter(receiver, "receiveMessage");
+//    }
+//
+//    @Bean
+//    MessageListenerAdapter receiveMethod(Receiver2 receiver) {
+//        return new MessageListenerAdapter(receiver, "receiveMethod");
+//
+//    }
+
+
     @Override
     public void configureRabbitListeners(RabbitListenerEndpointRegistrar registrar) {
         registrar.setMessageHandlerMethodFactory(myHandlerMethodFactory());
     }
-
 }
