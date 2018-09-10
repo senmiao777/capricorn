@@ -99,21 +99,31 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
     @Test
     public void testForityBillion(){
-        String idCard = "110111199809092345";
-       byte[] numbers = new byte[40*1000*1000*1000];
-       numbers[0] = 0;
-        numbers[1] = 0;
-        numbers[2] = 0;
-        numbers[3] = 1;
-        numbers[4] = 1;
-        numbers[5] = 1;
-        numbers[6] = 0;
-        numbers[7] = 0;
-        numbers[8] = 0;
-        numbers[9] = 0;
 
-     //  numbers.s
-        log.info("exist={}",numbers[5]);
+        String contractNo= "sadfjlkasdfjabc.pdf";
+        final int i = contractNo.lastIndexOf(".");
+
+        final String substring = contractNo.substring(0, contractNo.lastIndexOf("."));
+        log.info("substring={}",substring);
+        String idCard = "110111199809092345";
+        byte[] b = new byte[0];
+        final Optional<byte[]> b1 = Optional.ofNullable(b);
+        log.info("b1={}",b1.get());
+        log.info("b1.length={}",b1.get().length);
+//       byte[] numbers = new byte[40*1000*1000*1000];
+//       numbers[0] = 0;
+//        numbers[1] = 0;
+//        numbers[2] = 0;
+//        numbers[3] = 1;
+//        numbers[4] = 1;
+//        numbers[5] = 1;
+//        numbers[6] = 0;
+//        numbers[7] = 0;
+//        numbers[8] = 0;
+//        numbers[9] = 0;
+//
+//     //  numbers.s
+//        log.info("exist={}",numbers[5]);
 
 
     }
