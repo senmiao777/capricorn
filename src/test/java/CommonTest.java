@@ -97,7 +97,26 @@ public class CommonTest {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+    @Test
+    public void testForityBillion(){
+        String idCard = "110111199809092345";
+       byte[] numbers = new byte[40*1000*1000*1000];
+       numbers[0] = 0;
+        numbers[1] = 0;
+        numbers[2] = 0;
+        numbers[3] = 1;
+        numbers[4] = 1;
+        numbers[5] = 1;
+        numbers[6] = 0;
+        numbers[7] = 0;
+        numbers[8] = 0;
+        numbers[9] = 0;
 
+     //  numbers.s
+        log.info("exist={}",numbers[5]);
+
+
+    }
 
     @Test
     public void testRateLimiter() {
@@ -275,7 +294,7 @@ public class CommonTest {
     @Test
     public void e22() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(2);
+        executor.setCorePoolSize(10);
         //vexecutor
         final ThreadFactory threadFactory = Executors.defaultThreadFactory();
         final io.netty.util.Timer timer = new HashedWheelTimer(executor, 5, TimeUnit.SECONDS, 2);
