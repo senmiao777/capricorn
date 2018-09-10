@@ -23,6 +23,10 @@ public class Adapter extends Adaptee implements Target {
      */
     @Override
     public void targetOperation() {
+        /**
+         * 这里进行适配工作
+         * 将Adaptee适配成Target的子类Adapter
+         */
         super.adapteeMethod1();
     }
 }
