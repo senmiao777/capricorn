@@ -100,6 +100,14 @@ public class CommonTest {
     @Test
     public void testForityBillion(){
 
+        String test = null;
+        final Optional<String> test1 = Optional.ofNullable(test);
+        if(test1.isPresent()){
+            log.info("true");
+        }else {
+            log.info("false");
+        }
+
         String contractNo= "sadfjlkasdfjabc.pdf";
         final int i = contractNo.lastIndexOf(".");
 
