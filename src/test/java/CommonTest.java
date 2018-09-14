@@ -33,10 +33,7 @@ import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.Format;
 import java.text.ParseException;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
+import java.time.*;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.concurrent.*;
@@ -99,6 +96,12 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
     @Test
     public void testForityBillion(){
+
+        final LocalDate now = LocalDate.now();
+        final long l = now.atStartOfDay().minusDays(1).toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        log.info("now={}",l);
+
+        log.info("time={}",new Date(l));
 
         String test = null;
         final Optional<String> test1 = Optional.ofNullable(test);
