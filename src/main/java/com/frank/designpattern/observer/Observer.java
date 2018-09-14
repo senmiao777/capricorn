@@ -5,7 +5,7 @@ package com.frank.designpattern.observer;
  * @version 1.0
  * @date 2018/7/3
  * <p>
- * 被观察者
+ * 观察者
  */
 public interface Observer {
     void action(Observable.Notice notice);
