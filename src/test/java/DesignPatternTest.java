@@ -85,11 +85,12 @@ public class DesignPatternTest {
     @Test
     public void test2() {
 
-        Observer police = new Police();
+
 
         Observable criminal = new Criminal();
 
-        criminal.addObserver(police);
+        criminal.addObserver(new Police());
+        criminal.addObserver(new Soldier());
 
 
         criminal.eat("apple");
