@@ -1,6 +1,8 @@
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.User;
+import com.frank.model.JsonResult;
 import com.frank.other.Node;
 import com.frank.other.SingleTon;
 import com.frank.repository.mysql.IncomeStatementRepository;
@@ -94,33 +96,39 @@ public class CommonTest {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+
     @Test
-    public void testForityBillion(){
+    public void testForityBillion() {
+
+        String response = "sdfsd";
+        JsonResult jsonResult = JSONObject.parseObject(response, JsonResult.class);
+        log.info("jsonResult={}",jsonResult);
+        log.info("jsonResult== null{}",jsonResult == null);
 
         final LocalDate now = LocalDate.now();
         final long l = now.atStartOfDay().minusDays(1).toInstant(ZoneOffset.of("+8")).toEpochMilli();
-        log.info("now={}",l);
+        log.info("now={}", l);
 
-        log.info("time={}",new Date(l));
+        log.info("time={}", new Date(l));
 
         String test = null;
         final Optional<String> test1 = Optional.ofNullable(test);
-        if(test1.isPresent()){
+        if (test1.isPresent()) {
             log.info("true");
-        }else {
+        } else {
             log.info("false");
         }
 
-        String contractNo= "sadfjlkasdfjabc.pdf";
+        String contractNo = "sadfjlkasdfjabc.pdf";
         final int i = contractNo.lastIndexOf(".");
 
         final String substring = contractNo.substring(0, contractNo.lastIndexOf("."));
-        log.info("substring={}",substring);
+        log.info("substring={}", substring);
         String idCard = "110111199809092345";
         byte[] b = new byte[0];
         final Optional<byte[]> b1 = Optional.ofNullable(b);
-        log.info("b1={}",b1.get());
-        log.info("b1.length={}",b1.get().length);
+        log.info("b1={}", b1.get());
+        log.info("b1.length={}", b1.get().length);
 //       byte[] numbers = new byte[40*1000*1000*1000];
 //       numbers[0] = 0;
 //        numbers[1] = 0;
@@ -199,7 +207,7 @@ public class CommonTest {
         // 2018-08-24 15:08:03
         Date deadline = new Date(1535094483000L);
         final Date date = DateUtils.addDays(deadline, -30);
-        log.info("deadline={},date={}",deadline,date);
+        log.info("deadline={},date={}", deadline, date);
     }
 
     @Test
@@ -254,21 +262,21 @@ public class CommonTest {
     }
 
     @Test
-    public void testTime(){
+    public void testTime() {
         String idCard = "110111199809092345";
         final LocalDate birth1 = LocalDate.parse(idCard.substring(6, 14), YYYYMMDD);
-        log.info("birth1={}",birth1);
+        log.info("birth1={}", birth1);
         String s = "19920114";
         final LocalDate birth = LocalDate.parse(s, YYYYMMDD);
         final Period period = birth.until(LocalDate.now());
-        log.info("period={}",period);
-        log.info("age={}",period.getYears());
+        log.info("period={}", period);
+        log.info("age={}", period.getYears());
 
         final LocalDate start = LocalDate.of(1992, 10, 14);
-        final LocalDate end =LocalDate.of(2018,10,13);
+        final LocalDate end = LocalDate.of(2018, 10, 13);
         final Period until = start.until(end);
 
-        log.info("age={}",until.getYears());
+        log.info("age={}", until.getYears());
 
 
     }
@@ -299,11 +307,10 @@ public class CommonTest {
         final Date date;
         try {
             date = DateUtils.parseDate(d, "yyyy-MM-dd");
-            log.info("Date={}",date);
+            log.info("Date={}", date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
 
 
     }
