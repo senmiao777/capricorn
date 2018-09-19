@@ -1,4 +1,4 @@
-package com.frank.proxy;
+package com.frank.designpattern.proxy;
 
 /**
  * Created by frank on 2018/6/15.

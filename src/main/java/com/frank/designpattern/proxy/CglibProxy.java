@@ -1,4 +1,4 @@
-package com.frank.proxy;
+package com.frank.designpattern.proxy;
 
 import lombok.extern.slf4j.Slf4j;
 import net.sf.cglib.proxy.Enhancer;

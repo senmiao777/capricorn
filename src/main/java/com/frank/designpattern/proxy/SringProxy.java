@@ -1,4 +1,4 @@
-package com.frank.proxy;
+package com.frank.designpattern.proxy;
 
 import org.springframework.aop.framework.AopProxy;
 

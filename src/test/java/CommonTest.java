@@ -101,6 +101,11 @@ public class CommonTest {
     public void testForityBillion() {
 
         String response = "sdfsd";
+        String userName = "账单李四王五照料";
+        if(userName.length() > 4){
+            userName = userName.substring(0,4).concat("...");
+        }
+        log.info("userName={}",userName);
         JsonResult jsonResult = JSONObject.parseObject(response, JsonResult.class);
         log.info("jsonResult={}",jsonResult);
         log.info("jsonResult== null{}",jsonResult == null);

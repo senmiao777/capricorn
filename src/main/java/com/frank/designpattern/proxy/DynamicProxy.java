@@ -1,4 +1,4 @@
-package com.frank.proxy;
+package com.frank.designpattern.proxy;
 // 代理处理器：
 
 import lombok.extern.slf4j.Slf4j;

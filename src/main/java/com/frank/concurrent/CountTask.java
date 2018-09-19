@@ -96,6 +96,6 @@ public class CountTask extends RecursiveTask<Integer> {
      * @return
      */
     private boolean needFork(int start, int end) {
-        return end - start > THRESHOLD ? true : false;
+        return end - start > THRESHOLD;
     }
 }
