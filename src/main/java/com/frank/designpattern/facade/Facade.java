@@ -4,13 +4,18 @@ import com.frank.designpattern.adapter.ConcreteTarget;
 import com.frank.designpattern.observer.Observable;
 import com.frank.designpattern.observer.Police;
 import com.frank.designpattern.template.Hummer;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author: sb
  * @time: 2018-09-20 18:43
  * 门面模式
- * 外部访问子系统，都是通过门面对象，即门面对象是外部访问子系统的唯一通道
+ * 外部访问子系统，都是通过门面对象，即门面对象是外部访问子系统的唯一通道。
+ * 优点：
+ * 1、灵活性好，屏蔽子系统，对外部系统透明，子系统变了不影响调用方。
+ * 2、安全性高，外部系统想访问内部子系统只有一个入口，方便进行访问控制
  */
+@Slf4j
 public class Facade {
 
     /**
@@ -30,14 +35,17 @@ public class Facade {
     Hummer h = new Hummer();
 
     public void targetOperation(){
+        log.info("门面模式假装校验。。。");
         this.c.targetOperation();
     }
 
     public void action(Observable.Notice notice){
+        log.info("门面模式假装校验。。。");
         this.p.action(notice);
     }
 
     public void run(){
+        log.info("门面模式假装校验。。。");
         this.h.run();
     }
 
