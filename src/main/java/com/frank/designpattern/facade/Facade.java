@@ -48,6 +48,24 @@ public class Facade {
 
     public void run() {
         log.info("门面模式假装校验。。。");
+        /**
+         *
+         * this.p.action(notice);
+         * this.h.run();
+         * 上边的写法不应出现在门面中，门面对象不参与业务逻辑
+         * 如果真的需要处理子系统之间的业务逻辑，则封装一个新的对象
+         *
+         * class NewObject{
+         *      Police p = new Police();
+         *      Hummer h = new Hummer();
+         *      public complexMethod(){
+         *          this.p.action(notice);
+         *          this.h.run();
+         *      }
+         * }
+         *
+         *
+         */
         this.h.run();
     }
 
