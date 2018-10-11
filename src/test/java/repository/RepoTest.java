@@ -11,8 +11,10 @@ import com.frank.repository.mysql.StockRepository;
 import com.frank.util.ESUtil;
 import com.google.common.base.Splitter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.junit.Test;
@@ -24,7 +26,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author frank
@@ -51,6 +56,60 @@ public class RepoTest {
 
     @Autowired
     private TransportClient client;
+
+    @Test
+    public void testCreate() {
+        // final boolean index = ESUtil.createIndex(INDEX_CLOTHO);
+        String index = "user_mapping";
+        CreateIndexResponse indexresponse = client.admin().indices().prepareCreate(index).execute().actionGet();
+        Map<String,Object> userMapping = new HashMap<>(4);
+        /**
+         * "user": {
+         "_all":       { "enabled": false  },
+         "properties": {
+         "title":    { "type": "text"  },
+         "name":     { "type": "text"  },
+         "age":      { "type": "integer" }
+         "user_id":  {
+         "type":   "keyword"
+         },
+         "created":  {
+         "type":   "date",
+         "format": "strict_date_optional_time||epoch_millis"
+         }
+         }
+         }
+         */
+        Map userMap = new HashMap(10);
+        userMap.put("name","{ \"type\": \"text\"  }");
+        userMap.put("age","{ \"type\": \"integer\"  }");
+        userMap.put("createdAt","{\"type\":   \"date\",\"format\": \"yyyy-MM-dd HH:mm:ss.SSS\"}");
+        userMapping.put("properties",userMap);
+        //userMapping.put("format","yyyy-MM-dd HH:mm:ss.SSS");
+        client.admin().indices().prepareCreate(index).addMapping("user",userMapping);
+
+        final boolean acknowledged = indexresponse.isAcknowledged();
+        log.info("执行建立成功？" + indexresponse.isAcknowledged());
+        log.info("acknowledged={}", acknowledged);
+    }
+    @Test
+    public void testInsertEs() {
+
+        String index = "user_mapping";
+        for(int i = 92;i<192;i++){
+            Map map = new HashMap(10);
+            map.put("name","李四"+i);
+            map.put("age", RandomUtils.nextInt(10,100));
+            map.put("createdAt",new Date());
+            IndexResponse response = client.prepareIndex(index, "user").setSource(map).get();
+            log.info("addData response={} status:{},id:{}", response, response.status().getStatus(), response.getId());
+            try {
+                Thread.sleep(2000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
     @Test
