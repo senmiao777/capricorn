@@ -98,17 +98,99 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
     @Test
+    public void testBinary2Search2() {
+
+        Map<String,String> map = new HashMap<>(10);
+        map.put("area","1234平米");
+        map.put("duration","3年");
+        map.put("employeeNumber","1009");
+        map.put("businessVolume","营业额6879万元?");
+        map.put("bills","流水69万元?");
+        log.info(":map={}",JSON.toJSONString(map));
+    }
+    @Test
+    public void testBinarySearch2() {
+        List<Integer> list = Lists.newArrayList(1,2,3,4);
+        User u = User.generateUser();
+        u.setUserName(list.toString());
+
+       // final String s = list.toString();
+        log.info("user={}",u);
+        log.info("s={}",StringUtils.join(list,","));
+
+
+    }
+
+
+    /**
+     * 二分查找
+     */
+    @Test
+    public void testBinarySearch() {
+        int[] numbers = init(100);
+        int n = 110;
+        final int index = getIndex(numbers, n);
+        log.info("index={}",index);
+
+    }
+
+    private int getIndex(int[] numbers, int num){
+        int head = 0;
+        int tail = numbers.length-1;
+        if(numbers[head] > num || numbers[tail] < num){
+            throw new RuntimeException("未找到数据");
+        }
+        while (tail > head) {
+            int mid = (head + tail) / 2;
+            int currentValue = numbers[mid];
+            if (currentValue == num) {
+                return mid;
+            }
+
+            if (currentValue < num) {
+                head = mid + 1;
+            } else {
+                tail = mid - 1;
+            }
+
+        }
+        throw new RuntimeException("未找到数据");
+    }
+
+    private int[] init(int number) {
+        if (number <= 0) {
+            number = 10;
+        }
+        int[] b = new int[number];
+        for (int i = 0; i < number; i++) {
+            b[i] = i;
+        }
+        return b;
+    }
+
+    @Test
     public void testForityBillion() {
+        final int i1 = BigDecimal.ZERO.compareTo(new BigDecimal("123"));
+        String str = "S123.00";
+
+        log.info("bigDecimal1={}", i1);
+//        if(!NumberUtils.isNumber(str)){
+//            log.info("not number");
+//        }else {
+//            log.info("number");
+//        }
+//        final BigDecimal bigDecimal = NumberUtils.createBigDecimal(str);
+
 
         String response = "sdfsd";
         String userName = "账单李四王五照料";
-        if(userName.length() > 4){
-            userName = userName.substring(0,4).concat("...");
+        if (userName.length() > 4) {
+            userName = userName.substring(0, 4).concat("...");
         }
-        log.info("userName={}",userName);
+        log.info("userName={}", userName);
         JsonResult jsonResult = JSONObject.parseObject(response, JsonResult.class);
-        log.info("jsonResult={}",jsonResult);
-        log.info("jsonResult== null{}",jsonResult == null);
+        log.info("jsonResult={}", jsonResult);
+        log.info("jsonResult== null{}", jsonResult == null);
 
         final LocalDate now = LocalDate.now();
         final long l = now.atStartOfDay().minusDays(1).toInstant(ZoneOffset.of("+8")).toEpochMilli();
@@ -174,6 +256,7 @@ public class CommonTest {
      * @param tasks
      * @param executor
      */
+
     void submitTasks(List<Runnable> tasks, Executor executor) {
         for (Runnable task : tasks) {
             //   rateLimiter.acquire(); // may wait
