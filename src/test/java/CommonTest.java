@@ -100,23 +100,24 @@ public class CommonTest {
     @Test
     public void testBinary2Search2() {
 
-        Map<String,String> map = new HashMap<>(10);
-        map.put("area","1234平米");
-        map.put("duration","3年");
-        map.put("employeeNumber","1009");
-        map.put("businessVolume","营业额6879万元?");
-        map.put("bills","流水69万元?");
-        log.info(":map={}",JSON.toJSONString(map));
+        Map<String, String> map = new HashMap<>(10);
+        map.put("area", "1234平米");
+        map.put("duration", "3年");
+        map.put("employeeNumber", "1009");
+        map.put("businessVolume", "营业额6879万元?");
+        map.put("bills", "流水69万元?");
+        log.info(":map={}", JSON.toJSONString(map));
     }
+
     @Test
     public void testBinarySearch2() {
-        List<Integer> list = Lists.newArrayList(1,2,3,4);
+        List<Integer> list = Lists.newArrayList(1, 2, 3, 4);
         User u = User.generateUser();
         u.setUserName(list.toString());
 
-       // final String s = list.toString();
-        log.info("user={}",u);
-        log.info("s={}",StringUtils.join(list,","));
+        // final String s = list.toString();
+        log.info("user={}", u);
+        log.info("s={}", StringUtils.join(list, ","));
 
 
     }
@@ -130,14 +131,14 @@ public class CommonTest {
         int[] numbers = init(100);
         int n = 110;
         final int index = getIndex(numbers, n);
-        log.info("index={}",index);
+        log.info("index={}", index);
 
     }
 
-    private int getIndex(int[] numbers, int num){
+    private int getIndex(int[] numbers, int num) {
         int head = 0;
-        int tail = numbers.length-1;
-        if(numbers[head] > num || numbers[tail] < num){
+        int tail = numbers.length - 1;
+        if (numbers[head] > num || numbers[tail] < num) {
             throw new RuntimeException("未找到数据");
         }
         while (tail > head) {
@@ -298,6 +299,10 @@ public class CommonTest {
         log.info("deadline={},date={}", deadline, date);
     }
 
+
+    /**
+     * 链表反转
+     */
     @Test
     public void testReverseNode() {
         Node n5 = new Node(5, null);
@@ -308,7 +313,7 @@ public class CommonTest {
 
         Node head = n1;
         while (head != null) {
-            log.info("tmp data={}", head.getData());
+            log.info("tmp data={}", head.toString());
             head = head.getNext();
         }
 
@@ -320,6 +325,92 @@ public class CommonTest {
             log.info("tmp data={}", pre.getData());
             pre = pre.getNext();
         }
+
+
+    }
+
+
+    @Test
+    public void testReverseNo2de() {
+        final LinkedList linkedList = new LinkedList();
+        linkedList.add("1");
+        linkedList.add("2");
+        linkedList.add("3");
+        linkedList.add("4");
+        linkedList.add("5");
+        linkedList.add("6");
+
+        final Object o = linkedList.get(3);
+
+    }
+
+    @Test
+    public void findTheKthFromEnd() {
+        final Node node = initNode(3);
+        Node head = node;
+        while (head != null) {
+            log.info("tmp data={}", head.getData());
+            head = head.getNext();
+        }
+        final Node theKthFromEnd = getTheKthFromEnd(node, 2);
+        log.info("theKthFromEnd={}", theKthFromEnd.getData());
+
+
+    }
+
+    /**
+     * 找到链表的倒数第K个元素
+     * 思路：记录节点M，M在当前节点之前，与当前节点相差（K-1）个节点。
+     * 当遍历完成，即当前节点的next为null时，M即为倒数第K个节点
+     */
+    private Node getTheKthFromEnd(Node node, int k) {
+        if (node == null) {
+            throw new RuntimeException("链表为空");
+        }
+
+        if (k <= 0) {
+            throw new RuntimeException("参数异常");
+        }
+
+
+        Node head = node;
+        /**
+         * 在当前节点之前，与当前节点相差K个元素的节点
+         * 默认是头节点
+         */
+        Node kThBeforeCurrent = head;
+        int count = 0;
+        while (head != null) {
+            head = head.getNext();
+
+            /**
+             * 当前指针后移次数大于K，则kThBeforeCurrent和当前指针同步后移
+             */
+            if (++count > k) {
+                kThBeforeCurrent = kThBeforeCurrent.getNext();
+            }
+            if (head == null) {
+                if (count >= k) {
+                    return kThBeforeCurrent;
+                } else {
+                    throw new RuntimeException("链表长度小于" + k);
+                }
+            }
+        }
+        return null;
+    }
+
+    private Node initNode(int number) {
+        if (number < 0) {
+            number = 10;
+        }
+        Node end = new Node(-99, null);
+        Node temp = null;
+        for (int i = 0; i < number; i++) {
+            temp = new Node(i, end);
+            end = temp;
+        }
+        return temp;
 
     }
 
