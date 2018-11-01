@@ -330,23 +330,78 @@ public class CommonTest {
     }
 
 
+    /**
+     * 判断一个单向链表是不是有环
+     * 思路：两个人跑步，能套圈则说明有环
+     */
     @Test
-    public void testReverseNo2de() {
-        final LinkedList linkedList = new LinkedList();
-        linkedList.add("1");
-        linkedList.add("2");
-        linkedList.add("3");
-        linkedList.add("4");
-        linkedList.add("5");
-        linkedList.add("6");
+    public void isCycle() {
+        Node n5 = new Node(5, null);
+        Node n4 = new Node(4, n5);
+        Node n3 = new Node(3, n4);
+        Node n2 = new Node(2, n3);
+        Node n1 = new Node(1, n2);
 
-        final Object o = linkedList.get(3);
+        n5.setNext(n1);
 
+        final boolean cycle = isCycle(n1);
+        log.info("cycle={}", cycle);
     }
 
+    /**
+     * 永远停不下来怎么办
+     *
+     * @param node
+     * @return
+     */
+    private boolean isCycle(Node node) {
+
+
+        if (node == null) {
+            throw new RuntimeException("参数异常");
+        }
+
+        long beginAt = System.currentTimeMillis();
+
+        Node fast = node.getNext();
+        Node slow = node;
+
+        while (!fast.equals(slow)) {
+            /**
+             * fast 不为null，多走一步
+             */
+            if (fast != null) {
+                fast = fast.getNext();
+            } else {
+                return false;
+            }
+            fast = fast.getNext();
+            slow = slow.getNext();
+            /**
+             * 模拟链表过长，StackOverflowError
+             */
+            try {
+                Thread.sleep(2500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (System.currentTimeMillis() - beginAt > 1000 * 2) {
+                throw new StackOverflowError("链表巨长,深度超出");
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 找到链表的倒数第K个元素
+     * 思路：记录节点M，M在当前节点之前，与当前节点相差（K-1）个节点。
+     * 当遍历完成，即当前节点的next为null时，M即为倒数第K个节点
+     */
     @Test
     public void findTheKthFromEnd() {
         final Node node = initNode(3);
+        log.info("uuid={}", UUID.randomUUID().toString());
         Node head = node;
         while (head != null) {
             log.info("tmp data={}", head.getData());
@@ -358,11 +413,7 @@ public class CommonTest {
 
     }
 
-    /**
-     * 找到链表的倒数第K个元素
-     * 思路：记录节点M，M在当前节点之前，与当前节点相差（K-1）个节点。
-     * 当遍历完成，即当前节点的next为null时，M即为倒数第K个节点
-     */
+
     private Node getTheKthFromEnd(Node node, int k) {
         if (node == null) {
             throw new RuntimeException("链表为空");
