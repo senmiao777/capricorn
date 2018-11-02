@@ -1,5 +1,6 @@
 package interview;
 
+
 import com.frank.enums.Common;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -14,6 +15,67 @@ import java.util.Map;
  */
 @Slf4j
 public class TopInterviewQuestions {
+
+    /**
+     * Given a string, find the length of the longest substring without repeating characters.
+     * <p>
+     * Example 1:
+     * <p>
+     * Input: "abcabcbb"
+     * Output: 3
+     * Explanation: The answer is "abc", with the length of 3.
+     * <p>
+     * Example 2:
+     * <p>
+     * Input: "bbbbb"
+     * Output: 1
+     * Explanation: The answer is "b", with the length of 1.
+     * <p>
+     * Example 3:
+     * <p>
+     * Input: "pwwkew"
+     * Output: 3
+     * Explanation: The answer is "wke", with the length of 3.
+     * Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
+     * <p>
+     * <p>
+     * int lengthOfLongestSubstring(string s) {
+     * vector<int> dict(256, -1);
+     * int maxLen = 0, start = -1;
+     * for (int i = 0; i != s.length(); i++) {
+     * if (dict[s[i]] > start)
+     * start = dict[s[i]];
+     * dict[s[i]] = i;
+     * maxLen = max(maxLen, i - start);
+     * }
+     * return maxLen;
+     * }
+     */
+
+    @Test
+    public void getTheLengthOfLongestSubstring() {
+        String s = "abcabcbb";
+        final int length = getTheLengthOfLongestSubstring(s);
+        log.info("length={}", length);
+
+    }
+
+    private int getTheLengthOfLongestSubstring(String str) {
+        final int length = str.length();
+        Map<Character, Integer> map = new HashMap<>(length * 2);
+        int maxLength = 0;
+        int start = -1;
+        for (int i = 0; i < length; i++) {
+
+            if (map.get(str.charAt(i)) != null && map.get(str.charAt(i)) > start) {
+                start = map.get(str.charAt(i));
+            }
+            map.put(str.charAt(i), i);
+            maxLength = Math.max(maxLength, i - start);
+        }
+        return maxLength;
+    }
+
 
     @Test
     public void reverseInteger() {
