@@ -16,6 +16,16 @@ import java.util.Map;
 @Slf4j
 public class TopInterviewQuestions {
 
+
+    @Test
+    public void reverseInte2ger() {
+        int number = 3;
+        /**
+         *  M << N   == M 乘以 2的N次方
+         */
+        log.info("reverse={}", number << 4);
+    }
+
     /**
      * Given a string, find the length of the longest substring without repeating characters.
      * Example 1:
@@ -31,8 +41,8 @@ public class TopInterviewQuestions {
      * Output: 3
      * Explanation: The answer is "wke", with the length of 3.
      * Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
-     *
-     *
+     * <p>
+     * <p>
      * 思路：滑动窗口
      * 最长的不重复字符串长度 = Max (之前得到的最长的不重复字符串长度，(当前位置 - 起始位置))
      * 起始位置 = “上次出现的和当前元素相同的元素的下一个位置”，这是个逻辑上的概念。
@@ -131,16 +141,23 @@ public class TopInterviewQuestions {
             return 0;
         }
         int max = 0;
-        int j = 0;
+        int start = -1;
         Map<Character, Integer> map = new HashMap<>(length);
         for (int i = 0; i < length; i++) {
             if (map.containsKey(str.charAt(i))) {
                 // 加一
-                j = Math.max(j, map.get(str.charAt(i)) + 1);
+                start = Math.max(start, map.get(str.charAt(i)));
             }
 
+           /*
+           这样也可以，总之是start只能往前，不能往后。
+           if (map.containsKey(str.charAt(i)) && map.get(str.charAt(i)) > start) {
+                // 加一
+                start = map.get(str.charAt(i)) ;
+            }
+*/
             map.put(str.charAt(i), i);
-            max = Math.max(max, i - j + 1);
+            max = Math.max(max, i - start);
 
         }
         return max;
