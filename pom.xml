@@ -16,6 +16,24 @@
     </parent>
 
     <dependencies>
+        <dependency>
+            <groupId>io.sentry</groupId>
+            <artifactId>sentry</artifactId>
+            <version>1.7.10</version>
+        </dependency>
+        <dependency>
+            <groupId>io.sentry</groupId>
+            <artifactId>sentry-spring</artifactId>
+            <version>1.7.10</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>com.getsentry.raven</groupId>
+            <artifactId>raven-logback</artifactId>
+            <version>8.0.2</version>
+        </dependency>
 
         <dependency>
             <groupId>io.netty</groupId>
