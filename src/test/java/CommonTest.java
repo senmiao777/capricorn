@@ -99,6 +99,12 @@ public class CommonTest {
 
     @Test
     public void testBinary2Search2() {
+        String str = "";
+        if(str.length() == 0){
+            log.info(" length  == 0");
+        }else {
+            log.info(" length  ={}",str.length());
+        }
 
         Map<String, String> map = new HashMap<>(10);
         map.put("area", "1234平米");

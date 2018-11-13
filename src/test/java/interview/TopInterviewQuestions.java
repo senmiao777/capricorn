@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author frank
@@ -123,6 +124,13 @@ public class TopInterviewQuestions {
      */
     @Test
     public void longestSubstring() {
+        byte[] b = new byte[10];
+        final Optional<byte[]> b1 = Optional.ofNullable(b);
+        if (b1.isPresent()) {
+            log.info("isPresent = true");
+        } else {
+            log.info("isPresent = false");
+        }
         String str1 = "abcabccdbacb";
         int length = findLength(str1);
         log.info("length={}", length);
