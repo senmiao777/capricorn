@@ -5,9 +5,7 @@ import com.frank.enums.Common;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author frank
@@ -17,14 +15,171 @@ import java.util.Optional;
 @Slf4j
 public class TopInterviewQuestions {
 
+    @Test
+    public void bitSet() {
+
+        /**
+         * 得到一个可以支持0~127的位图
+         * 默认所有位都是0，即false
+         */
+        final BitSet bitSet = new BitSet(128);
+        /**
+         * 对位进行设置
+         */
+        bitSet.set(0);
+        bitSet.set(1);
+        bitSet.set(2);
+        bitSet.set(3);
+        bitSet.set(5);
+        bitSet.set(32);
+        bitSet.set(33);
+        bitSet.set(35);
+        bitSet.set(50);
+        bitSet.set(51);
+        bitSet.set(53);
+        bitSet.set(99);
+        bitSet.set(97);
+        bitSet.set(98);
+        bitSet.set(91);
+        bitSet.set(111);
+        bitSet.set(122);
+
+
+        // 返回此 BitSet 中设置为 true 的位数。
+        final int cardinality = bitSet.cardinality();
+
+        log.info("cardinality={}", cardinality);
+        log.info("0={}", bitSet.get(0));
+        log.info("1={}", bitSet.get(1));
+        log.info("2={}", bitSet.get(2));
+        log.info("3={}", bitSet.get(3));
+        log.info("4={}", bitSet.get(4));
+        log.info("5={}", bitSet.get(5));
+
+    }
+
+
+    /**
+     * 假设需要排序或者查找的总数N=10000000，
+     * 那么我们需要申请内存空间的大小为int a[1 + N/32]，其中：a[0]在内存中占32为可以对应十进制数0-31，依次类推：
+     * bitmap表为：
+     * a[0]--------->0-31
+     * a[1]--------->32-63
+     * a[2]--------->64-95
+     * a[3]--------->96-127
+     * <p>
+     * 现在我们假设有100个不重复的数，范围是[0,127]
+     * 用bitMap只要存四个元素就能搞定这个事
+     */
+    @Test
+    public void bitMap() {
+        int[] bmap = new int[4];
+        log.info("bmap={}", bmap);
+        setVal(bmap, 0);
+        setVal(bmap, 1);
+        setVal(bmap, 2);
+        setVal(bmap, 3);
+        setVal(bmap, 5);
+        setVal(bmap, 32);
+        setVal(bmap, 33);
+        setVal(bmap, 35);
+        setVal(bmap, 50);
+        setVal(bmap, 51);
+        setVal(bmap, 53);
+        setVal(bmap, 99);
+        setVal(bmap, 97);
+        setVal(bmap, 98);
+        setVal(bmap, 91);
+        setVal(bmap, 111);
+        setVal(bmap, 122);
+
+        // 47 ,262155 ,0,8
+        log.info("bmap={}", bmap);
+
+        final boolean b = testVal(bmap, 3);
+        log.info("122={}", b);
+        final boolean b2 = testVal(bmap, 4);
+        log.info("121={}", b2);
+    }
+
 
     @Test
     public void reverseInte2ger() {
+
         int number = 3;
         /**
-         *  M << N   == M 乘以 2的N次方
+         <<      :     左移运算符，num << 1,相当于num乘以2
+         >>      :     右移运算符，num >> 1,相当于num除以2
+         >>>    :     无符号右移，忽略符号位，空位都以0补齐
+         M << N   == M 乘以 2的N次方
          */
         log.info("reverse={}", number << 4);
+
+        int[] bmap = new int[3];
+
+        log.info("bmap={}", bmap);
+        setVal(bmap, 0);
+        setVal(bmap, 1);
+        setVal(bmap, 2);
+        setVal(bmap, 3);
+        setVal(bmap, 5);
+        setVal(bmap, 32);
+        setVal(bmap, 33);
+        setVal(bmap, 35);
+        // 47 ,3 ,0
+        log.info("bmap={}", bmap);
+
+
+        System.out.println("*******调用JDK中的库方法--开始********");
+        int n = 100;
+        BitSet bitArray = new BitSet(n);
+        int ARRNUM = 20;
+        int[] array = getArray(ARRNUM, n);
+        for (int i = 0; i < ARRNUM; i++) {
+            bitArray.set(array[i] - 1000);
+        }
+        int count = 0;
+        for (int j = 0; j < bitArray.length(); j++) {
+            if (bitArray.get(j)) {
+                System.out.print(j + 1000 + " ");
+                count++;
+            }
+        }
+        System.out.println();
+        System.out.println("排序后的数组大小为：" + count);
+        System.out.println("*******调用JDK中的库方法--结束********");
+
+    }
+
+    public int[] getArray(int ARRNUM, int N) {
+
+        @SuppressWarnings("unused")
+        int array1[] = {1000, 1002, 1032, 1033, 6543, 9999, 1033, 1000};
+
+        int array[] = new int[ARRNUM];
+        System.out.println("数组大小：" + ARRNUM);
+        Random r = new Random();
+        for (int i = 0; i < ARRNUM; i++) {
+            array[i] = r.nextInt(N) + 1000;
+        }
+
+        System.out.println(Arrays.toString(array));
+        return array;
+    }
+
+    private void setVal(int[] bmap, int val) {
+        bmap[val / 32] |= (1 << (val % 32));
+        //bmap[val>>5] != (val&0x1F);//这个更快？
+    }
+
+    boolean testVal(int[] bmap, int val) {
+//        final int i = bmap[val / 32] & (1 << (val % 32));
+//        log.info("i={}",i);
+
+        final int i1 = bmap[val >> 5] & (val & 0x1F);
+        log.info("i={}", i1);
+        return i1 == 1;
+        //return bmap[val>>5] & (val&0x1F);
     }
 
     /**

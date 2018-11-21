@@ -99,11 +99,21 @@ public class CommonTest {
 
     @Test
     public void testBinary2Search2() {
-        String str = "";
-        if(str.length() == 0){
+//        User user = User.generateUser();
+//       // user.setTest(null);
+//        final Integer integer = Optional.ofNullable(user)
+//                .map(u -> u.getTest() !=null  && u.getAge() >10)
+//                .orElse(0);
+
+//        log.info("integer={}",integer);
+        LinkedList l = new LinkedList();
+        String str = "a";
+        final byte[] bytes = str.getBytes();
+        log.info("bytes={}",bytes);
+        if (str.length() == 0) {
             log.info(" length  == 0");
-        }else {
-            log.info(" length  ={}",str.length());
+        } else {
+            log.info(" length  ={}", str.length());
         }
 
         Map<String, String> map = new HashMap<>(10);
