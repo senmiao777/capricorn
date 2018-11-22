@@ -3,6 +3,7 @@ package interview;
 
 import com.frank.enums.Common;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 
 import java.util.*;
@@ -14,6 +15,102 @@ import java.util.*;
  */
 @Slf4j
 public class TopInterviewQuestions {
+
+    /**
+     * https://leetcode.com/problems/container-with-most-water/description/
+     * 思路：先从两个端点开始算，然后y轴数值小的往里移动。
+     */
+    @Test
+    public void maxCapacity() {
+        int number = 100000;
+        int[] y = new int[number];
+        for (int i = 0; i < number; i++) {
+            y[i] = RandomUtils.nextInt(1, 100);
+        }
+        log.info("max capacity={}", capacity(y));
+
+        log.info("max capacity={}", capacity2(y));
+    }
+
+
+    /**
+     * 循环嵌套，效率低
+     *
+     * @param y
+     * @return
+     */
+    int capacity(int[] y) {
+        final long l = System.currentTimeMillis();
+        final int length = y.length;
+        if (length < 2) {
+            throw new RuntimeException("数组异常");
+        }
+        int capacity = 0;
+        for (int i = 0; i < length; i++) {
+            for (int j = i + 1; j < length; j++) {
+                capacity = Math.max(capacity, Math.min(y[i], y[j]) * (j - i));
+            }
+        }
+        log.info("capacity cost = {}", System.currentTimeMillis() - l);
+        return capacity;
+    }
+
+    /**
+     * 单层， 一次搞定
+     *
+     * @param y
+     * @return
+     */
+    int capacity2(int[] y) {
+        final long l = System.currentTimeMillis();
+        final int length = y.length;
+        if (length < 2) {
+            throw new RuntimeException("数组异常");
+        }
+        int capacity = 0;
+        int left = 0;
+        int right = length - 1;
+        while (left < right) {
+            capacity = Math.max(capacity, Math.min(y[left], y[right]) * (right - left));
+
+            if (y[left] < y[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        log.info("capacity2 cost = {}", System.currentTimeMillis() - l);
+        return capacity;
+    }
+
+    @Test
+    public void testSpeed() {
+        log.info("64 >> 6={}", 64 >> 6);
+
+        final long start = System.currentTimeMillis();
+        int number = Integer.MAX_VALUE;
+
+        log.info("number={}", number);
+        for (int i = 0; i < number; i++) {
+            final int i1 = 64 >> 6;
+//            if(i % n == 0){
+//                log.info("move i={}",i);
+//            }
+        }
+        log.info("move cost={}", System.currentTimeMillis() - start);
+
+        final long now = System.currentTimeMillis();
+        for (int i = 0; i < number; i++) {
+            final int i1 = 64 / 64;
+//            if(i % n == 0){
+//                log.info("divide j={}",i);
+//            }
+        }
+
+        log.info("divide cost={}", System.currentTimeMillis() - now);
+
+    }
+
 
     @Test
     public void bitSet() {
@@ -56,6 +153,11 @@ public class TopInterviewQuestions {
         log.info("4={}", bitSet.get(4));
         log.info("5={}", bitSet.get(5));
 
+        log.info("30 >> 6={}", 30 >> 6);
+        log.info("2 >> 6={}", 2 >> 6);
+        log.info("63 >> 6={}", 63 >> 6);
+        log.info("64 >> 6={}", 64 >> 6);
+        log.info("65 >> 6={}", 65 >> 6);
     }
 
 
@@ -70,6 +172,7 @@ public class TopInterviewQuestions {
      * <p>
      * 现在我们假设有100个不重复的数，范围是[0,127]
      * 用bitMap只要存四个元素就能搞定这个事
+     * java 的 BitSet 就是这个原理，不过底层是用的long
      */
     @Test
     public void bitMap() {
