@@ -16,6 +16,48 @@ import java.util.*;
 @Slf4j
 public class TopInterviewQuestions {
 
+    @Test
+    public void longestPrefix() {
+        String[] strList = {"flower", "flow", "flight"};
+        final int length = strList.length;
+        log.info("length={}", length);
+
+        final String longestPrefix = getLongestPrefix(strList);
+        log.info("longestPrefix={}", longestPrefix);
+
+    }
+
+
+    /**
+     * 思路：每次用第一个元素和剩下的所有元素比，没有就用第一个元素删除最后一个字符在和剩下的每一个元素比较
+     * 还没有，在减，以此类推。
+     * @param strList
+     * @return
+     */
+    String getLongestPrefix(String[] strList) {
+
+        final int length = strList.length;
+        if(length == 0){
+            return "";
+        }
+        String s = strList[0];
+        while (s.length() > 0) {
+            for (int i = 1; i < length; i++) {
+                if (!strList[i].startsWith(s)) {
+                    s = s.substring(0, s.length() - 1);
+                    break;
+                }
+
+                if (i == length - 1) {
+                    return s;
+                }
+            }
+
+        }
+
+        return "";
+    }
+
     /**
      * https://leetcode.com/problems/container-with-most-water/description/
      * 思路：先从两个端点开始算，然后y轴数值小的往里移动。
@@ -23,6 +65,8 @@ public class TopInterviewQuestions {
     @Test
     public void maxCapacity() {
         int number = 100000;
+        String s = "";
+        s.startsWith("");
         int[] y = new int[number];
         for (int i = 0; i < number; i++) {
             y[i] = RandomUtils.nextInt(1, 100);

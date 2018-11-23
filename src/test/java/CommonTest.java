@@ -108,6 +108,9 @@ public class CommonTest {
 //        log.info("integer={}",integer);
         LinkedList l = new LinkedList();
         String str = "a";
+        final String substring = str.substring(0, str.length() - 1);
+        log.info("substring:{}",substring);
+
         final byte[] bytes = str.getBytes();
         log.info("bytes={}",bytes);
         if (str.length() == 0) {
