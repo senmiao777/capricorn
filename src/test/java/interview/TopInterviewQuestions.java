@@ -25,19 +25,21 @@ public class TopInterviewQuestions {
         final String longestPrefix = getLongestPrefix(strList);
         log.info("longestPrefix={}", longestPrefix);
 
+
     }
 
 
     /**
      * 思路：每次用第一个元素和剩下的所有元素比，没有就用第一个元素删除最后一个字符在和剩下的每一个元素比较
      * 还没有，在减，以此类推。
+     *
      * @param strList
      * @return
      */
     String getLongestPrefix(String[] strList) {
 
         final int length = strList.length;
-        if(length == 0){
+        if (length == 0) {
             return "";
         }
         String s = strList[0];
@@ -57,6 +59,11 @@ public class TopInterviewQuestions {
 
         return "";
     }
+    /**
+     * 思路：
+     * LCP(S1…Sn)=LCP(LCP(LCP(S1,S2),S3),…Sn)
+     * 前两个元素得到最长共同前缀a,在用a和第三个元素得到共同前缀b，在用b和第四个元素得到共同前缀c...
+     */
 
     /**
      * https://leetcode.com/problems/container-with-most-water/description/
