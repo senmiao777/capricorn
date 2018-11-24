@@ -18,7 +18,8 @@ public class TopInterviewQuestions {
 
     @Test
     public void longestPrefix() {
-        String[] strList = {"flower", "flow", "flight"};
+        //String[] strList = {"flower", "flow", "flight"};
+        String[] strList = {"abab", "aba", ""};
         final int length = strList.length;
         log.info("length={}", length);
 
@@ -59,11 +60,44 @@ public class TopInterviewQuestions {
 
         return "";
     }
+
+
     /**
      * 思路：
      * LCP(S1…Sn)=LCP(LCP(LCP(S1,S2),S3),…Sn)
      * 前两个元素得到最长共同前缀a,在用a和第三个元素得到共同前缀b，在用b和第四个元素得到共同前缀c...
      */
+    String getLongestPrefix2(String[] strList) {
+
+        final int length = strList.length;
+        if (length == 0) {
+            return "";
+        }
+        String longestPrefix = strList[0];
+        /**
+         * 元素个数
+         */
+        for (int i = 1; i < length; i++) {
+            final int currentLength = longestPrefix.length();
+            /**
+             * 当前最长前缀长度
+             */
+            for (int j = 0; j < currentLength; j++) {
+                if (!strList[i].startsWith(longestPrefix)) {
+                    longestPrefix = longestPrefix.substring(0, longestPrefix.length() - 1);
+                } else {
+                    break;
+                }
+            }
+
+            if (longestPrefix.length() == 0) {
+                return "";
+            }
+        }
+
+        return longestPrefix;
+    }
+
 
     /**
      * https://leetcode.com/problems/container-with-most-water/description/

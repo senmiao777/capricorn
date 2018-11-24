@@ -2,6 +2,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.User;
+import com.frank.exception.ResubmitException;
 import com.frank.model.JsonResult;
 import com.frank.other.Node;
 import com.frank.other.SingleTon;
@@ -106,6 +107,8 @@ public class CommonTest {
 //                .orElse(0);
 
 //        log.info("integer={}",integer);
+
+
         LinkedList l = new LinkedList();
         String str = "a";
         final String substring = str.substring(0, str.length() - 1);
@@ -138,7 +141,27 @@ public class CommonTest {
         log.info("user={}", u);
         log.info("s={}", StringUtils.join(list, ","));
 
+        log.info("user1111111111");
+        try {
+            method1(2);
+        }catch (Exception e){
+            log.info("e={}",e.getMessage());
+        }
 
+
+        log.info("user222222222221111111111");
+
+    }
+
+    private void method1(int m) throws IllegalArgumentException {
+        if(m == 1){
+            throw new IllegalArgumentException();
+        }
+
+        log.info("33333333333");
+        if(m == 2){
+            throw new ResubmitException("1234");
+        }
     }
 
 
