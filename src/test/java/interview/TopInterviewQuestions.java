@@ -18,12 +18,12 @@ public class TopInterviewQuestions {
 
     @Test
     public void longestPrefix() {
-        //String[] strList = {"flower", "flow", "flight"};
-        String[] strList = {"abab", "aba", ""};
+        String[] strList = {"flower", "flow", "flight"};
+        //String[] strList = {"abab", "aba", ""};
         final int length = strList.length;
         log.info("length={}", length);
 
-        final String longestPrefix = getLongestPrefix(strList);
+        final String longestPrefix = getLongestPrefix3(strList);
         log.info("longestPrefix={}", longestPrefix);
 
 
@@ -93,8 +93,40 @@ public class TopInterviewQuestions {
             if (longestPrefix.length() == 0) {
                 return "";
             }
+
+            /**
+             * while (strs[i].indexOf(prefix) != 0) {
+             prefix = prefix.substring(0, prefix.length() - 1);
+             if (prefix.isEmpty()) return "";
+             }
+             */
         }
 
+        return longestPrefix;
+    }
+
+    /**
+     * 思路：
+     * Vertical scanning
+     */
+    String getLongestPrefix3(String[] strList) {
+        final int length = strList.length;
+        if (length == 0) {
+            return "";
+        }
+        if(length == 1){
+            return strList[0];
+        }
+        String longestPrefix = strList[0];
+        for (int i = 0; i < longestPrefix.length(); i++) {
+            final char c = longestPrefix.charAt(i);
+            for (int j = 1; j < length; j++) {
+                if (strList[j].length() == i || strList[j].charAt(i) != c ) {
+                    return longestPrefix.substring(0,i);
+                }
+            }
+
+        }
         return longestPrefix;
     }
 
