@@ -2,6 +2,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.User;
+import com.frank.exception.ResubmitException;
 import com.frank.model.JsonResult;
 import com.frank.other.Node;
 import com.frank.other.SingleTon;
@@ -99,6 +100,27 @@ public class CommonTest {
 
     @Test
     public void testBinary2Search2() {
+//        User user = User.generateUser();
+//       // user.setTest(null);
+//        final Integer integer = Optional.ofNullable(user)
+//                .map(u -> u.getTest() !=null  && u.getAge() >10)
+//                .orElse(0);
+
+//        log.info("integer={}",integer);
+
+
+        LinkedList l = new LinkedList();
+        String str = "a";
+        final String substring = str.substring(0, str.length() - 1);
+        log.info("substring:{}",substring);
+
+        final byte[] bytes = str.getBytes();
+        log.info("bytes={}",bytes);
+        if (str.length() == 0) {
+            log.info(" length  == 0");
+        } else {
+            log.info(" length  ={}", str.length());
+        }
 
         Map<String, String> map = new HashMap<>(10);
         map.put("area", "1234平米");
@@ -119,7 +141,27 @@ public class CommonTest {
         log.info("user={}", u);
         log.info("s={}", StringUtils.join(list, ","));
 
+        log.info("user1111111111");
+        try {
+            method1(2);
+        }catch (Exception e){
+            log.info("e={}",e.getMessage());
+        }
 
+
+        log.info("user222222222221111111111");
+
+    }
+
+    private void method1(int m) throws IllegalArgumentException {
+        if(m == 1){
+            throw new IllegalArgumentException();
+        }
+
+        log.info("33333333333");
+        if(m == 2){
+            throw new ResubmitException("1234");
+        }
     }
 
 

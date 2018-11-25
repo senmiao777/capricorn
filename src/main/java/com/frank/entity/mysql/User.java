@@ -54,6 +54,7 @@ public class User implements Serializable {
         user.setAge(RandomUtils.nextInt(15, 80));
         user.setCreateAt(new Date());
         user.setUpdateAt(new Date());
+        //user.setTest("123");
         //user.setId(RandomUtils.nextLong());
         user.setUserName("ceshi".concat(String.valueOf(RandomUtils.nextInt())));
         user.setPhone(RandomUtils.nextLong(13240411000L,18766192345L));

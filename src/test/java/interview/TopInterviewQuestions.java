@@ -3,10 +3,10 @@ package interview;
 
 import com.frank.enums.Common;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author frank
@@ -16,14 +16,390 @@ import java.util.Map;
 @Slf4j
 public class TopInterviewQuestions {
 
+    @Test
+    public void longestPrefix() {
+        String[] strList = {"flower", "flow", "flight"};
+        //String[] strList = {"abab", "aba", ""};
+        final int length = strList.length;
+        log.info("length={}", length);
+
+        final String longestPrefix = getLongestPrefix3(strList);
+        log.info("longestPrefix={}", longestPrefix);
+
+
+    }
+
+
+    /**
+     * 思路：每次用第一个元素和剩下的所有元素比，没有就用第一个元素删除最后一个字符在和剩下的每一个元素比较
+     * 还没有，在减，以此类推。
+     *
+     * @param strList
+     * @return
+     */
+    String getLongestPrefix(String[] strList) {
+
+        final int length = strList.length;
+        if (length == 0) {
+            return "";
+        }
+        String s = strList[0];
+        while (s.length() > 0) {
+            for (int i = 1; i < length; i++) {
+                if (!strList[i].startsWith(s)) {
+                    s = s.substring(0, s.length() - 1);
+                    break;
+                }
+
+                if (i == length - 1) {
+                    return s;
+                }
+            }
+
+        }
+
+        return "";
+    }
+
+
+    /**
+     * 思路：
+     * LCP(S1…Sn)=LCP(LCP(LCP(S1,S2),S3),…Sn)
+     * 前两个元素得到最长共同前缀a,在用a和第三个元素得到共同前缀b，在用b和第四个元素得到共同前缀c...
+     */
+    String getLongestPrefix2(String[] strList) {
+
+        final int length = strList.length;
+        if (length == 0) {
+            return "";
+        }
+        String longestPrefix = strList[0];
+        /**
+         * 元素个数
+         */
+        for (int i = 1; i < length; i++) {
+            final int currentLength = longestPrefix.length();
+            /**
+             * 当前最长前缀长度
+             */
+            for (int j = 0; j < currentLength; j++) {
+                if (!strList[i].startsWith(longestPrefix)) {
+                    longestPrefix = longestPrefix.substring(0, longestPrefix.length() - 1);
+                } else {
+                    break;
+                }
+            }
+
+            if (longestPrefix.length() == 0) {
+                return "";
+            }
+
+            /**
+             * while (strs[i].indexOf(prefix) != 0) {
+             prefix = prefix.substring(0, prefix.length() - 1);
+             if (prefix.isEmpty()) return "";
+             }
+             */
+        }
+
+        return longestPrefix;
+    }
+
+    /**
+     * 思路：
+     * Vertical scanning
+     */
+    String getLongestPrefix3(String[] strList) {
+        final int length = strList.length;
+        if (length == 0) {
+            return "";
+        }
+        if(length == 1){
+            return strList[0];
+        }
+        String longestPrefix = strList[0];
+        for (int i = 0; i < longestPrefix.length(); i++) {
+            final char c = longestPrefix.charAt(i);
+            for (int j = 1; j < length; j++) {
+                if (strList[j].length() == i || strList[j].charAt(i) != c ) {
+                    return longestPrefix.substring(0,i);
+                }
+            }
+
+        }
+        return longestPrefix;
+    }
+
+
+    /**
+     * https://leetcode.com/problems/container-with-most-water/description/
+     * 思路：先从两个端点开始算，然后y轴数值小的往里移动。
+     */
+    @Test
+    public void maxCapacity() {
+        int number = 100000;
+        String s = "";
+        s.startsWith("");
+        int[] y = new int[number];
+        for (int i = 0; i < number; i++) {
+            y[i] = RandomUtils.nextInt(1, 100);
+        }
+        log.info("max capacity={}", capacity(y));
+
+        log.info("max capacity={}", capacity2(y));
+    }
+
+
+    /**
+     * 循环嵌套，效率低
+     *
+     * @param y
+     * @return
+     */
+    int capacity(int[] y) {
+        final long l = System.currentTimeMillis();
+        final int length = y.length;
+        if (length < 2) {
+            throw new RuntimeException("数组异常");
+        }
+        int capacity = 0;
+        for (int i = 0; i < length; i++) {
+            for (int j = i + 1; j < length; j++) {
+                capacity = Math.max(capacity, Math.min(y[i], y[j]) * (j - i));
+            }
+        }
+        log.info("capacity cost = {}", System.currentTimeMillis() - l);
+        return capacity;
+    }
+
+    /**
+     * 单层， 一次搞定
+     *
+     * @param y
+     * @return
+     */
+    int capacity2(int[] y) {
+        final long l = System.currentTimeMillis();
+        final int length = y.length;
+        if (length < 2) {
+            throw new RuntimeException("数组异常");
+        }
+        int capacity = 0;
+        int left = 0;
+        int right = length - 1;
+        while (left < right) {
+            capacity = Math.max(capacity, Math.min(y[left], y[right]) * (right - left));
+
+            if (y[left] < y[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        log.info("capacity2 cost = {}", System.currentTimeMillis() - l);
+        return capacity;
+    }
+
+    @Test
+    public void testSpeed() {
+        log.info("64 >> 6={}", 64 >> 6);
+
+        final long start = System.currentTimeMillis();
+        int number = Integer.MAX_VALUE;
+
+        log.info("number={}", number);
+        for (int i = 0; i < number; i++) {
+            final int i1 = 64 >> 6;
+//            if(i % n == 0){
+//                log.info("move i={}",i);
+//            }
+        }
+        log.info("move cost={}", System.currentTimeMillis() - start);
+
+        final long now = System.currentTimeMillis();
+        for (int i = 0; i < number; i++) {
+            final int i1 = 64 / 64;
+//            if(i % n == 0){
+//                log.info("divide j={}",i);
+//            }
+        }
+
+        log.info("divide cost={}", System.currentTimeMillis() - now);
+
+    }
+
+
+    @Test
+    public void bitSet() {
+
+        /**
+         * 得到一个可以支持0~127的位图
+         * 默认所有位都是0，即false
+         */
+        final BitSet bitSet = new BitSet(128);
+        /**
+         * 对位进行设置
+         */
+        bitSet.set(0);
+        bitSet.set(1);
+        bitSet.set(2);
+        bitSet.set(3);
+        bitSet.set(5);
+        bitSet.set(32);
+        bitSet.set(33);
+        bitSet.set(35);
+        bitSet.set(50);
+        bitSet.set(51);
+        bitSet.set(53);
+        bitSet.set(99);
+        bitSet.set(97);
+        bitSet.set(98);
+        bitSet.set(91);
+        bitSet.set(111);
+        bitSet.set(122);
+
+
+        // 返回此 BitSet 中设置为 true 的位数。
+        final int cardinality = bitSet.cardinality();
+
+        log.info("cardinality={}", cardinality);
+        log.info("0={}", bitSet.get(0));
+        log.info("1={}", bitSet.get(1));
+        log.info("2={}", bitSet.get(2));
+        log.info("3={}", bitSet.get(3));
+        log.info("4={}", bitSet.get(4));
+        log.info("5={}", bitSet.get(5));
+
+        log.info("30 >> 6={}", 30 >> 6);
+        log.info("2 >> 6={}", 2 >> 6);
+        log.info("63 >> 6={}", 63 >> 6);
+        log.info("64 >> 6={}", 64 >> 6);
+        log.info("65 >> 6={}", 65 >> 6);
+    }
+
+
+    /**
+     * 假设需要排序或者查找的总数N=10000000，
+     * 那么我们需要申请内存空间的大小为int a[1 + N/32]，其中：a[0]在内存中占32为可以对应十进制数0-31，依次类推：
+     * bitmap表为：
+     * a[0]--------->0-31
+     * a[1]--------->32-63
+     * a[2]--------->64-95
+     * a[3]--------->96-127
+     * <p>
+     * 现在我们假设有100个不重复的数，范围是[0,127]
+     * 用bitMap只要存四个元素就能搞定这个事
+     * java 的 BitSet 就是这个原理，不过底层是用的long
+     */
+    @Test
+    public void bitMap() {
+        int[] bmap = new int[4];
+        log.info("bmap={}", bmap);
+        setVal(bmap, 0);
+        setVal(bmap, 1);
+        setVal(bmap, 2);
+        setVal(bmap, 3);
+        setVal(bmap, 5);
+        setVal(bmap, 32);
+        setVal(bmap, 33);
+        setVal(bmap, 35);
+        setVal(bmap, 50);
+        setVal(bmap, 51);
+        setVal(bmap, 53);
+        setVal(bmap, 99);
+        setVal(bmap, 97);
+        setVal(bmap, 98);
+        setVal(bmap, 91);
+        setVal(bmap, 111);
+        setVal(bmap, 122);
+
+        // 47 ,262155 ,0,8
+        log.info("bmap={}", bmap);
+
+        final boolean b = testVal(bmap, 3);
+        log.info("122={}", b);
+        final boolean b2 = testVal(bmap, 4);
+        log.info("121={}", b2);
+    }
+
 
     @Test
     public void reverseInte2ger() {
+
         int number = 3;
         /**
-         *  M << N   == M 乘以 2的N次方
+         <<      :     左移运算符，num << 1,相当于num乘以2
+         >>      :     右移运算符，num >> 1,相当于num除以2
+         >>>    :     无符号右移，忽略符号位，空位都以0补齐
+         M << N   == M 乘以 2的N次方
          */
         log.info("reverse={}", number << 4);
+
+        int[] bmap = new int[3];
+
+        log.info("bmap={}", bmap);
+        setVal(bmap, 0);
+        setVal(bmap, 1);
+        setVal(bmap, 2);
+        setVal(bmap, 3);
+        setVal(bmap, 5);
+        setVal(bmap, 32);
+        setVal(bmap, 33);
+        setVal(bmap, 35);
+        // 47 ,3 ,0
+        log.info("bmap={}", bmap);
+
+
+        System.out.println("*******调用JDK中的库方法--开始********");
+        int n = 100;
+        BitSet bitArray = new BitSet(n);
+        int ARRNUM = 20;
+        int[] array = getArray(ARRNUM, n);
+        for (int i = 0; i < ARRNUM; i++) {
+            bitArray.set(array[i] - 1000);
+        }
+        int count = 0;
+        for (int j = 0; j < bitArray.length(); j++) {
+            if (bitArray.get(j)) {
+                System.out.print(j + 1000 + " ");
+                count++;
+            }
+        }
+        System.out.println();
+        System.out.println("排序后的数组大小为：" + count);
+        System.out.println("*******调用JDK中的库方法--结束********");
+
+    }
+
+    public int[] getArray(int ARRNUM, int N) {
+
+        @SuppressWarnings("unused")
+        int array1[] = {1000, 1002, 1032, 1033, 6543, 9999, 1033, 1000};
+
+        int array[] = new int[ARRNUM];
+        System.out.println("数组大小：" + ARRNUM);
+        Random r = new Random();
+        for (int i = 0; i < ARRNUM; i++) {
+            array[i] = r.nextInt(N) + 1000;
+        }
+
+        System.out.println(Arrays.toString(array));
+        return array;
+    }
+
+    private void setVal(int[] bmap, int val) {
+        bmap[val / 32] |= (1 << (val % 32));
+        //bmap[val>>5] != (val&0x1F);//这个更快？
+    }
+
+    boolean testVal(int[] bmap, int val) {
+//        final int i = bmap[val / 32] & (1 << (val % 32));
+//        log.info("i={}",i);
+
+        final int i1 = bmap[val >> 5] & (val & 0x1F);
+        log.info("i={}", i1);
+        return i1 == 1;
+        //return bmap[val>>5] & (val&0x1F);
     }
 
     /**
@@ -123,6 +499,13 @@ public class TopInterviewQuestions {
      */
     @Test
     public void longestSubstring() {
+        byte[] b = new byte[10];
+        final Optional<byte[]> b1 = Optional.ofNullable(b);
+        if (b1.isPresent()) {
+            log.info("isPresent = true");
+        } else {
+            log.info("isPresent = false");
+        }
         String str1 = "abcabccdbacb";
         int length = findLength(str1);
         log.info("length={}", length);
