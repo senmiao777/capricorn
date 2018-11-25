@@ -36,7 +36,7 @@ public class ClassTest {
         Sentry.init();
 
         // You can also manually provide the DSN to the ``init`` method.
-        String dsn = "https://sentry.io/whatever-7k";
+        String dsn = "https://67c87982db4b47458f5a2c330707ebc8@sentry.io/1320071";
         Sentry.init(dsn);
 
         /*
