@@ -1,9 +1,6 @@
 package com.frank.entity.mysql;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 
@@ -22,9 +19,14 @@ import java.util.Date;
 @Setter
 @ToString
 @Slf4j
+@AllArgsConstructor
+
 public class User implements Serializable {
 
     private static final long serialVersionUID = -3622354500982417427L;
+
+    public User() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
