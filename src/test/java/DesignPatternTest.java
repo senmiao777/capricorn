@@ -59,13 +59,14 @@ public class DesignPatternTest {
     @Test
     public void test() {
         MotorVehicle ford = new Ford();
-        ford.run();
+        ford.run(15);
 
         MotorVehicle hummer = new Hummer();
-        hummer.run();
+        hummer.run(36);
 
         hummer.setAlarm(true);
-        hummer.run();
+        hummer.run(22);
+
 
     }
 

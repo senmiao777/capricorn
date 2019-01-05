@@ -119,11 +119,6 @@ public class User implements Serializable {
             return this;
         }
 
-        public Builder age(Integer age) {
-            this.age = age;
-            return this;
-        }
-
         public Builder phone(Long phone) {
             this.phone = phone;
             return this;

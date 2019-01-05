@@ -14,9 +14,9 @@ public class Ford extends MotorVehicle {
      * 启动方法
      */
     @Override
-    protected void start(){
-        log.info("Ford start");
-    };
+    protected void start(int second) {
+        log.info("Ford start cost {} second",second);
+    }
 
     /**
      * 鸣笛方法

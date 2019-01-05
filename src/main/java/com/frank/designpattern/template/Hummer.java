@@ -14,15 +14,15 @@ public class Hummer extends MotorVehicle {
      * 启动方法
      */
     @Override
-    protected void start(){
-        log.info("Hummer start");
-    };
+    protected void start(int second) {
+        log.info("Hummer start cost {} second", second);
+    }
 
     /**
      * 鸣笛方法
      */
     @Override
-    protected void alarm(){
+    protected void alarm() {
         log.info("Hummer alarm");
     }
 
@@ -30,7 +30,7 @@ public class Hummer extends MotorVehicle {
      * 行驶方法
      */
     @Override
-    protected void move(){
+    protected void move() {
         log.info("Hummer move");
     }
 
@@ -38,7 +38,7 @@ public class Hummer extends MotorVehicle {
      * 停车方法
      */
     @Override
-    protected void stop(){
+    protected void stop() {
         log.info("Hummer stop");
     }
 

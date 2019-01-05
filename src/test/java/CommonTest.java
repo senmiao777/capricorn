@@ -40,6 +40,7 @@ import java.time.*;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -100,7 +101,38 @@ public class CommonTest {
 
 
     @Test
+    public void testBinary2Searc3h32() {
+        final User.Builder userBuilder = new User.Builder().age(18);
+        userBuilder.phone(13291790987L);
+        userBuilder.userType(1);
+        userBuilder.userName("建造者模式");
+        final User user = userBuilder.bulid();
+        log.info("user={}",user);
+    }
+
+    @Test
     public void testBinary2Searc3h2() {
+         AtomicReference<User> ATOMIC_REFERENCE = new AtomicReference<User>();
+
+         User u1 =  null;
+        User u = User.generateUser();
+        u.setAge(1234);
+        u.setUserName("ceshi1234");
+
+        final User user = Optional.ofNullable(u1).orElse(u);
+        log.info("user={}",user);
+
+
+//        User u2 =u;
+//        log.info("u2.equals(u) ={}",u2.equals(u));
+//        u2.setAge(99);
+//      //  u.setAge(91);
+//        log.info("after set age u2.equals(u) ={}",u2.equals(u));
+//        final boolean b = ATOMIC_REFERENCE.compareAndSet(u, u2);
+//        String s = "12ss";
+//
+//
+//        log.info("result = {}",b);
 
     }
 

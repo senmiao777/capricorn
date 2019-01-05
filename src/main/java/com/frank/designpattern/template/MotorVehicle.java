@@ -36,12 +36,9 @@ public abstract class MotorVehicle {
 
     /**
      * 启动方法
+     * 启动耗时
      */
-    protected void start() {
-        log.info("MotorVehicle start");
-    }
-
-    ;
+    protected abstract void start(int second);
 
     /**
      * 鸣笛方法
@@ -67,8 +64,8 @@ public abstract class MotorVehicle {
     /**
      * 模板方法
      */
-    public final void run() {
-        start();
+    public final void run(int second) {
+        start(second);
         boolean alarm = isAlarm();
         if (alarm) {
             alarm();

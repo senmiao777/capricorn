@@ -66,7 +66,7 @@ public class Facade {
          *
          *
          */
-        this.h.run();
+        this.h.run(23);
     }
 
 
