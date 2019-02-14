@@ -46,13 +46,13 @@ public class OverrideAndOverloadTest {
 //        log.info("int sayHello i={}",i);
 //    }
 
-//    public void sayHello(char i) {
-//        log.info("char sayHello i={}",i);
-//    }
+    public void sayHello(char i) {
+        log.info("char sayHello i={}",i);
+    }
 
-//    public void sayHello(long i) {
-//        log.info("long sayHello i={}",i);
-//    }
+    public void sayHello(long i) {
+        log.info("long sayHello i={}",i);
+    }
 
 //    public void sayHello(Character i) {
 //        log.info("Character sayHello i={}",i);
@@ -92,7 +92,7 @@ public class OverrideAndOverloadTest {
          * 编译器虽然能确定出方法的重载版本，但在很多情况下这个重载的版本并不是唯一的，往往只能确定一个更加合适的版本。
          * 如果有接收char类型的sayHello,会输出char sayHello i=a
          * 去掉char类型的sayHello，如果有接收int类型的sayHello,会输出int sayHello i=97
-         * 去掉char类型的sayHello，int类型的sayHello,如果有接收int类型的sayHello,会输出long sayHello i=97
+         * 去掉char类型的sayHello，int类型的sayHello,如果有接收long类型的sayHello,会输出long sayHello i=97
          * 聪明的你已经发现规律了 char->int->long->float->double
          * 不会匹配到byte和short类型，因为char转byte或short类型不安全
          *

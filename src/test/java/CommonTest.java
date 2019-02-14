@@ -2,6 +2,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.User;
+import com.frank.enums.Common;
+import com.frank.exception.BizException;
 import com.frank.exception.ResubmitException;
 import com.frank.model.JsonResult;
 import com.frank.other.Node;
@@ -18,6 +20,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
@@ -101,26 +104,66 @@ public class CommonTest {
 
 
     @Test
+    public void test2(){
+        Long c = 1234L;
+       String s = "1234";
+       if(c.equals(s)){
+           log.info("true");
+       }else {
+           log.info("false");
+       }
+
+    }
+
+    @Test
     public void testBinary2Searc3h32() {
-        final User.Builder userBuilder = new User.Builder().age(18);
-        userBuilder.phone(13291790987L);
-        userBuilder.userType(1);
-        userBuilder.userName("建造者模式");
-        final User user = userBuilder.bulid();
-        log.info("user={}",user);
+//        final User.Builder userBuilder = new User.Builder().age(18);
+//        userBuilder.phone(13291790987L);
+//        userBuilder.userType(1);
+//        userBuilder.userName("建造者模式");
+//        final User user = userBuilder.bulid();
+//        log.info("user={}", user);
+
+        Long id = 123L;
+        Long t = null;
+        if(id.equals(t)){
+            log.info("true");
+        }else {
+            log.info("false");
+        }
+
+        final User user = User.generateUser();
+        final String s = JSON.toJSONString(user);
+        log.info("user String = {}",s);
+
+        Object obj = s;
+        if(obj instanceof User ){
+            log.info("obj instanceof User ");
+        }else {
+            log.info("obj not instanceof User ");
+        }
+
     }
 
     @Test
     public void testBinary2Searc3h2() {
-         AtomicReference<User> ATOMIC_REFERENCE = new AtomicReference<User>();
+        AtomicReference<User> ATOMIC_REFERENCE = new AtomicReference<User>();
 
-         User u1 =  null;
+        User u1 = null;
         User u = User.generateUser();
-        u.setAge(1234);
+        u.setAge(123);
         u.setUserName("ceshi1234");
+        try {
+            if (u.getAge() == 123) {
+                throw new BizException(Common.REQUEST_AT);
+            }
+        } catch (BizException e) {
+            log.info("code={},errorMsg={},e={}", e.getCode(), e.getMessage(), ExceptionUtils.getStackTrace(e));
+            e.printStackTrace();
+        }
 
         final User user = Optional.ofNullable(u1).orElse(u);
-        log.info("user={}",user);
+        log.info("user={}", user);
 
 
 //        User u2 =u;
@@ -150,10 +193,10 @@ public class CommonTest {
         LinkedList l = new LinkedList();
         String str = "a";
         final String substring = str.substring(0, str.length() - 1);
-        log.info("substring:{}",substring);
+        log.info("substring:{}", substring);
 
         final byte[] bytes = str.getBytes();
-        log.info("bytes={}",bytes);
+        log.info("bytes={}", bytes);
         if (str.length() == 0) {
             log.info(" length  == 0");
         } else {
@@ -182,8 +225,8 @@ public class CommonTest {
         log.info("user1111111111");
         try {
             method1(2);
-        }catch (Exception e){
-            log.info("e={}",e.getMessage());
+        } catch (Exception e) {
+            log.info("e={}", e.getMessage());
         }
 
 
@@ -192,12 +235,12 @@ public class CommonTest {
     }
 
     private void method1(int m) throws IllegalArgumentException {
-        if(m == 1){
+        if (m == 1) {
             throw new IllegalArgumentException();
         }
 
         log.info("33333333333");
-        if(m == 2){
+        if (m == 2) {
             throw new ResubmitException("1234");
         }
     }
