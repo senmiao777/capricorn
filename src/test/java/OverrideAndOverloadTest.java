@@ -114,6 +114,7 @@ public class OverrideAndOverloadTest {
          * 动态分派 override 重写/覆盖
          */
 
+        log.info("--------------------------------------------");
         Human m = new Man();
         Human w = new Woman();
         m.sayHi();
