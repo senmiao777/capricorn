@@ -134,6 +134,9 @@ public class RabbitMqTest {
     }
 
 
+    /**
+     * fanout 负载均衡监听
+     */
     @Test
     public void testt2() {
         log.info("RabbitMqTest start");
