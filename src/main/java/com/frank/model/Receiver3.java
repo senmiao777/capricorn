@@ -1,4 +1,4 @@
-package com.frank.other;
+package com.frank.model;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -23,8 +23,8 @@ public class Receiver3 {
         log.info("Receiver3 testQueue receiver222收到={}",str);
     }
 
-    @RabbitListener(queues = "secondQueue")
-    public void receiver1(String str) {
-        log.info("Receiver3 secondQueue receiver111收到={}",str);
-    }
+//    @RabbitListener(queues = "secondQueue")
+//    public void receiver1(String str) {
+//        log.info("Receiver3 secondQueue receiver111收到={}",str);
+//    }
 }
