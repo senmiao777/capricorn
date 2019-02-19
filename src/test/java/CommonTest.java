@@ -106,7 +106,11 @@ public class CommonTest {
     @Test
     public void test2(){
         Long c = 1234L;
-       String s = "1234";
+       String s = "12345678912345";
+       String s1 = s.substring(0,5);
+       log.info("s1={}",s1);
+       s = s.substring(5,s.length());
+        log.info("s={}",s);
        if(c.equals(s)){
            log.info("true");
        }else {
