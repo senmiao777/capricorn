@@ -1,6 +1,5 @@
 package com.frank.model;
 
-import com.frank.annotation.MDCLog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -16,9 +15,9 @@ import org.springframework.stereotype.Component;
 @RabbitListener(queues = "secondQueue")
 public class Receiver2 {
 
-    @MDCLog
+   // @MDCLog
     @RabbitHandler
     public void receiveMethod(String message) {
-        log.info("secondQueue receiveMethod called.message={}", message);
+        log.info("Receiver2 secondQueue receiveMethod called.message={}", message);
     }
 }
