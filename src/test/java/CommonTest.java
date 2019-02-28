@@ -104,14 +104,33 @@ public class CommonTest {
 
 
     @Test
-    public void test2(){
+    public void test222() {
+        User u = User.generateUser();
+        u.setCreateAt(new Date());
+        final String s = JSON.toJSONString(u);
+
+        log.info("s={}", s);
+
+        String str = "{\"age\":59,\"createAt\":1550854532191,\"phone\":17545043614,\"updateAt\":1550554532191,\"userName\":\"ceshi2125095626\",\"userType\":1}";
+
+        final User user = JSON.parseObject(str, User.class);
+
+        log.info("user={}", user);
+
+    }
+
+    @Test
+    public void test2() {
         Long c = 1234L;
-       String s = "1234";
-       if(c.equals(s)){
-           log.info("true");
-       }else {
-           log.info("false");
-       }
+        String s = "12345678";
+        if (c.equals(s)) {
+            log.info("true");
+        } else {
+            log.info("false");
+        }
+
+        log.info("substring={}",s.substring(0));
+
 
     }
 
@@ -126,20 +145,20 @@ public class CommonTest {
 
         Long id = 123L;
         Long t = null;
-        if(id.equals(t)){
+        if (id.equals(t)) {
             log.info("true");
-        }else {
+        } else {
             log.info("false");
         }
 
         final User user = User.generateUser();
         final String s = JSON.toJSONString(user);
-        log.info("user String = {}",s);
+        log.info("user String = {}", s);
 
         Object obj = s;
-        if(obj instanceof User ){
+        if (obj instanceof User) {
             log.info("obj instanceof User ");
-        }else {
+        } else {
             log.info("obj not instanceof User ");
         }
 
