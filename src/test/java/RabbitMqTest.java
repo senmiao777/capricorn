@@ -145,7 +145,7 @@ public class RabbitMqTest {
         }
 
         try {
-            Thread.sleep(3000L);
+            Thread.sleep(5000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
