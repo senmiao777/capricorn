@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Macaque implements Fightable {
     @Override
-    public void fight() {
-        log.info("用狙战斗");
+    public void fight(String name) {
+        log.info("{} 用狙战斗", name);
     }
 }

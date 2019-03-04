@@ -7,6 +7,9 @@ import com.frank.designpattern.decorator.ConcreteDecoratorA;
 import com.frank.designpattern.decorator.ConcreteDecoratorB;
 import com.frank.designpattern.facade.Facade;
 import com.frank.designpattern.observer.*;
+import com.frank.designpattern.observer.Police;
+import com.frank.designpattern.observer.Soldier;
+import com.frank.designpattern.strategy.*;
 import com.frank.designpattern.template.Ford;
 import com.frank.designpattern.template.Hummer;
 import com.frank.designpattern.template.MotorVehicle;
@@ -20,6 +23,29 @@ import org.junit.Test;
  */
 @Slf4j
 public class DesignPatternTest {
+
+    /**
+     * 策略模式
+     */
+    @Test
+    public void testStrategy() {
+        Person police = new com.frank.designpattern.strategy.Police();
+        police.eat();
+        police.fight();
+
+        Person soldier = new com.frank.designpattern.strategy.Soldier();
+        soldier.eat();
+        soldier.fight();
+
+        Person moneyCarrier = new MoneyCarrier();
+        moneyCarrier.eat();
+        moneyCarrier.fight();
+
+        Person securityGuard = new SecurityGuard();
+        securityGuard.eat();
+        securityGuard.fight();
+    }
+
 
     @Test
     public void testFacade() {

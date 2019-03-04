@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Pistol implements Fightable {
     @Override
-    public void fight() {
-        log.info("用手枪战斗");
+    public void fight(String name) {
+        log.info("{} 用手枪战斗", name);
     }
 }

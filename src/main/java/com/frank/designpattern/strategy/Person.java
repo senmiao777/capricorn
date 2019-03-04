@@ -1,17 +1,25 @@
 package com.frank.designpattern.strategy;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
 /**
  * @author frank
  * @version 1.0
- * @date 2019/3/3 0003 下午 6:40
- * 策略调用者的接口
+ * @date 2019/3/3 0003 下午 6:44
  */
-public interface Person {
+@Slf4j
+@Component
+public abstract class Person {
 
+    Fightable fightable;
 
-    /**
-     * 吃方法，所有的人都有
-     */
-    void eat();
+    public void eat() {
+        log.info("I can eat...");
+    }
+
+    public void fight() {
+        fightable.fight(this.getClass().getSimpleName());
+    }
 
 }

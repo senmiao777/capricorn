@@ -7,5 +7,5 @@ package com.frank.designpattern.strategy;
  * 战斗接口，实现该接口的类就会具有战斗特性
  */
 public interface Fightable {
-    void fight();
+    void fight(String name);
 }
