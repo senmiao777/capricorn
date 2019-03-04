@@ -10,15 +10,17 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class AbstractPerson implements Person {
+public class AbstractPerson implements Person,Fightable {
 
-    @Override
-    public void fight() {
-
-    }
+    Fightable fightable;
 
     @Override
     public void eat() {
         log.info("I can eat...");
+    }
+
+    @Override
+    public void fight() {
+        fightable.fight();
     }
 }

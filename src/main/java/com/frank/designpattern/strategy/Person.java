@@ -8,13 +8,10 @@ package com.frank.designpattern.strategy;
  */
 public interface Person {
 
-    /**
-     * 战斗方法,并不是所有的人都有该方法
-     */
-    void fight();
 
     /**
      * 吃方法，所有的人都有
      */
     void eat();
+
 }
