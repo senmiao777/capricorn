@@ -26,6 +26,12 @@ public abstract class Person {
 
     Fightable fightable;
 
+
+    /**
+     * 为什么不像eat()方法那样直接把drive()方法定义在抽象类里呢？
+     * 设想一种场景，Person的实现类有20个，对drive方法的实现一共有5种，你怎么实现这5种方式可以被复用？
+     * -->把这5种策略写成5种策略的实现就可以实现复用了
+     */
     Driveable driveable;
 
     public void eat() {
