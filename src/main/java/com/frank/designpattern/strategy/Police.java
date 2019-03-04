@@ -9,6 +9,9 @@ import com.frank.designpattern.template.Hummer;
  */
 public class Police extends Person {
 
+    /**
+     * 要用哪个策略，就用具体的策略实现类给父类对应的策略接口实例进行赋值
+     */
     public Police() {
         driveable = new Hummer();
         fightable = new Macaque();
