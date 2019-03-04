@@ -32,6 +32,7 @@ public class DesignPatternTest {
         Person police = new com.frank.designpattern.strategy.Police();
         police.eat();
         police.fight();
+        police.drive();
 
         Person soldier = new com.frank.designpattern.strategy.Soldier();
         soldier.eat();

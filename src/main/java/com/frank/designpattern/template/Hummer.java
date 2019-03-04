@@ -1,5 +1,6 @@
 package com.frank.designpattern.template;
 
+import com.frank.designpattern.strategy.Driveable;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -9,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
  * 悍马汽车，继承汽车类
  */
 @Slf4j
-public class Hummer extends MotorVehicle {
+public class Hummer extends MotorVehicle implements Driveable {
     /**
      * 启动方法
      */
@@ -42,5 +43,8 @@ public class Hummer extends MotorVehicle {
         log.info("Hummer stop");
     }
 
-
+    @Override
+    public void drive(String name) {
+        log.info("{} 开悍马去上班",name);
+    }
 }
