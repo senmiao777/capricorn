@@ -121,7 +121,9 @@ public class CommonTest {
 
     @Test
     public void test2() {
-        Long c = 1234L;
+        Long c = -128L;
+        Long d = -128L;
+        log.info("c == d ?={}", c == d);
         String s = "12345678";
         if (c.equals(s)) {
             log.info("true");
@@ -129,7 +131,13 @@ public class CommonTest {
             log.info("false");
         }
 
-        log.info("substring={}",s.substring(0));
+        log.info("substring={}", s.substring(0));
+
+        final HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
+
+        ArrayList l;
+        final Timestamp TIME = new Timestamp(1557072000000L);
+        log.info("TIME={}", TIME);
 
 
     }
