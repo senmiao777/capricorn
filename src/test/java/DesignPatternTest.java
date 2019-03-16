@@ -131,7 +131,7 @@ public class DesignPatternTest {
          *  criminal.addObserver(police);
          criminal.addObserver(new Soldier());
          */
-        new Soldier(criminal);
+        new Soldier();
 
         criminal.sleep("十分钟");
         criminal.setAge(19);
