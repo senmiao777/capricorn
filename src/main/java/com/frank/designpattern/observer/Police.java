@@ -12,6 +12,12 @@ import org.springframework.scheduling.annotation.Async;
 @Slf4j
 public class Police implements Observer {
 
+    private Subject subject;
+
+    public Police(Subject subject) {
+        this.subject = subject;
+    }
+
     @Async("testTaskPoolExecutor")
     @Override
     public void action(Subject.Notice notice) {
@@ -21,7 +27,7 @@ public class Police implements Observer {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        log.info("Police监听到{} {}活动，内容{}", notice.getObservable(), notice.getOperationType(), notice.getObj());
+        log.info("Police监听到{} {}活动，内容{}", notice.getSubject(), notice.getOperationType(), notice.getObj());
 
     }
 }

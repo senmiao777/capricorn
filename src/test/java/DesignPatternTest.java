@@ -124,15 +124,13 @@ public class DesignPatternTest {
     public void test2() {
 
 
-        Subject criminal = new Criminal();
+        Criminal criminal = new Criminal();
         /**
          * 被观察者添加需要监听自己的观察者
          */
-        criminal.addObserver(new Police());
+        criminal.addObserver(new Police(criminal));
         criminal.addObserver(new Soldier());
 
-
-        criminal.eat("apple");
         criminal.sleep("十分钟");
 
         /**

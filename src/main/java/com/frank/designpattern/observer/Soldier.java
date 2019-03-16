@@ -21,7 +21,7 @@ public class Soldier implements Observer {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        log.info("Soldier监听到{} {}活动，内容{}", notice.getObservable(), notice.getOperationType(), notice.getObj());
+        log.info("Soldier监听到{} {}活动，内容{}", notice.getSubject(), notice.getOperationType(), notice.getObj());
 
     }
 }

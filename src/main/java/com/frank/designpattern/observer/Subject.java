@@ -29,17 +29,7 @@ public interface Subject {
      */
     void notifyObservers(Notice msg);
 
-    /**
-     * 吃方法
-     * @param food
-     */
-    void eat(String food);
 
-    /**
-     * 睡方法
-     * @param time
-     */
-    void sleep(String time);
 
 
     enum OperationType {
@@ -48,18 +38,18 @@ public interface Subject {
          */
         EAT,
         DRINK,
+        UPDATE_AGE,
         SLEEP;
     }
 
     class Notice {
         private OperationType operationType;
-        private String observable;
+        private String subject;
         private Object obj;
 
-
-        public Notice(OperationType operationType, String observable, Object obj) {
+        public Notice(OperationType operationType, String subject, Object obj) {
             this.operationType = operationType;
-            this.observable = observable;
+            this.subject = subject;
             this.obj = obj;
         }
 
@@ -67,12 +57,24 @@ public interface Subject {
             return operationType;
         }
 
-        public String getObservable() {
-            return observable;
-        }
-
         public Object getObj() {
             return obj;
+        }
+
+        public void setOperationType(OperationType operationType) {
+            this.operationType = operationType;
+        }
+
+        public String getSubject() {
+            return subject;
+        }
+
+        public void setSubject(String subject) {
+            this.subject = subject;
+        }
+
+        public void setObj(Object obj) {
+            this.obj = obj;
         }
     }
 }
