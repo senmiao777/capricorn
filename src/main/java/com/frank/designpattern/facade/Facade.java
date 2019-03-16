@@ -1,6 +1,7 @@
 package com.frank.designpattern.facade;
 
 import com.frank.designpattern.adapter.ConcreteTarget;
+import com.frank.designpattern.observer.Criminal;
 import com.frank.designpattern.observer.Subject;
 import com.frank.designpattern.observer.Police;
 import com.frank.designpattern.template.Hummer;
@@ -29,7 +30,7 @@ public class Facade {
     /**
      * 子系统2
      */
-    Police p = new Police();
+    Police p = new Police(new Criminal());
 
     /**
      * 子系统3
