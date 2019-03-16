@@ -125,10 +125,11 @@ public class DesignPatternTest {
 
 
         Criminal criminal = new Criminal();
+        Police police = new Police(criminal);
         /**
          * 被观察者添加需要监听自己的观察者
          */
-        criminal.addObserver(new Police(criminal));
+        criminal.addObserver(police);
         criminal.addObserver(new Soldier());
 
         criminal.sleep("十分钟");

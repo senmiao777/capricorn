@@ -28,6 +28,5 @@ public class Police implements Observer {
             e.printStackTrace();
         }
         log.info("Police监听到{} {}活动，内容{}", notice.getSubject(), notice.getOperationType(), notice.getObj());
-
     }
 }
