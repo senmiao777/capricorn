@@ -124,7 +124,7 @@ public class DesignPatternTest {
     public void test2() {
 
 
-        Observable criminal = new Criminal();
+        Subject criminal = new Criminal();
         /**
          * 被观察者添加需要监听自己的观察者
          */

@@ -1,7 +1,7 @@
 package com.frank.designpattern.facade;
 
 import com.frank.designpattern.adapter.ConcreteTarget;
-import com.frank.designpattern.observer.Observable;
+import com.frank.designpattern.observer.Subject;
 import com.frank.designpattern.observer.Police;
 import com.frank.designpattern.template.Hummer;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ public class Facade {
         this.c.targetOperation();
     }
 
-    public void action(Observable.Notice notice) {
+    public void action(Subject.Notice notice) {
         log.info("门面模式假装校验。。。");
         this.p.action(notice);
     }

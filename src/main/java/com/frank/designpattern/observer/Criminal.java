@@ -13,7 +13,7 @@ import java.util.List;
  * 被观察者-罪犯
  */
 @Slf4j
-public class Criminal implements Observable {
+public class Criminal implements Subject {
 
     List<Observer> observers = new ArrayList<>();
 

@@ -14,7 +14,7 @@ public class Police implements Observer {
 
     @Async("testTaskPoolExecutor")
     @Override
-    public void action(Observable.Notice notice) {
+    public void action(Subject.Notice notice) {
         try {
             // 模拟延迟
             Thread.sleep(2000);

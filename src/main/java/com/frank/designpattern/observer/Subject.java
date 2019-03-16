@@ -5,9 +5,9 @@ package com.frank.designpattern.observer;
  * @version 1.0
  * @date 2018/7/3
  * <p>
- * 被观察者
+ * 被订阅的主题，即被观察者
  */
-public interface Observable {
+public interface Subject {
     /**
      * 添加观察者
      *

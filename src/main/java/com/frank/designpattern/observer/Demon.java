@@ -55,7 +55,7 @@ public class Demon extends Observable {
     public void eat(String food) {
         log.info("Demon eat {}", food);
         super.setChanged();
-        super.notifyObservers(new com.frank.designpattern.observer.Observable.Notice(com.frank.designpattern.observer.Observable.OperationType.EAT, getClass().toString(), food));
+        super.notifyObservers(new Subject.Notice(Subject.OperationType.EAT, getClass().toString(), food));
     }
 //
 //    @Override
