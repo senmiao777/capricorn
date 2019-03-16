@@ -16,6 +16,7 @@ public class Police implements Observer {
 
     public Police(Subject subject) {
         this.subject = subject;
+        subject.addObserver(this);
     }
 
     @Async("testTaskPoolExecutor")

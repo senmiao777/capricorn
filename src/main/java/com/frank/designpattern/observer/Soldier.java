@@ -11,6 +11,13 @@ import org.springframework.scheduling.annotation.Async;
  */
 @Slf4j
 public class Soldier implements Observer {
+    private Subject subject;
+
+    public Soldier(Subject subject) {
+        this.subject = subject;
+        subject.addObserver(this);
+    }
+
 
     @Async("testTaskPoolExecutor")
     @Override

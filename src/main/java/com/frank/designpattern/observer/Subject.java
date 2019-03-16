@@ -29,9 +29,6 @@ public interface Subject {
      */
     void notifyObservers(Notice msg);
 
-
-
-
     enum OperationType {
         /**
          * 吃

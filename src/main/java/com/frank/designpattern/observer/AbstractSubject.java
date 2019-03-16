@@ -15,6 +15,9 @@ public abstract class AbstractSubject implements Subject {
     @Override
     public void notifyObservers(Notice msg) {
         for (Observer o : observers) {
+            /**
+             * 主题知道观察者有一个action方法
+             */
             o.action(msg);
         }
     }

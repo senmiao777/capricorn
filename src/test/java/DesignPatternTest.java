@@ -7,9 +7,9 @@ import com.frank.designpattern.decorator.ConcreteDecoratorA;
 import com.frank.designpattern.decorator.ConcreteDecoratorB;
 import com.frank.designpattern.facade.Facade;
 import com.frank.designpattern.observer.*;
-import com.frank.designpattern.observer.Police;
-import com.frank.designpattern.observer.Soldier;
-import com.frank.designpattern.strategy.*;
+import com.frank.designpattern.strategy.MoneyCarrier;
+import com.frank.designpattern.strategy.Person;
+import com.frank.designpattern.strategy.SecurityGuard;
 import com.frank.designpattern.template.Ford;
 import com.frank.designpattern.template.Hummer;
 import com.frank.designpattern.template.MotorVehicle;
@@ -121,19 +121,20 @@ public class DesignPatternTest {
      * 而责任链模式传递的消息原则上是不进行修改的
      */
     @Test
-    public void test2() {
+    public void testObserveStrategy() {
 
 
         Criminal criminal = new Criminal();
         Police police = new Police(criminal);
         /**
          * 被观察者添加需要监听自己的观察者
+         *  criminal.addObserver(police);
+         criminal.addObserver(new Soldier());
          */
-        criminal.addObserver(police);
-        criminal.addObserver(new Soldier());
+        new Soldier(criminal);
 
         criminal.sleep("十分钟");
-
+        criminal.setAge(19);
         /**
          * spring 提供的观察者和监听者
          */
