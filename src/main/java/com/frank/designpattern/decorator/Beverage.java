@@ -15,8 +15,7 @@ import java.math.BigDecimal;
  * 怎么得到饮料最终是多少钱呢？
  * <p>
  * java.io包用到很多装饰器，比如
- * FileInputStream装饰了InputStream
- * BufferedInputStream装饰了FileInputStream
+ * 如BufferedInputStream、ByteArrayInputStream等都是具体的装饰器，装饰了InputStream
  */
 public interface Beverage {
     /**
