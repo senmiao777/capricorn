@@ -1,10 +1,7 @@
 import com.frank.designpattern.adapter.Adapter;
 import com.frank.designpattern.adapter.ConcreteTarget;
 import com.frank.designpattern.adapter.Target;
-import com.frank.designpattern.decorator.Component;
-import com.frank.designpattern.decorator.ConcreteComponent;
-import com.frank.designpattern.decorator.ConcreteDecoratorA;
-import com.frank.designpattern.decorator.ConcreteDecoratorB;
+import com.frank.designpattern.decorator.*;
 import com.frank.designpattern.facade.Facade;
 import com.frank.designpattern.observer.*;
 import com.frank.designpattern.strategy.MoneyCarrier;
@@ -95,6 +92,20 @@ public class DesignPatternTest {
         hummer.run(22);
 
 
+    }
+
+    @Test
+    public void decorator(){
+        Beverage tea = new Tea();
+        tea = new Sugar(tea);
+        tea = new Milk(tea);
+        log.info("tea cost={}", tea.cost());
+
+        Beverage coffe = new Coffe();
+        coffe = new Sugar(coffe);
+        coffe = new Milk(coffe);
+        coffe = new Whip(coffe);
+        log.info("coffe cost={}", coffe.cost());
     }
 
     /**
