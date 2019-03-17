@@ -13,6 +13,10 @@ import com.frank.designpattern.template.MotorVehicle;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.FilterInputStream;
+
 /**
  * @author frank
  * @version 1.0
@@ -44,7 +48,6 @@ public class DesignPatternTest {
         securityGuard.fight();
     }
 
-
     @Test
     public void testFacade() {
         Facade f = new Facade();
@@ -53,7 +56,6 @@ public class DesignPatternTest {
         f.targetOperation();
     }
 
-
     @Test
     public void testAdapter() {
         Target t = new Adapter();
@@ -61,19 +63,6 @@ public class DesignPatternTest {
 
         Target t2 = new ConcreteTarget();
         t2.targetOperation();
-    }
-
-
-    @Test
-    public void testDecorator() {
-        Component component = new ConcreteComponent();
-        /**
-         * 想添加新的装饰，增加一个装饰器实现类就行了，高度可扩展
-         * 对原有组件没有任何影响
-         */
-        component = new ConcreteDecoratorA(component);
-        component = new ConcreteDecoratorB(component);
-        component.operation();
     }
 
 
@@ -106,6 +95,13 @@ public class DesignPatternTest {
         coffe = new Milk(coffe);
         coffe = new Whip(coffe);
         log.info("coffe cost={}", coffe.cost());
+
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream("test".getBytes());
+        try {
+            FilterInputStream filterInputStream = new BufferedInputStream(byteArrayInputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
