@@ -139,6 +139,11 @@ public class CommonTest {
         final Timestamp TIME = new Timestamp(1557072000000L);
         log.info("TIME={}", TIME);
 
+        final java.time.format.DateTimeFormatter FORMATTER = java.time.format.DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+        log.info("FORMATTER={}",FORMATTER.format(LocalDateTime.now()));
+
+
 
     }
 
