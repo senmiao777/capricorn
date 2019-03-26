@@ -105,6 +105,11 @@ public class CommonTest {
 
     @Test
     public void test222() {
+
+        byte b1 = 127;
+        byte b2 =-128;
+
+
         User u = User.generateUser();
         u.setCreateAt(new Date());
         final String s = JSON.toJSONString(u);
