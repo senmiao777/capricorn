@@ -17,6 +17,34 @@ import java.util.*;
 public class TopInterviewQuestions {
 
     @Test
+    public void removeDuplicates() {
+        int[] numbers = new int[]{0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
+        final int length = removeDuplicates(numbers);
+        log.info("length={},length={}",length,numbers);
+    }
+
+    private int removeDuplicates(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        /**
+         * 默认替换下标位置
+         */
+        int index = 1;
+        for (int i = 1; i < nums.length; i++) {
+            /**
+             * 不相等，则把当前位置的元素放到index位置
+             */
+            if (nums[i - 1] != nums[i]) {
+                nums[index] = nums[i];
+                index++;
+            }
+        }
+
+        return index;
+    }
+
+    @Test
     public void longestPrefix() {
         String[] strList = {"flower", "flow", "flight"};
         //String[] strList = {"abab", "aba", ""};
@@ -114,15 +142,15 @@ public class TopInterviewQuestions {
         if (length == 0) {
             return "";
         }
-        if(length == 1){
+        if (length == 1) {
             return strList[0];
         }
         String longestPrefix = strList[0];
         for (int i = 0; i < longestPrefix.length(); i++) {
             final char c = longestPrefix.charAt(i);
             for (int j = 1; j < length; j++) {
-                if (strList[j].length() == i || strList[j].charAt(i) != c ) {
-                    return longestPrefix.substring(0,i);
+                if (strList[j].length() == i || strList[j].charAt(i) != c) {
+                    return longestPrefix.substring(0, i);
                 }
             }
 
