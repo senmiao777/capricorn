@@ -17,6 +17,40 @@ import java.util.*;
 @Slf4j
 public class TopInterviewQuestions {
 
+
+    @Test
+    public void implementIndexOf() {
+        String haystack = "hello";
+        String needle = "ll";
+        final int i = strStr(haystack, needle);
+        log.info("implementIndexOf i ={}", i);
+    }
+
+    private int strStr(String haystack, String needle) {
+
+        if("".equals(needle)){
+            return 0;
+        }
+        int temp = 0;
+        int needleLength = needle.length();
+        int haystackLength = haystack.length();
+        for (int i = 0; i < haystack.length(); i++) {
+            int j = i;
+            while (temp < needleLength && j < haystackLength && needle.charAt(temp) == haystack.charAt(j)) {
+                temp++;
+                j++;
+            }
+            if (needleLength == temp) {
+                return i;
+            } else {
+                temp = 0;
+            }
+
+        }
+
+        return -1;
+    }
+
     @Test
     public void removeNthNodeFromEndofList() {
         Node n5 = new Node(5, null);
