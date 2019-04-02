@@ -24,6 +24,7 @@ public class TopInterviewQuestions {
         String needle = "ll";
         final int i = strStr(haystack, needle);
         log.info("implementIndexOf i ={}", i);
+        needle.indexOf("d");
     }
 
     private int strStr(String haystack, String needle) {
