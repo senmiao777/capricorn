@@ -2,6 +2,7 @@ package interview;
 
 
 import com.frank.enums.Common;
+import com.frank.other.Node;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
@@ -17,10 +18,65 @@ import java.util.*;
 public class TopInterviewQuestions {
 
     @Test
+    public void removeNthNodeFromEndofList() {
+        Node n5 = new Node(5, null);
+        Node n4 = new Node(4, n5);
+        Node n3 = new Node(3, n4);
+        Node n2 = new Node(2, n3);
+        Node n1 = new Node(1, n2);
+
+        final Node node = removeNthNodeFromEndofList(n1, 0);
+        log.info("n1={}", node);
+    }
+
+    /**
+     * 快慢指针
+     *
+     * @param head
+     * @param n    移除倒数第N个节点
+     *             <p>
+     *             删除倒数第N个，那么慢的指针比快的指针慢N
+     */
+    private Node removeNthNodeFromEndofList(Node head, int n) {
+        if (n <= 0) {
+            return head;
+        }
+        Node fast = head;
+        Node slow = head;
+        /**
+         * 先让快速指针向前移动N次
+         */
+        for (int i = 0; i < n; i++) {
+            fast = fast.getNext();
+        }
+
+        /**
+         * 移除的N等于链表的长度，则移除的是头节点
+         */
+        if (fast == null) {
+            return head.getNext();
+        }
+
+        /**
+         * 快慢指针同时向后移动
+         */
+        while (fast.getNext() != null) {
+            fast = fast.getNext();
+            slow = slow.getNext();
+        }
+        /**
+         * 慢指针的下一节点指向快指针
+         */
+        slow.setNext(slow.getNext().getNext());
+        return head;
+    }
+
+
+    @Test
     public void removeDuplicates() {
         int[] numbers = new int[]{0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
         final int length = removeDuplicates(numbers);
-        log.info("length={},length={}",length,numbers);
+        log.info("length={},length={}", length, numbers);
     }
 
     private int removeDuplicates(int[] nums) {
