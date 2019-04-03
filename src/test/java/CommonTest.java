@@ -1440,6 +1440,10 @@ public class CommonTest {
         Object obj = null;
         Map<String, String> map = (Map<String, String>) obj;
         log.info("map={}", map);
+        ConcurrentLinkedQueue q;
+        SynchronousQueue q1;
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(1, 1, 0L,
+                TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>());
     }
 
     @Test
