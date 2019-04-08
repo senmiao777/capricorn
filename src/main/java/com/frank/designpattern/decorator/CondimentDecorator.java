@@ -5,13 +5,10 @@ package com.frank.designpattern.decorator;
  * @version 1.0
  * @date 2019/3/17 0017 上午 10:59
  * 调料抽象类，所有装饰器类都实现该抽象类
- * <p>
- * 为什么不是接口，接口不能实现接口，调料如果定义成接口就不能实现饮料接口了。
- * <p>
  * 设计原则讲“多用组合少用继承”，这里为什么用继承？
  * 这里用继承是为了让装饰器和被装饰者（组件）有共同的类型，而不是为了继承组件的行为。
  * 行为由装饰者和其他的组合提供。
- * n. 调味品，佐料; 英 [ˈkɒndɪmənt]
+ *
  * <p>
  * 如果只有一个装饰器类，则不需要写个抽象类了，直接继承就行了
  * 装饰器优点：
@@ -26,6 +23,7 @@ package com.frank.designpattern.decorator;
  * <p>
  * 使用场景：
  * 就一句话，当需要动态扩展类的功能的时候
+ * n. 调味品，佐料; 英 [ˈkɒndɪmənt]
  */
 public abstract class CondimentDecorator implements Beverage {
 }
