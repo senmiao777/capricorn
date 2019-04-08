@@ -44,6 +44,7 @@ import java.time.temporal.TemporalAccessor;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -1455,6 +1456,8 @@ public class CommonTest {
         intList.add(6);
         intList.get(5);
         final ArrayList<Object> objects = new ArrayList<>();
+
+        final ReentrantLock reentrantLock = new ReentrantLock();
 
     }
 
