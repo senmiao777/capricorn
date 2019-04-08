@@ -1444,6 +1444,18 @@ public class CommonTest {
         SynchronousQueue q1;
         ThreadPoolExecutor pool = new ThreadPoolExecutor(1, 1, 0L,
                 TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>());
+
+        final LinkedList<Integer> intList = new LinkedList<>();
+        
+        intList.add(1);
+        intList.add(2);
+        intList.add(3);
+        intList.add(4);
+        intList.add(5);
+        intList.add(6);
+        intList.get(5);
+        final ArrayList<Object> objects = new ArrayList<>();
+
     }
 
     @Test
