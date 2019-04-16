@@ -108,7 +108,7 @@ public class CommonTest {
     public void test222() {
 
         byte b1 = 127;
-        byte b2 =-128;
+        byte b2 = -128;
 
 
         User u = User.generateUser();
@@ -147,8 +147,7 @@ public class CommonTest {
 
         final java.time.format.DateTimeFormatter FORMATTER = java.time.format.DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
-        log.info("FORMATTER={}",FORMATTER.format(LocalDateTime.now()));
-
+        log.info("FORMATTER={}", FORMATTER.format(LocalDateTime.now()));
 
 
     }
@@ -1438,26 +1437,56 @@ public class CommonTest {
 
     @Test
     public void testNull() {
-        Object obj = null;
-        Map<String, String> map = (Map<String, String>) obj;
-        log.info("map={}", map);
-        ConcurrentLinkedQueue q;
-        SynchronousQueue q1;
-        ThreadPoolExecutor pool = new ThreadPoolExecutor(1, 1, 0L,
-                TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>());
+//        final BigDecimal bigDecimal = new BigDecimal(0.1);
+//        final BigDecimal bigDecimal1 = BigDecimal.valueOf(0.1);
+//        final BigDecimal add = bigDecimal.add(null);
+//        log.info("add={}", add);
+//
+//        log.info("bigDecimal={},bigDecimal1={}", bigDecimal, bigDecimal1);
+//
+//
+//        Object obj = null;
+//        Map<String, String> map = (Map<String, String>) obj;
+//        log.info("map={}", map);
+//        ConcurrentLinkedQueue q;
+//        SynchronousQueue q1;
+//        ThreadPoolExecutor pool = new ThreadPoolExecutor(1, 1, 0L,
+//                TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>());
 
-        final LinkedList<Integer> intList = new LinkedList<>();
-        
-        intList.add(1);
-        intList.add(2);
-        intList.add(3);
-        intList.add(4);
-        intList.add(5);
-        intList.add(6);
-        intList.get(5);
+        final LinkedList<Integer> linkedList = new LinkedList<>();
+
+
+        linkedList.add(1);
+        linkedList.add(2);
+        linkedList.add(3);
+        linkedList.add(null);
+        linkedList.add(4);
+        linkedList.add(5);
+        linkedList.add(6);
+        linkedList.get(5);
+
+        final Integer integer = linkedList.peekLast();
+        //  final boolean contains = linkedList.contains(null);
+
+
+        final LinkedList<String> test = new LinkedList<>();
+
+        String str = null;
+        test.add("a");
+        test.add("b");
+        test.add(str);
+        test.add("c");
+
+        final int i = linkedList.indexOf(str);
+        log.info("i={}", i);
+
+
         final ArrayList<Object> objects = new ArrayList<>();
 
         final ReentrantLock reentrantLock = new ReentrantLock();
+
+        ArrayBlockingQueue arrayBlockingQueue;
+        LinkedBlockingQueue linkedBlockingQueue;
 
     }
 
