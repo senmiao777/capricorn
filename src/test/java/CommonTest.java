@@ -34,8 +34,13 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.annotation.Rollback;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.sql.Timestamp;
 import java.text.Format;
 import java.text.ParseException;
@@ -103,6 +108,34 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
+
+    @Test
+    public void testNio() {
+        String path = "D:/test/codeList.txt";
+        try {
+            FileInputStream inputStream = new FileInputStream(path);
+            final FileChannel channel = inputStream.getChannel();
+
+            ByteBuffer buff = ByteBuffer.allocate(1024);
+
+            final int read = channel.read(buff);
+            log.info("read={}", read);
+
+            FileOutputStream outputStream = new FileOutputStream(path);
+            final FileChannel outputChannel = outputStream.getChannel();
+
+            ByteBuffer outBuffer = ByteBuffer.allocate(1024);
+            outBuffer.put("just a test ...".getBytes());
+
+            outBuffer.flip();
+            outputChannel.write(outBuffer);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     @Test
     public void test222() {
@@ -1487,6 +1520,14 @@ public class CommonTest {
 
         ArrayBlockingQueue arrayBlockingQueue;
         LinkedBlockingQueue linkedBlockingQueue;
+
+        final BigDecimal bigDecimal = new BigDecimal(0.1);
+        log.info("bigDecimal={}", bigDecimal);
+        BigDecimal.valueOf(0.1);
+
+        final Double aDouble = new Double(0.1);
+        log.info("aDouble={}", aDouble);
+
 
     }
 
