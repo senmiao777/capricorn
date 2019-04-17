@@ -113,7 +113,6 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
 
-
     @Test
     public void testNio() {
         String path = "D:/test/codeList.txt";
@@ -126,14 +125,12 @@ public class CommonTest {
 
             while ((inChannel.read(bytebuf)) != -1) {//读取通道数据到缓冲区中,非-1就代表有数据
                 /**
-                 * 确定缓冲区数据的起点和终点
+                 * 确定缓冲区数据的起点和终点，读取的是 0~limit 范围内的数据
                  public final Buffer flip() {
                  limit = position;
                  position = 0;
                  mark = -1;
                  return this;
-
-                 读取的是 0~limit 范围内的数据
                  }
                  */
                 bytebuf.flip();
@@ -155,12 +152,14 @@ public class CommonTest {
             FileOutputStream outputStream = new FileOutputStream(outputPath);
             final FileChannel outputChannel = outputStream.getChannel();
 
-            ByteBuffer outBuffer = ByteBuffer.allocate(1024);
-            outBuffer.put("just a test ...".getBytes());
+
+            ByteBuffer outBuffer = ByteBuffer.allocate(64);
+            outBuffer.put("0123456789abcdefghijklmnopqrstuvwxyz".getBytes());
+            //  CharsetEncoder encoder = Charset.defaultCharset().newEncoder();
 
             outBuffer.flip();
             outputChannel.write(outBuffer);
-
+            outBuffer.clear();
 
 
         } catch (IOException e) {
