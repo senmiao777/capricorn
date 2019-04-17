@@ -118,10 +118,11 @@ public class CommonTest {
         String path = "D:/test/codeList.txt";
         try {
             FileInputStream inputStream = new FileInputStream(path);
-            final FileChannel inChannel = inputStream.getChannel();
+            FileChannel inChannel = inputStream.getChannel();
 
             ByteBuffer bytebuf = ByteBuffer.allocate(8);
             CharsetDecoder decoder = Charset.defaultCharset().newDecoder();
+
 
             while ((inChannel.read(bytebuf)) != -1) {//读取通道数据到缓冲区中,非-1就代表有数据
                 /**
@@ -139,6 +140,8 @@ public class CommonTest {
                 log.info("decode={}", decode.toString());
                 //清空缓冲区，再次放入数据
                 bytebuf.clear();
+
+
             }
 
 //            final int read = channel.read(buff);
@@ -147,21 +150,25 @@ public class CommonTest {
 //            log.info("buff.get(5)={}", (char) buff.get(5));
 //            log.info("buff.array()={}", buff.array());
 
+
+            ByteBuffer outBuffer = ByteBuffer.allocate(16);
+
             String outputPath = "D:/test/codeList2.txt";
 
             FileOutputStream outputStream = new FileOutputStream(outputPath);
             final FileChannel outputChannel = outputStream.getChannel();
 
-
-            ByteBuffer outBuffer = ByteBuffer.allocate(64);
-            outBuffer.put("0123456789abcdefghijklmnopqrstuvwxyz".getBytes());
-            //  CharsetEncoder encoder = Charset.defaultCharset().newEncoder();
-
-            outBuffer.flip();
-            outputChannel.write(outBuffer);
-            outBuffer.clear();
-
-
+            FileInputStream inputStream2 = new FileInputStream(path);
+            FileChannel inChannel2 = inputStream2.getChannel();
+            int i = 0;
+            while ((inChannel2.read(outBuffer)) != -1) {//读取通道数据到缓冲区中,非-1就代表有数据
+                outBuffer.put(1,new Byte("97"));
+                outBuffer.put(2,new Byte("102"));
+                outBuffer.flip();
+                outputChannel.write(outBuffer);
+                outBuffer.clear();
+                i++;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
