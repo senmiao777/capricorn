@@ -37,10 +37,14 @@ import org.springframework.test.annotation.Rollback;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.sql.Timestamp;
 import java.text.Format;
 import java.text.ParseException;
@@ -109,22 +113,46 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
 
+
     @Test
     public void testNio() {
         String path = "D:/test/codeList.txt";
         try {
             FileInputStream inputStream = new FileInputStream(path);
-            final FileChannel channel = inputStream.getChannel();
+            final FileChannel inChannel = inputStream.getChannel();
 
-            ByteBuffer buff = ByteBuffer.allocate(1024);
+            ByteBuffer bytebuf = ByteBuffer.allocate(8);
+            CharsetDecoder decoder = Charset.defaultCharset().newDecoder();
 
-            final int read = channel.read(buff);
-            log.info("read={}", read);
+            while ((inChannel.read(bytebuf)) != -1) {//读取通道数据到缓冲区中,非-1就代表有数据
+                /**
+                 * 确定缓冲区数据的起点和终点
+                 public final Buffer flip() {
+                 limit = position;
+                 position = 0;
+                 mark = -1;
+                 return this;
 
-            log.info("buff.get(5)={}", (char) buff.get(5));
-            log.info("buff.array()={}", buff.array());
+                 读取的是 0~limit 范围内的数据
+                 }
+                 */
+                bytebuf.flip();
+                //对bytebuf进行解码，避免乱码
+                CharBuffer decode = decoder.decode(bytebuf);
+                log.info("decode={}", decode.toString());
+                //清空缓冲区，再次放入数据
+                bytebuf.clear();
+            }
 
-            FileOutputStream outputStream = new FileOutputStream(path);
+//            final int read = channel.read(buff);
+//            log.info("read={}", read);
+//
+//            log.info("buff.get(5)={}", (char) buff.get(5));
+//            log.info("buff.array()={}", buff.array());
+
+            String outputPath = "D:/test/codeList2.txt";
+
+            FileOutputStream outputStream = new FileOutputStream(outputPath);
             final FileChannel outputChannel = outputStream.getChannel();
 
             ByteBuffer outBuffer = ByteBuffer.allocate(1024);
@@ -132,6 +160,7 @@ public class CommonTest {
 
             outBuffer.flip();
             outputChannel.write(outBuffer);
+
 
 
         } catch (IOException e) {
@@ -153,19 +182,12 @@ public class CommonTest {
         String c = "1";
         log.info("1 + 1 + c +1={}", 1 + 1 + c + 1);
 
+        hello(b);
 
-        User u = User.generateUser();
-        u.setCreateAt(new Date());
-        final String s = JSON.toJSONString(u);
+    }
 
-        log.info("s={}", s);
-
-        String str = "{\"age\":59,\"createAt\":1550854532191,\"phone\":17545043614,\"updateAt\":1550554532191,\"userName\":\"ceshi2125095626\",\"userType\":1}";
-
-        final User user = JSON.parseObject(str, User.class);
-
-        log.info("user={}", user);
-
+    private void hello(Serializable param) {
+        log.info("hello param ={}", param);
     }
 
     @Test
