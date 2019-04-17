@@ -121,6 +121,9 @@ public class CommonTest {
             final int read = channel.read(buff);
             log.info("read={}", read);
 
+            log.info("buff.get(5)={}", (char) buff.get(5));
+            log.info("buff.array()={}", buff.array());
+
             FileOutputStream outputStream = new FileOutputStream(path);
             final FileChannel outputChannel = outputStream.getChannel();
 
@@ -142,6 +145,13 @@ public class CommonTest {
 
         byte b1 = 127;
         byte b2 = -128;
+
+        int a = 1;
+        log.info("a+1={}", a + 1);
+        char b = '1';
+        log.info("b+1={}", b + 1);
+        String c = "1";
+        log.info("1 + 1 + c +1={}", 1 + 1 + c + 1);
 
 
         User u = User.generateUser();
