@@ -34,10 +34,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.annotation.Rollback;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.ByteBuffer;
@@ -120,7 +117,7 @@ public class CommonTest {
             FileInputStream inputStream = new FileInputStream(path);
             FileChannel inChannel = inputStream.getChannel();
 
-            ByteBuffer bytebuf = ByteBuffer.allocate(8);
+            ByteBuffer bytebuf = ByteBuffer.allocate(16);
             CharsetDecoder decoder = Charset.defaultCharset().newDecoder();
 
 
@@ -151,23 +148,30 @@ public class CommonTest {
 //            log.info("buff.array()={}", buff.array());
 
 
-            ByteBuffer outBuffer = ByteBuffer.allocate(16);
+            ByteBuffer outBuffer = ByteBuffer.allocate(8);
 
-            String outputPath = "D:/test/codeList2.txt";
-
-            FileOutputStream outputStream = new FileOutputStream(outputPath);
-            final FileChannel outputChannel = outputStream.getChannel();
-
-            FileInputStream inputStream2 = new FileInputStream(path);
-            FileChannel inChannel2 = inputStream2.getChannel();
-            int i = 0;
-            while ((inChannel2.read(outBuffer)) != -1) {//读取通道数据到缓冲区中,非-1就代表有数据
-                outBuffer.put(1,new Byte("97"));
-                outBuffer.put(2,new Byte("102"));
+            RandomAccessFile randomAccessFile = new RandomAccessFile(path, "rw");
+            FileChannel channel = randomAccessFile.getChannel();
+            while ((channel.read(outBuffer)) != -1) {//读取通道数据到缓冲区中,非-1就代表有数据
+                outBuffer.put(1, new Byte("97"));
+                outBuffer.put(2, new Byte("98"));
+                outBuffer.put(3, new Byte("99"));
                 outBuffer.flip();
-                outputChannel.write(outBuffer);
+
+//                CharBuffer decode = decoder.decode(outBuffer);
+//                log.info("randomAccessFile decode={}", decode.toString());
+                channel.write(outBuffer);
+
+                /**
+                 FileInputStream inputStream2 = new FileInputStream(path);
+                 FileChannel inChannel2 = inputStream2.getChannel();
+                 inChannel2.write(outBuffer);
+                 NonWritableChannelException,原因channel是通过fileInputStream get出来的，所以只可读
+
+                 换成RandomAccessFile channel是双向的
+                 */
+
                 outBuffer.clear();
-                i++;
             }
         } catch (IOException e) {
             e.printStackTrace();
