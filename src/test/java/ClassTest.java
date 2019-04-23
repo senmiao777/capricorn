@@ -1,3 +1,4 @@
+import com.frank.annotation.RedisLock;
 import io.sentry.Sentry;
 import io.sentry.SentryClient;
 import io.sentry.SentryClientFactory;
@@ -8,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author frank
@@ -20,6 +23,17 @@ public class ClassTest {
 
     static {
         log.info("看到这句话说明类加载了，并且static代码块执行了");
+    }
+
+
+    /**
+     * 在运行时通过反射取出方法的注解
+     */
+    @Test
+    public void testAnnotation() {
+        Map m = new HashMap<>(1);
+        final RedisLock lock = m.getClass().getDeclaredAnnotation(RedisLock.class);
+        final int i = lock.maxExpireTime();
     }
 
     @Test
