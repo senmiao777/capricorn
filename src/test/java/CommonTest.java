@@ -1562,6 +1562,7 @@ public class CommonTest {
 
         ArrayBlockingQueue arrayBlockingQueue;
         LinkedBlockingQueue linkedBlockingQueue;
+        PriorityQueue priorityQueue;
 
         final BigDecimal bigDecimal = new BigDecimal(0.1);
         log.info("bigDecimal={}", bigDecimal);
