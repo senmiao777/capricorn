@@ -27,6 +27,13 @@ public class RemoteControl {
         command.execute();
     }
 
+    /**
+     * 开空调
+     */
+    public void openAirconditioner() {
+        command.execute();
+    }
+
     public Command getCommand() {
         return command;
     }

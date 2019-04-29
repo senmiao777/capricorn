@@ -39,6 +39,9 @@ public class DesignPatternTest {
 
         control.setCommand(parlourLightOffCommand);
         control.closeParlourLight();
+
+        control.setCommand(new AirconditionerOnCommand(new Airconditioner()));
+        control.openAirconditioner();
     }
 
     /**

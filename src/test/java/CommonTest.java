@@ -1504,6 +1504,9 @@ public class CommonTest {
         if (FAIL.equals(test)) {
             log.info("testString2 FAIL in ");
         }
+
+        String s = "-9999999";
+        log.info("s={}",s.contains("999999"));
     }
 
     @Test
