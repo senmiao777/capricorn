@@ -12,6 +12,9 @@ package com.frank.designpattern.command;
  */
 public class ParlourLightOnCommand implements Command {
 
+    /**
+     * 命令的接收者（执行者）
+     */
     Light light;
 
     public ParlourLightOnCommand(Light light) {

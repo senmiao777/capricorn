@@ -1,6 +1,7 @@
 import com.frank.designpattern.adapter.Adapter;
 import com.frank.designpattern.adapter.ConcreteTarget;
 import com.frank.designpattern.adapter.Target;
+import com.frank.designpattern.command.*;
 import com.frank.designpattern.decorator.*;
 import com.frank.designpattern.facade.Facade;
 import com.frank.designpattern.observer.*;
@@ -24,6 +25,21 @@ import java.io.FilterInputStream;
  */
 @Slf4j
 public class DesignPatternTest {
+
+
+    @Test
+    public void testCommand(){
+        RemoteControl control = new RemoteControl();
+        final Light parlourLight = new ParlourLight();
+        final Command parlourLightOnCommand = new ParlourLightOnCommand(parlourLight);
+        control.setCommand(parlourLightOnCommand);
+        control.openParlourLight();
+
+        final ParlourLightOffCommand parlourLightOffCommand = new ParlourLightOffCommand(parlourLight);
+
+        control.setCommand(parlourLightOffCommand);
+        control.closeParlourLight();
+    }
 
     /**
      * 策略模式
