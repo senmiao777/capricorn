@@ -10,6 +10,7 @@ import com.frank.other.Node;
 import com.frank.other.SingleTon;
 import com.frank.repository.mysql.IncomeStatementRepository;
 import com.frank.util.GenerateUtil;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -34,7 +35,10 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.annotation.Rollback;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.ByteBuffer;
@@ -1508,6 +1512,21 @@ public class CommonTest {
         Map<String, Boolean> map = Maps.newHashMap();
         map.put("sendMessage", false);
         log.info("map={}", JSON.toJSONString(map));
+
+        log.info("nano1 ={}", LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli());
+        log.info("nano2 ={}", new Date().getTime());
+
+
+        Map<String, Object> data;
+        List<Map<String, Object>> list = new ArrayList<>();
+        data = ImmutableMap.of("ledgerNo", "1009", "divideValue", BigDecimal.valueOf(123));
+        list.add(data);
+        data = ImmutableMap.of("ledgerNo", "54", "divideValue", BigDecimal.valueOf(456));
+        list.add(data);
+
+        log.info("众邦提前结清divideParam={}", JSON.toJSONString(list));
+
+
     }
 
     @Test
