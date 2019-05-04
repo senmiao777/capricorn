@@ -28,7 +28,7 @@ public class DesignPatternTest {
 
 
     @Test
-    public void testCommand(){
+    public void testCommand() {
         RemoteControl control = new RemoteControl();
         final Light parlourLight = new ParlourLight();
         final Command parlourLightOnCommand = new ParlourLightOnCommand(parlourLight);
@@ -40,7 +40,7 @@ public class DesignPatternTest {
         control.setCommand(parlourLightOffCommand);
         control.closeParlourLight();
 
-        control.setCommand(new AirconditionerOnCommand(new Airconditioner()));
+        control.setCommand(new AirconditionerOnCommand(new Airconditioner("美的")));
         control.openAirconditioner();
     }
 
@@ -69,10 +69,10 @@ public class DesignPatternTest {
 
     @Test
     public void testFacade() {
-        Facade f = new Facade();
-        f.run();
-
-        f.targetOperation();
+        Airconditioner airconditioner = new Airconditioner("格力");
+        Light light = new ParlourLight();
+        Facade facade = new Facade(light, airconditioner);
+        facade.open();
     }
 
     @Test
@@ -103,7 +103,7 @@ public class DesignPatternTest {
     }
 
     @Test
-    public void decorator(){
+    public void decorator() {
         Beverage tea = new Tea();
         tea = new Sugar(tea);
         tea = new Milk(tea);
