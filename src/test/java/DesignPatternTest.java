@@ -13,11 +13,14 @@ import com.frank.designpattern.template.Ford;
 import com.frank.designpattern.template.Hummer;
 import com.frank.designpattern.template.MotorVehicle;
 import lombok.extern.slf4j.Slf4j;
+import ognl.EnumerationIterator;
 import org.junit.Test;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.FilterInputStream;
+import java.util.Enumeration;
+import java.util.Vector;
 
 /**
  * @author frank
@@ -83,6 +86,13 @@ public class DesignPatternTest {
 
         Target t2 = new ConcreteTarget();
         t2.targetOperation();
+
+        Vector vector = new Vector();
+        Enumeration elements = vector.elements();
+        /**
+         * EnumerationIterator作为一个适配器，使Enumeration具有Iterator的遍历方法
+         */
+        EnumerationIterator enumerationIterator = new EnumerationIterator(elements);
     }
 
 

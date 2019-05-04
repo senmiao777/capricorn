@@ -13,9 +13,15 @@ package com.frank.designpattern.adapter;
  * <p>
  * 使用场景：
  * 需要修改一个已经在生产中使用的接口时
- *
- *
+ * <p>
+ * 生产中经典的例子就是对枚举遍历的适配
+ * Vector vector = new Vector();
+ * Enumeration elements = vector.elements();
+ * EnumerationIterator enumerationIterator=new EnumerationIterator(elements);
+ * <p>
+ * EnumerationIterator作为一个适配器，使Enumeration具有Iterator的遍历方法
  */
+
 public class Adapter implements Target {
 
     /**
