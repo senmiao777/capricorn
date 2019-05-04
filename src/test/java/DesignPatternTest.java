@@ -1,3 +1,4 @@
+import com.frank.designpattern.adapter.Adaptee;
 import com.frank.designpattern.adapter.Adapter;
 import com.frank.designpattern.adapter.ConcreteTarget;
 import com.frank.designpattern.adapter.Target;
@@ -77,7 +78,7 @@ public class DesignPatternTest {
 
     @Test
     public void testAdapter() {
-        Target t = new Adapter();
+        Target t = new Adapter(new Adaptee());
         t.targetOperation();
 
         Target t2 = new ConcreteTarget();
