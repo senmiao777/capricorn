@@ -34,6 +34,16 @@ public class RemoteControl {
         command.execute();
     }
 
+
+    /**
+     * 开空调，热水器，客厅灯。。。
+     * 宏命令
+     */
+    public void arriveHome() {
+        command.execute();
+    }
+
+
     public Command getCommand() {
         return command;
     }
