@@ -20,6 +20,7 @@ package com.frank.designpattern.adapter;
  * EnumerationIterator enumerationIterator=new EnumerationIterator(elements);
  * <p>
  * EnumerationIterator作为一个适配器，使Enumeration具有Iterator的遍历方法
+ * InputStreamReader作为一个适配器，实现了字节流到字符流的转换。
  */
 
 public class Adapter implements Target {

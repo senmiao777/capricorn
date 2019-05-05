@@ -16,9 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import ognl.EnumerationIterator;
 import org.junit.Test;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.FilterInputStream;
+import java.io.*;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -93,6 +91,13 @@ public class DesignPatternTest {
          * EnumerationIterator作为一个适配器，使Enumeration具有Iterator的遍历方法
          */
         EnumerationIterator enumerationIterator = new EnumerationIterator(elements);
+
+        try {
+            final InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream("path"));
+        } catch(Exception e){
+    
+           
+        }
     }
 
 
