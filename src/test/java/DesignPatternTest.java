@@ -92,8 +92,14 @@ public class DesignPatternTest {
          */
         EnumerationIterator enumerationIterator = new EnumerationIterator(elements);
 
+        String path = "D://test/123.txt";
         try {
-            final InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream("path"));
+            final InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(path));
+
+            log.info("inputStreamReader.read()={}",inputStreamReader.read());
+
+            final FileReader fileReader = new FileReader(path);
+            log.info("fileReader.read()={}",fileReader.read());
         } catch(Exception e){
     
            
