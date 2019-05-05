@@ -1,3 +1,4 @@
+import com.frank.designpattern.adapter.Adaptee;
 import com.frank.designpattern.adapter.Adapter;
 import com.frank.designpattern.adapter.ConcreteTarget;
 import com.frank.designpattern.adapter.Target;
@@ -12,11 +13,14 @@ import com.frank.designpattern.template.Ford;
 import com.frank.designpattern.template.Hummer;
 import com.frank.designpattern.template.MotorVehicle;
 import lombok.extern.slf4j.Slf4j;
+import ognl.EnumerationIterator;
 import org.junit.Test;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.FilterInputStream;
+import java.util.Enumeration;
+import java.util.Vector;
 
 /**
  * @author frank
@@ -28,7 +32,7 @@ public class DesignPatternTest {
 
 
     @Test
-    public void testCommand(){
+    public void testCommand() {
         RemoteControl control = new RemoteControl();
         final Light parlourLight = new ParlourLight();
         final Command parlourLightOnCommand = new ParlourLightOnCommand(parlourLight);
@@ -40,7 +44,7 @@ public class DesignPatternTest {
         control.setCommand(parlourLightOffCommand);
         control.closeParlourLight();
 
-        control.setCommand(new AirconditionerOnCommand(new Airconditioner()));
+        control.setCommand(new AirconditionerOnCommand(new Airconditioner("美的")));
         control.openAirconditioner();
     }
 
@@ -69,19 +73,26 @@ public class DesignPatternTest {
 
     @Test
     public void testFacade() {
-        Facade f = new Facade();
-        f.run();
-
-        f.targetOperation();
+        Airconditioner airconditioner = new Airconditioner("格力");
+        Light light = new ParlourLight();
+        Facade facade = new Facade(light, airconditioner);
+        facade.open();
     }
 
     @Test
     public void testAdapter() {
-        Target t = new Adapter();
+        Target t = new Adapter(new Adaptee());
         t.targetOperation();
 
         Target t2 = new ConcreteTarget();
         t2.targetOperation();
+
+        Vector vector = new Vector();
+        Enumeration elements = vector.elements();
+        /**
+         * EnumerationIterator作为一个适配器，使Enumeration具有Iterator的遍历方法
+         */
+        EnumerationIterator enumerationIterator = new EnumerationIterator(elements);
     }
 
 
@@ -103,7 +114,7 @@ public class DesignPatternTest {
     }
 
     @Test
-    public void decorator(){
+    public void decorator() {
         Beverage tea = new Tea();
         tea = new Sugar(tea);
         tea = new Milk(tea);
