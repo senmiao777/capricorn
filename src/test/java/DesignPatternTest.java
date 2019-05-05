@@ -136,10 +136,22 @@ public class DesignPatternTest {
         coffe = new Milk(coffe);
         coffe = new Whip(coffe);
         log.info("coffe cost={}", coffe.cost());
-
+        String path = "D://test/123.txt";
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream("test".getBytes());
         try {
             FilterInputStream filterInputStream = new BufferedInputStream(byteArrayInputStream);
+
+            final BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(path));
+            log.info("BufferedInputStream支持mark和reset,mark={}",bufferedInputStream.markSupported());
+            bufferedInputStream.mark(0);
+            final char read = (char)bufferedInputStream.read();
+            log.info("read={}",read);
+            bufferedInputStream.reset();
+
+            bufferedInputStream.mark(0);
+            final char read2 = (char)bufferedInputStream.read();
+            log.info("read2={}",read2);
+            //ByteArrayInputStream
         } catch (Exception e) {
             e.printStackTrace();
         }
