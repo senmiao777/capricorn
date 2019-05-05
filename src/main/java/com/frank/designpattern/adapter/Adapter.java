@@ -14,12 +14,14 @@ package com.frank.designpattern.adapter;
  * 使用场景：
  * 需要修改一个已经在生产中使用的接口时
  * <p>
- * 生产中经典的例子就是对枚举遍历的适配
+ * 生产中的例子就是对枚举遍历的适配
  * Vector vector = new Vector();
  * Enumeration elements = vector.elements();
  * EnumerationIterator enumerationIterator=new EnumerationIterator(elements);
  * <p>
  * EnumerationIterator作为一个适配器，使Enumeration具有Iterator的遍历方法
+ *
+ * 生产中经典的例子就是字节流到字符流的适配
  * InputStreamReader作为一个适配器，实现了字节流到字符流的转换。
  *
  */
