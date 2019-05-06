@@ -15,6 +15,9 @@ import com.frank.designpattern.template.MotorVehicle;
 import lombok.extern.slf4j.Slf4j;
 import ognl.EnumerationIterator;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import java.io.*;
 import java.util.Enumeration;
@@ -75,6 +78,12 @@ public class DesignPatternTest {
         Light light = new ParlourLight();
         Facade facade = new Facade(light, airconditioner);
         facade.open();
+
+        //搜索CLASSPATH路径，以classpath路径下的bean.xml、service.xml文件创建applicationContext
+        ApplicationContext ctx = new ClassPathXmlApplicationContext(new String[]{"bean.xml", "service.xml"});
+
+        //以指定路径下的bean.xml、service.xml文件创建applicationContext
+        ApplicationContext ctx1 = new FileSystemXmlApplicationContext(new String[]{"bean.xml", "service.xml"});
     }
 
     @Test
@@ -96,13 +105,13 @@ public class DesignPatternTest {
         try {
             final InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(path));
 
-            log.info("inputStreamReader.read()={}",inputStreamReader.read());
+            log.info("inputStreamReader.read()={}", inputStreamReader.read());
 
             final FileReader fileReader = new FileReader(path);
-            log.info("fileReader.read()={}",fileReader.read());
-        } catch(Exception e){
-    
-           
+            log.info("fileReader.read()={}", fileReader.read());
+        } catch (Exception e) {
+
+
         }
     }
 
@@ -142,15 +151,15 @@ public class DesignPatternTest {
             FilterInputStream filterInputStream = new BufferedInputStream(byteArrayInputStream);
 
             final BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(path));
-            log.info("BufferedInputStream支持mark和reset,mark={}",bufferedInputStream.markSupported());
+            log.info("BufferedInputStream支持mark和reset,mark={}", bufferedInputStream.markSupported());
             bufferedInputStream.mark(0);
-            final char read = (char)bufferedInputStream.read();
-            log.info("read={}",read);
+            final char read = (char) bufferedInputStream.read();
+            log.info("read={}", read);
             bufferedInputStream.reset();
 
             bufferedInputStream.mark(0);
-            final char read2 = (char)bufferedInputStream.read();
-            log.info("read2={}",read2);
+            final char read2 = (char) bufferedInputStream.read();
+            log.info("read2={}", read2);
             //ByteArrayInputStream
         } catch (Exception e) {
             e.printStackTrace();
