@@ -5,16 +5,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import java.util.concurrent.CompletionService;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 
 @Configuration
 public class ExecutorConfig {
 
     /**
      * 多线程池
+     * ThreadPoolTaskExecutor 和 ThreadPoolExecutor什么区别？
+     * ThreadPoolTaskExecutor是sping实现的线程池，比ThreadPoolExecutor功能多一点（比如定时调度功能），类似一个装饰器
+     *
      * @return
      */
     @Bean(name = "testTaskPoolExecutor")
@@ -32,10 +32,27 @@ public class ExecutorConfig {
         return executor;
     }
 
+
+    @Bean(name = "mailPoolExecutor")
+    public Executor mailPoolExecutor() {
+        final LinkedBlockingQueue<Runnable> queue = new LinkedBlockingQueue<>(100);
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 10, 1L, TimeUnit.SECONDS, queue);
+        executor.setRejectedExecutionHandler(new RejectedExecutionHandler() {
+            @Override
+            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+                /**
+                 * 当线程池满了的时候，自定义处理方式
+                 */
+            }
+        });
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        return executor;
+    }
+
     @Bean(name = "completionService")
     public CompletionService CompletionService() {
         return new ExecutorCompletionService(testTaskPoolExecutor());
     }
 
-   // CompletionService<Integer> completionService = new ExecutorCompletionService<Integer>(executorService);
+    // CompletionService<Integer> completionService = new ExecutorCompletionService<Integer>(executorService);
 }
