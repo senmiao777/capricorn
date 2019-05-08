@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
  * @version 1.0
  * @date 2019/3/3 0003 下午 6:44
  * <p>
+ * 调用者抽象类，即上下文对象。
  * 调用者抽象类持有策略接口的引用，即抽象类持有各种策略的实例（接口），比如飞行策略，游泳策略，计算策略，下载策略等等。
  * 在子类进行具体策略实例的初始化，这块是硬编码的，在子类知道具体用哪类策略的哪个实例。
  * 比如用飞行策略（fly）的火箭飞行实例（rocket）。
@@ -17,6 +18,9 @@ import org.springframework.stereotype.Component;
  * <p>
  * 策略模式的优点：
  * 1、调用者和具体策略的实现解耦，策略可以独立变化不会影响调用者
+ * <p>
+ * <p>
+ * <p>
  */
 @Slf4j
 @Component

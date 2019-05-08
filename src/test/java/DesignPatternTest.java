@@ -6,9 +6,9 @@ import com.frank.designpattern.command.*;
 import com.frank.designpattern.decorator.*;
 import com.frank.designpattern.facade.Facade;
 import com.frank.designpattern.observer.*;
-import com.frank.designpattern.strategy.MoneyCarrier;
-import com.frank.designpattern.strategy.Person;
-import com.frank.designpattern.strategy.SecurityGuard;
+import com.frank.designpattern.observer.Police;
+import com.frank.designpattern.observer.Soldier;
+import com.frank.designpattern.strategy.*;
 import com.frank.designpattern.template.Ford;
 import com.frank.designpattern.template.Hummer;
 import com.frank.designpattern.template.MotorVehicle;
@@ -70,6 +70,16 @@ public class DesignPatternTest {
         Person securityGuard = new SecurityGuard();
         securityGuard.eat();
         securityGuard.fight();
+
+        /**
+         * 策略模式的另一种实现
+         * 调用类对象不变，设置不同的策略
+         */
+        ConcretePerson police2 = new ConcretePerson(new Pistol());
+        police2.strategyMethod();
+
+        ConcretePerson police3 = new ConcretePerson(new MachineGun());
+        police3.strategyMethod();
     }
 
     @Test
