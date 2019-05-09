@@ -94,6 +94,7 @@ public class DesignPatternTest {
 
         //以指定路径下的bean.xml、service.xml文件创建applicationContext
         ApplicationContext ctx1 = new FileSystemXmlApplicationContext(new String[]{"bean.xml", "service.xml"});
+        ctx.getApplicationName();
     }
 
     @Test

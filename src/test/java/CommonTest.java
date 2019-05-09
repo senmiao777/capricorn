@@ -198,6 +198,19 @@ public class CommonTest {
 
         hello(b);
 
+        log.info("stopService={}",stopService());
+
+
+    }
+
+    private boolean stopService() {
+        final LocalDateTime now = LocalDateTime.now();
+        final LocalDateTime latest = LocalDateTime.now().withHour(22).withMinute(55);
+        final LocalDateTime earliest = LocalDateTime.now().withHour(13).withMinute(0);
+        if (now.isAfter(latest) || now.isBefore(earliest)) {
+            return true;
+        }
+        return false;
     }
 
     private void hello(Serializable param) {
