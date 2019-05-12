@@ -3,7 +3,7 @@ import com.frank.interceptor.LogBeforeAdvice;
 import com.frank.interceptor.TimeAfterAdvice;
 import com.frank.interceptor.TimeBeforeAdvice;
 import com.frank.designpattern.proxy.CglibProxy;
-import com.frank.designpattern.proxy.DynamicProxy;
+import com.frank.designpattern.proxy.MyDynamicInvocationHandler;
 import com.frank.designpattern.proxy.DynamicProxy2;
 import com.frank.designpattern.proxy.MyProxyFactory;
 import com.frank.service.DemoService;
@@ -144,7 +144,7 @@ public class ProxyTest {
         /**
          * 下边的两行代码在DynamicProxy2里做了封装，看起来更简洁明了
          */
-        InvocationHandler invocationHandler = new DynamicProxy(serviceImpl);
+        InvocationHandler invocationHandler = new MyDynamicInvocationHandler(serviceImpl);
         // 抽象角色：真实对象和代理对象的共同接口
         DemoService service = (DemoService) Proxy.newProxyInstance(cls.getClassLoader(), cls.getInterfaces(), invocationHandler);
         service.call();
