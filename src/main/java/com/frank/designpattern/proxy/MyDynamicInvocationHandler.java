@@ -15,6 +15,8 @@ import java.lang.reflect.Method;
  * 你当然可以把该class的实例当作这些interface中的任何一个来用。
  * 当然啦，这个DynamicProxy其实就是一个Proxy， 它不会替你作实质性的工作，在生成它的实例时你必须提供一个handler，由它接管实际的工作。
  * <p>
+ * 调用过程 proxy -> handler -> real subject
+ * <p>
  * <p>
  * 代理模式和装饰器模式的区别：
  * 装饰器模式：在不改变接口的前提下，动态扩展对象的功能，在不使用创造更多子类的情况下，将对象的功能加以扩展。
@@ -41,22 +43,25 @@ import java.lang.reflect.Method;
  * （spring的动态代理只能为接口创建代理实例，从Proxy.newProxyInstance的第二个参数就能看出来）
  */
 @Slf4j
-public class DynamicProxy implements InvocationHandler {
+public class MyDynamicInvocationHandler implements InvocationHandler {
     //AbstractAutoProxyCreator
 
-    private Object sub;
+    private Object subject;
 
-    public DynamicProxy() {
+    public MyDynamicInvocationHandler() {
     }
 
-    public DynamicProxy(Object obj) {
-        sub = obj;
+    public MyDynamicInvocationHandler(Object obj) {
+        subject = obj;
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         before(method, args);
-        method.invoke(sub, args);
+        /**
+         * 被调用的方法.invoke(真正的调用方法的对象,方法参数);
+         */
+        method.invoke(subject, args);
         after(method, args);
         return null;
     }

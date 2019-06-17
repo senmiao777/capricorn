@@ -8,8 +8,8 @@ public class MyProxyFactory {
         return new DynamicProxy2();
     }
 
-    public static DynamicProxy createProxy() {
-        return new DynamicProxy();
+    public static MyDynamicInvocationHandler createProxy() {
+        return new MyDynamicInvocationHandler();
     }
 
     public static CglibProxy cresteCglibProxy() {
