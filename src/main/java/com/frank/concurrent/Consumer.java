@@ -32,6 +32,17 @@ public class Consumer implements Runnable {
      * 3. 队列大小初始化方式不同
      * ArrayBlockingQueue实现的队列中必须指定队列的大小；
      * LinkedBlockingQueue实现的队列中可以不指定队列的大小，但是默认是Integer.MAX_VALUE
+     *
+     * LinkedBlockingQueue原理
+     *
+     * 存取元素的时候都用了ReentrantLock来进行加锁。
+     * 存取元素的时候都会判断是否需要改变Condition。
+     * 存元素根据判断条件调用notempty.signal, notfull.await.
+     * 取元素根据判断条件调用notfull.signal,notempty.await
+     *
+     * 那ReentrantLock又是什么原理呢？
+     *
+     *
      */
     private BlockingQueue<String> queue;
 
