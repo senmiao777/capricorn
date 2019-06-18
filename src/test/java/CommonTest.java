@@ -2,8 +2,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.User;
-import com.frank.enums.Common;
-import com.frank.exception.BizException;
 import com.frank.exception.ResubmitException;
 import com.frank.model.JsonResult;
 import com.frank.other.Node;
@@ -21,7 +19,6 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
@@ -198,7 +195,7 @@ public class CommonTest {
 
         hello(b);
 
-        log.info("stopService={}",stopService());
+        log.info("stopService={}", stopService());
 
 
     }
@@ -282,14 +279,32 @@ public class CommonTest {
         User u = User.generateUser();
         u.setAge(123);
         u.setUserName("ceshi1234");
-        try {
-            if (u.getAge() == 123) {
-                throw new BizException(Common.REQUEST_AT);
-            }
-        } catch (BizException e) {
-            log.info("code={},errorMsg={},e={}", e.getCode(), e.getMessage(), ExceptionUtils.getStackTrace(e));
-            e.printStackTrace();
-        }
+        final User user1 = User.generateUser();
+        user1.setUserName("张三1");
+        final User user2 = User.generateUser();
+        final User user3 = User.generateUser();
+
+        List<User> userList = new ArrayList<>(10);
+        userList.add(user1);
+        userList.add(user2);
+        userList.add(user3);
+
+        log.info("11 userList={}", userList);
+
+        final User user4 = userList.get(0);
+        user4.setUserName(user4.getUserName().concat("修改张三"));
+
+        log.info("22 userList={}", userList);
+
+
+//        try {
+//            if (u.getAge() == 123) {
+//                throw new BizException(Common.REQUEST_AT);
+//            }
+//        } catch (BizException e) {
+//            log.info("code={},errorMsg={},e={}", e.getCode(), e.getMessage(), ExceptionUtils.getStackTrace(e));
+//            e.printStackTrace();
+//        }
 
         final User user = Optional.ofNullable(u1).orElse(u);
         log.info("user={}", user);
@@ -1509,6 +1524,14 @@ public class CommonTest {
 
     @Test
     public void testString2() {
+
+        LocalDate nowLocalDate = LocalDate.now();
+        if (nowLocalDate.getMonth() == Month.JUNE && nowLocalDate.getDayOfMonth() == 17) {
+            log.info("getMonth true");
+        } else {
+            log.info("getMonth false");
+        }
+
         String test = PASS;
         if (PASS.equals(test)) {
             log.info("testString2 PASS in ");
@@ -1519,7 +1542,7 @@ public class CommonTest {
         }
 
         String s = "-9999999";
-        log.info("s={}",s.contains("999999"));
+        log.info("s={}", s.contains("999999"));
     }
 
     @Test
