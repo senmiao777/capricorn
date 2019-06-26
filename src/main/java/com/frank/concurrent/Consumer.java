@@ -32,17 +32,21 @@ public class Consumer implements Runnable {
      * 3. 队列大小初始化方式不同
      * ArrayBlockingQueue实现的队列中必须指定队列的大小；
      * LinkedBlockingQueue实现的队列中可以不指定队列的大小，但是默认是Integer.MAX_VALUE
-     *
+     * <p>
      * LinkedBlockingQueue原理
-     *
+     * <p>
      * 存取元素的时候都用了ReentrantLock来进行加锁。
      * 存取元素的时候都会判断是否需要改变Condition。
-     * 存元素根据判断条件调用notempty.signal, notfull.await.
+     * 存元素根据判断条件调用notempty.signal, notfull.await
      * 取元素根据判断条件调用notfull.signal,notempty.await
-     *
+     * <p>
      * 那ReentrantLock又是什么原理呢？
-     *
-     *
+     * <p>
+     * ReentrantLock中有个抽象的静态内部类Sync,Sync是继承了AbstractQueuedSynchronizer的，也就是大名鼎鼎的AQS.
+     * Sync是个抽象类，他有两个子类，分别是NonfairSync和FairSync.
+     * 非公平的Sync会直接进行CAS，而公平的Sync会先判断hasQueuedPredecessors，为假的话才会进行CAS
+     * <p>
+     * hasQueuedPredecessors 的逻辑是 Queries whether any threads have been waiting to acquire longer than the current thread.
      */
     private BlockingQueue<String> queue;
 
