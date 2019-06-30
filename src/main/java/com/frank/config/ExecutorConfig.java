@@ -24,6 +24,11 @@ public class ExecutorConfig {
         executor.setMaxPoolSize(10);
         //最大运行1W队列
         executor.setQueueCapacity(1000);
+        /**
+         * 最大空闲时间
+         * 超过这个时间，大于maxCorePoolSize的空闲线程将被终止
+         */
+        executor.setKeepAliveSeconds(300);
         executor.setThreadNamePrefix("testpool-task-");
         // rejection-policy：当pool已经达到max size的时候，如何处理新任务
         // 如果QueueCapacity 都爆了 ,使用主线程跑任务  CallerRunsPolicy
