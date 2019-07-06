@@ -1547,6 +1547,7 @@ public class CommonTest {
 
     @Test
     public void testNullw() {
+        final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
         Map<String, Boolean> map = Maps.newHashMap();
         map.put("sendMessage", false);
