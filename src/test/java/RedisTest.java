@@ -1,3 +1,4 @@
+import com.frank.designpattern.decorator.Beverage;
 import com.frank.entity.mysql.Benefit;
 import com.frank.entity.mysql.User;
 import com.frank.service.IDbService;
@@ -6,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -35,6 +37,16 @@ public class RedisTest {
     @Autowired
     private IDbService dbService;
 
+    @Autowired
+    @Qualifier("nothing")
+    private Beverage nothingTest;
+
+    @Test
+    public void testmachineGun() {
+
+       log.info("what={}",nothingTest.cost());
+
+    }
     @Test
     public void testt2() {
         User u1 = User.generateUser();

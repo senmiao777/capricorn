@@ -1,6 +1,7 @@
 package com.frank.designpattern.strategy;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 /**
  * @author frank
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2019/3/3 0003 下午 6:47
  */
 @Slf4j
+@Component
 public class MachineGun implements Fightable {
 
 
