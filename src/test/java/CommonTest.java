@@ -112,6 +112,69 @@ public class CommonTest {
 
 
     @Test
+    public void testRemove() {
+        List<Integer> num = new ArrayList<>();
+        num.add(0);
+        num.add(0);
+        num.add(1);
+        num.add(0);
+        num.add(0);
+        num.add(2);
+        num.add(0);
+        num.add(0);
+        num.add(3);
+        Integer integer = new Integer(0);
+
+        /**
+         * 隐式的迭代器遍历删除，会报ConcurrentModificationException
+         */
+        for (Integer i: num){
+            log.info("current ={}",i);
+            if(i ==0){
+                num.remove(integer);
+            }
+        }
+
+        /**
+         * 正向的遍历删除，存在数组元素前移，当前下标的下一个元素不会被删除的问题
+         *
+         */
+//        for(int i= 0; i < num.size();i++){
+//            if(num.get(i) == 0){
+//                num.remove(i);
+//            }
+//        }
+
+
+        /**
+         * 逆向遍历没有元素前移当前下标的下一个元素不会被删除的问题，因为当前就是最后一个元素
+         */
+        for (int i = num.size() - 1; i >= 0; i--) {
+            if (num.get(i) == 0) {
+                num.remove(i);
+            }
+        }
+
+        /**
+         * 迭代器遍历没有问题
+         */
+        Iterator<Integer> iterator = num.iterator();
+
+        while (iterator.hasNext()){
+            Integer next = iterator.next();
+            if(next == 0){
+                iterator.remove();
+            }
+        }
+
+        for (Integer i : num) {
+            log.info("current ={}", i);
+        }
+
+
+    }
+
+    @Test
     public void testNio() {
         String path = "D:/test/codeList.txt";
         try {
