@@ -110,6 +110,32 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
+    @Test
+    public void testHash() {
+        Map<String,String> map = new HashMap<>(4);
+        map.put("数学","101");
+        map.put("语文","120");
+        map.put("英语","140");
+        map.put("物理","110");
+        map.put("政治","110");
+        map.put("生物","110");
+        map.put("化学","110");
+
+        /**
+         * 937651 二进制为 11100100111010110011
+         * 682778 二进制为 10100110101100011010
+         *
+         * 828410 二进制为 11001010001111111010
+         * 828406 二进制为 11001010001111110110
+         * 8 二进制为 1000
+         */
+
+        log.info("828410 & 8 ={}",(828410 & 8));
+        log.info("682778 & 8 ={}",(682778 & 8));
+
+        log.info("1136427 & 4 ={}",(1136427 & 4));
+        log.info("937651 & 4 ={}",(937651 & 4));
+    }
 
     @Test
     public void testRemove() {
@@ -176,6 +202,8 @@ public class CommonTest {
 
     @Test
     public void testNio() {
+        HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
+        objectObjectHashMap.put("k","v");
         String path = "D:/test/codeList.txt";
         try {
             FileInputStream inputStream = new FileInputStream(path);
