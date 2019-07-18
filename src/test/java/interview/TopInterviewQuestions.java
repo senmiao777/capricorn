@@ -2,6 +2,7 @@ package interview;
 
 
 import com.frank.enums.Common;
+import com.frank.model.leetcode.ListNode;
 import com.frank.other.Node;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
@@ -17,6 +18,120 @@ import java.util.*;
 @Slf4j
 public class TopInterviewQuestions {
 
+    /**
+     * 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
+     * 输出：7 -> 0 -> 8
+     * 原因：342 + 465 = 807
+     * <p>
+     * 24356
+     * 566
+     * ->7 0 8 5678
+     */
+    @Test
+    public void testTwoAdd() {
+        ListNode six2 = new ListNode(6, null);
+        ListNode five2 = new ListNode(5, six2);
+        ListNode three = new ListNode(3, five2);
+        ListNode four = new ListNode(4, three);
+
+        ListNode two = new ListNode(2, four);
+
+
+        ListNode four2 = new ListNode(6, null);
+        ListNode six = new ListNode(6, four2);
+
+        ListNode five = new ListNode(5, six);
+
+        ListNode add = add(two, five);
+
+        log.info("add={}", add);
+    }
+
+    private ListNode add(ListNode one, ListNode another) {
+
+        int sum = 0;
+        /**
+         * 进位标志
+         */
+        boolean flag = (sum = one.getVal() + another.getVal()) >= 10 ? true : false;
+        /**
+         * 初始化第一个元素
+         */
+        ListNode head = new ListNode(flag ? sum - 10 : sum);
+        ListNode first = head;
+        one = one.getNext();
+        another = another.getNext();
+        ListNode temp;
+        while (one != null && another != null) {
+            sum = flag ? one.getVal() + another.getVal() + 1 : one.getVal() + another.getVal();
+            if (sum >= 10) {
+                sum = sum - 10;
+                flag = true;
+            } else {
+                flag = false;
+            }
+            temp = new ListNode(sum);
+            head.setNext(temp);
+            head = temp;
+
+            one = one.getNext();
+            another = another.getNext();
+        }
+
+        if (one == null) {
+            if (another == null) {
+                return first;
+            }
+
+            if (!flag) {
+                head.setNext(another);
+            }
+
+            /**
+             * 9加1进位的情况
+             */
+            while (another.getVal() == 9 && another != null) {
+                temp = new ListNode(0);
+                head.setNext(temp);
+                head = temp;
+                another = another.getNext();
+            }
+
+            if (another != null) {
+                another.setVal(another.getVal() +1);
+                head.setNext(another);
+            }
+            return first;
+        }
+
+
+        /**
+         *   2435678
+         *   564
+         *
+         *
+         *   ->7 0 8 5678
+         */
+        if (another == null) {
+            if (!flag) {
+                head.setNext(one);
+            }
+            while (flag && one.getVal() == 9 && one != null) {
+                temp = new ListNode(0);
+                head.setNext(temp);
+                head = temp;
+                one = one.getNext();
+            }
+
+            if (one != null) {
+                one.setVal(one.getVal() +1);
+                head.setNext(one);
+            }
+            return first;
+        }
+        return null;
+    }
+
 
     @Test
     public void implementIndexOf() {
@@ -29,7 +144,7 @@ public class TopInterviewQuestions {
 
     private int strStr(String haystack, String needle) {
 
-        if("".equals(needle)){
+        if ("".equals(needle)) {
             return 0;
         }
         int temp = 0;
@@ -697,7 +812,7 @@ public class TopInterviewQuestions {
         ListNode next = head;
         do {
 
-            log.info("{}->", next.val);
+            log.info("{}->", next.getVal());
             next = next.getNext();
         } while (next != null);
         log.info(Common.LOG_END.getValue());
@@ -714,30 +829,6 @@ public class TopInterviewQuestions {
         return Integer.valueOf(numberString.toString());
     }
 
-    static class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode(int val) {
-            this.val = val;
-        }
-
-        public void setVal(int val) {
-            this.val = val;
-        }
-
-        public void setNext(ListNode next) {
-            this.next = next;
-        }
-
-        public int getVal() {
-            return val;
-        }
-
-        public ListNode getNext() {
-            return next;
-        }
-    }
 
 }
 
