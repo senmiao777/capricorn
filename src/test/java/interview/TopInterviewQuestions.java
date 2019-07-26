@@ -26,6 +26,11 @@ public class TopInterviewQuestions {
      * 24356
      * 566
      * ->7 0 8 5678
+     * <p>
+     * <p>
+     * 开始的思路，判断两个链表A和B都不为空的时候，执行逻辑。然后后边得分别判断A不为空时，XX，B不为空时XX。
+     * 问题1：同样的逻辑得执行两遍，代码冗余。
+     * 2：当链表为空的时候，对值的处理很麻烦。
      */
     @Test
     public void testTwoAdd() {
@@ -41,10 +46,54 @@ public class TopInterviewQuestions {
         ListNode six = new ListNode(6, four2);
 
         ListNode five = new ListNode(5, six);
+        // ListNode add = add(two, five);
 
-        ListNode add = add(two, five);
+        ListNode one = null;//new ListNode(1, null);
 
-        log.info("add={}", add);
+        ListNode nine1 = new ListNode(9, null);
+        ListNode nine2 = new ListNode(9, nine1);
+
+
+        ListNode add = add2(one, nine2);
+
+        log.info("add2={}", add);
+    }
+
+    private ListNode add2(ListNode one, ListNode another) {
+        final ListNode one1 = one;
+        //final ListNode one1 = one;
+
+        int sum = 0;
+        int first = 0;
+        int second = 0;
+        int flag = 0;
+        ListNode head = null;
+        ListNode temp = null;
+        while (one != null || another != null) {
+            first = one == null ? 0 : one.getVal();
+            second = another == null ? 0 : another.getVal();
+
+            sum = first + second + flag;
+            ListNode n = new ListNode(sum % 10);
+            if (head == null) {
+                head = n;
+            } else {
+                temp.setNext(n);
+            }
+
+            temp = n;
+
+            flag = sum / 10;
+            one = one == null ? null : one.getNext();
+            another = another == null ? null : another.getNext();
+
+        }
+
+        if (flag == 1) {
+            temp.setNext(new ListNode(1));
+        }
+
+        return head;
     }
 
     private ListNode add(ListNode one, ListNode another) {
@@ -98,8 +147,10 @@ public class TopInterviewQuestions {
             }
 
             if (another != null) {
-                another.setVal(another.getVal() +1);
+                another.setVal(another.getVal() + 1);
                 head.setNext(another);
+            } else {
+                head.setNext(new ListNode(1));
             }
             return first;
         }
@@ -124,9 +175,12 @@ public class TopInterviewQuestions {
             }
 
             if (one != null) {
-                one.setVal(one.getVal() +1);
+                one.setVal(one.getVal() + 1);
                 head.setNext(one);
+            } else {
+                head.setNext(new ListNode(1));
             }
+
             return first;
         }
         return null;
