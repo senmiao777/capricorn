@@ -60,9 +60,6 @@ public class TopInterviewQuestions {
     }
 
     private ListNode add2(ListNode one, ListNode another) {
-        final ListNode one1 = one;
-        //final ListNode one1 = one;
-
         int sum = 0;
         int first = 0;
         int second = 0;
