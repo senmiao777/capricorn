@@ -111,9 +111,18 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
     /**
-     * == 比较的是两个引用指向的是不是同一个地址，即同一个对象
      * equals 比较的是内容
-     * String s = "XXX";是唯一不需要new 就可以创建对象的方式，它是在常量池中而不是像new出来的对象一样放在堆中
+     * == 比较的是两个引用指向的是不是同一个地址，即同一个对象
+     * 如果是具体的阿拉伯数字的比较，值相等则为true，如：
+     * int a=10 与 long b=10L 与 double c=10.0都是相同的（为true），因为他们都指向地址为10的堆。
+     * <p>
+     * <p>
+     * <p>
+     * String s = "abcd";是唯一不需要new 就可以创建对象的方式，它是在常量池中而不是像new出来的对象一样放在堆中。
+     * 即当声明这样的一个字符串后，JVM会在常量池中先查找有有没有一个值为"abcd"的对象,
+     * 如果有,就会把它赋给当前引用.即原来那个引用和现在这个引用指点向了同一对象,
+     * 如果没有,则在常量池中新创建一个"abcd".
+     * 下一次如果有String s1 = "abcd",又会将s1指向"abcd"这个对象,即以这形式声明的字符串,只要值相等,任何多个引用都指向同一对象.
      * String s = new String("XXX");这种方式创建的字符串对象不会放到串池里
      */
     @Test
@@ -133,7 +142,7 @@ public class CommonTest {
         long b = 10L;
         double c = 10.0;
 
-        log.info(" d == a {},a == b {},b == c {}", d == a, a == b, b == c);
+        log.info(" d == a {},a == b {},b == c {}, c == d {}", d == a, a == b, b == c, c == d);
 
 
     }
