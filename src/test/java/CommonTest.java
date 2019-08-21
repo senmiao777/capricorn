@@ -110,16 +110,53 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
+    /**
+     * equals 比较的是内容
+     * == 比较的是两个引用指向的是不是同一个地址，即同一个对象
+     * 如果是具体的阿拉伯数字的比较，值相等则为true，如：
+     * int a=10 与 long b=10L 与 double c=10.0都是相同的（为true），因为他们都指向地址为10的堆。
+     * <p>
+     * <p>
+     * <p>
+     * String s = "abcd";是唯一不需要new 就可以创建对象的方式，它是在常量池中而不是像new出来的对象一样放在堆中。
+     * 即当声明这样的一个字符串后，JVM会在常量池中先查找有有没有一个值为"abcd"的对象,
+     * 如果有,就会把它赋给当前引用.即原来那个引用和现在这个引用指点向了同一对象,
+     * 如果没有,则在常量池中新创建一个"abcd".
+     * 下一次如果有String s1 = "abcd",又会将s1指向"abcd"这个对象,即以这形式声明的字符串,只要值相等,任何多个引用都指向同一对象.
+     * String s = new String("XXX");这种方式创建的字符串对象不会放到串池里
+     */
+    @Test
+    public void testString4() {
+
+        String s1 = "test";
+        String s2 = new String("test");
+        log.info("s1 == s2 {}", s1 == s2);
+        log.info("s1.equals(s2)) {}", s1.equals(s2));
+
+        String s3 = "test";
+        log.info("s1 == s3 {}", s1 == s3);
+        log.info("s1.equals(s3)) {}", s1.equals(s3));
+
+        char d = 10;
+        int a = 10;
+        long b = 10L;
+        double c = 10.0;
+
+        log.info(" d == a {},a == b {},b == c {}, c == d {}", d == a, a == b, b == c, c == d);
+
+
+    }
+
     @Test
     public void testHash() {
-        Map<String,String> map = new HashMap<>(4);
-        map.put("数学","101");
-        map.put("语文","120");
-        map.put("英语","140");
-        map.put("物理","110");
-        map.put("政治","110");
-        map.put("生物","110");
-        map.put("化学","110");
+        Map<String, String> map = new HashMap<>(4);
+        map.put("数学", "101");
+        map.put("语文", "120");
+        map.put("英语", "140");
+        map.put("物理", "110");
+        map.put("政治", "110");
+        map.put("生物", "110");
+        map.put("化学", "110");
 
         /**
          * 937651 二进制为 11100100111010110011
@@ -130,11 +167,11 @@ public class CommonTest {
          * 8 二进制为 1000
          */
 
-        log.info("828410 & 8 ={}",(828410 & 8));
-        log.info("682778 & 8 ={}",(682778 & 8));
+        log.info("828410 & 8 ={}", (828410 & 8));
+        log.info("682778 & 8 ={}", (682778 & 8));
 
-        log.info("1136427 & 4 ={}",(1136427 & 4));
-        log.info("937651 & 4 ={}",(937651 & 4));
+        log.info("1136427 & 4 ={}", (1136427 & 4));
+        log.info("937651 & 4 ={}", (937651 & 4));
     }
 
     @Test
@@ -154,9 +191,9 @@ public class CommonTest {
         /**
          * 隐式的迭代器遍历删除，会报ConcurrentModificationException
          */
-        for (Integer i: num){
-            log.info("current ={}",i);
-            if(i ==0){
+        for (Integer i : num) {
+            log.info("current ={}", i);
+            if (i == 0) {
                 num.remove(integer);
             }
         }
@@ -186,9 +223,9 @@ public class CommonTest {
          */
         Iterator<Integer> iterator = num.iterator();
 
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             Integer next = iterator.next();
-            if(next == 0){
+            if (next == 0) {
                 iterator.remove();
             }
         }
@@ -203,7 +240,7 @@ public class CommonTest {
     @Test
     public void testNio() {
         HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
-        objectObjectHashMap.put("k","v");
+        objectObjectHashMap.put("k", "v");
         String path = "D:/test/codeList.txt";
         try {
             FileInputStream inputStream = new FileInputStream(path);
