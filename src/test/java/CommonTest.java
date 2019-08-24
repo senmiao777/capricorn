@@ -124,6 +124,8 @@ public class CommonTest {
      * 如果没有,则在常量池中新创建一个"abcd".
      * 下一次如果有String s1 = "abcd",又会将s1指向"abcd"这个对象,即以这形式声明的字符串,只要值相等,任何多个引用都指向同一对象.
      * String s = new String("XXX");这种方式创建的字符串对象不会放到串池里
+     *
+     * jdk1.7 之前 hotspot JVM中常量池位于方法区，而jdk1.7之后，常量池从方法区移除，移到了堆中。
      */
     @Test
     public void testString4() {
@@ -141,6 +143,8 @@ public class CommonTest {
         int a = 10;
         long b = 10L;
         double c = 10.0;
+
+        double v = d + c;
 
         log.info(" d == a {},a == b {},b == c {}, c == d {}", d == a, a == b, b == c, c == d);
 
