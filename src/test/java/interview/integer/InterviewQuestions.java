@@ -117,8 +117,9 @@ public class InterviewQuestions {
         int flag = 1;
         int result = 0;
         char current;
+        int len = s.length();
 
-        for (int i = 0; i < s.length(); i++) {
+        for (int i = 0; i < len; i++) {
 
             if (' ' == (current = s.charAt(i))) {
                 if (isFirst) {
@@ -139,7 +140,7 @@ public class InterviewQuestions {
                 } else if ('+' == current) {
                     continue;
                 } else {
-                    result = Integer.valueOf(current);
+                    result = Integer.valueOf(s.substring(i,i+1));
                 }
             } else {
                 if (!c.contains(current)) {
@@ -153,8 +154,9 @@ public class InterviewQuestions {
                 } else if (result == Integer.MAX_VALUE / 10 && (int) current > Integer.MAX_VALUE % 10) {
                     return flag * Integer.MAX_VALUE;
                 }
-                result = result * 10 + (int) current;
+                result = result * 10 + Integer.valueOf(s.substring(i,i+1));
             }
+
         }
         return flag * result;
     }

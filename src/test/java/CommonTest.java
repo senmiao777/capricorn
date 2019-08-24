@@ -1521,6 +1521,7 @@ public class CommonTest {
         map.put("2000", one);
         map.put("4000", two);
         log.info("map={}", JSON.toJSONString(map));
+        two.clear();
 
         Map<String, Set<Integer>> map2 = new HashMap<>(5);
         Set<Integer> one2 = Sets.newHashSet(1, 2, 3, 2);
