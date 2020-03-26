@@ -8,9 +8,7 @@ import com.frank.other.Node;
 import com.frank.other.SingleTon;
 import com.frank.repository.mysql.IncomeStatementRepository;
 import com.frank.util.GenerateUtil;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.RateLimiter;
 import io.netty.util.HashedWheelTimer;
@@ -1678,25 +1676,28 @@ public class CommonTest {
 
     @Test
     public void testNullw() {
-        final ExecutorService executorService = Executors.newFixedThreadPool(2);
+//        final ExecutorService executorService = Executors.newFixedThreadPool(2);
+//
+//        Map<String, Boolean> map = Maps.newHashMap();
+//        map.put("sendMessage", false);
+//        log.info("map={}", JSON.toJSONString(map));
+//
+//        log.info("nano1 ={}", LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli());
+//        log.info("nano2 ={}", new Date().getTime());
+//
+//
+//        Map<String, Object> data;
+//        List<Map<String, Object>> list = new ArrayList<>();
+//        data = ImmutableMap.of("ledgerNo", "1009", "divideValue", BigDecimal.valueOf(123));
+//        list.add(data);
+//        data = ImmutableMap.of("ledgerNo", "54", "divideValue", BigDecimal.valueOf(456));
+//        list.add(data);
+//
+//        log.info("众邦提前结清divideParam={}", JSON.toJSONString(list));
 
-        Map<String, Boolean> map = Maps.newHashMap();
-        map.put("sendMessage", false);
-        log.info("map={}", JSON.toJSONString(map));
 
-        log.info("nano1 ={}", LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli());
-        log.info("nano2 ={}", new Date().getTime());
-
-
-        Map<String, Object> data;
-        List<Map<String, Object>> list = new ArrayList<>();
-        data = ImmutableMap.of("ledgerNo", "1009", "divideValue", BigDecimal.valueOf(123));
-        list.add(data);
-        data = ImmutableMap.of("ledgerNo", "54", "divideValue", BigDecimal.valueOf(456));
-        list.add(data);
-
-        log.info("众邦提前结清divideParam={}", JSON.toJSONString(list));
-
+        final String s = Base64.getEncoder().encodeToString("3423423".getBytes());
+        log.info("s123={}", s);
 
     }
 

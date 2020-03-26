@@ -141,6 +141,8 @@ public class DesignPatternTest {
         hummer.setAlarm(true);
         hummer.run(22);
 
+        final Integer integer = Integer.valueOf("123");
+
 
     }
 
