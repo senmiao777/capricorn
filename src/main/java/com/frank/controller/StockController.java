@@ -12,14 +12,13 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -83,6 +82,13 @@ public class StockController {
         log.info("stockCode={},等待时间={}", stockCode, rateLimiter.acquire());
         Stock stock = stockRepository.findByStockCode(stockCode);
         return JsonResult.buildSuccessResult(stock);
+    }
+
+    @RequestMapping(value = "/short/{id}", method = RequestMethod.GET)
+    public void shortresource(HttpServletResponse response, @PathVariable("id") Long id) {
+        log.info("shortresource id={}", id);
+        response.setStatus(HttpStatus.FOUND.value());
+        response.addHeader("location", "https://blog.csdn.net/lsm135/article/details/54093256");
     }
 
     /**
