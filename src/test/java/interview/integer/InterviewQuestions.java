@@ -30,7 +30,7 @@ public class InterviewQuestions {
             log.info("before={}",numbers[i]);
         }
 
-        int count =5;
+        int count =7;
         wash(numbers, count);
         for (int i = 0; i < numbers.length; i++) {
             log.info("after={}",numbers[i]);
