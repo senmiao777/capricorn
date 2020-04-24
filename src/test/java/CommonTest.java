@@ -108,6 +108,27 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
+    @Test
+    public void jdk7NewFeature() {
+
+        int value = 1_000_000;
+        log.info("value={}", value);
+
+        /**
+         * 1个字节8位
+         * 2个字节16位
+         * 4个字节32位
+         * 8个字节64位
+         */
+        byte num1 = 0b00000010;
+        short num2 = 0b0000000000000111;
+        int num3 = 0b10100001010001011010000101000101;
+        long num4 = 0b0010000101000101101000010100010110100001010001011010000101000101L;
+        log.info("binaryValue num1={},num2={},num3={},num4={},", num1, num2, num3, num4);
+
+
+    }
+
     /**
      * equals 比较的是内容
      * == 比较的是两个引用指向的是不是同一个地址，即同一个对象
@@ -122,7 +143,7 @@ public class CommonTest {
      * 如果没有,则在常量池中新创建一个"abcd".
      * 下一次如果有String s1 = "abcd",又会将s1指向"abcd"这个对象,即以这形式声明的字符串,只要值相等,任何多个引用都指向同一对象.
      * String s = new String("XXX");这种方式创建的字符串对象不会放到串池里
-     *
+     * <p>
      * jdk1.7 之前 hotspot JVM中常量池位于方法区，而jdk1.7之后，常量池从方法区移除，移到了堆中。
      */
     @Test
