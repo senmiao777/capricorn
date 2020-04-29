@@ -97,9 +97,9 @@ public class InterviewQuestions {
             return members.get(0);
         }
 
-        String temp = null;
+        String temp = members.get(0);
         for (int i = 1; i < members.size(); i++) {
-            temp = longestCommonString(members.get(i - 1), members.get(i));
+            temp = longestCommonString(temp, members.get(i));
             if (temp == null) {
                 return null;
             }
