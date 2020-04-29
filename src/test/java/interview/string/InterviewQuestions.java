@@ -73,17 +73,61 @@ public class InterviewQuestions {
     public void jdk7NewFeature2() {
         String a = "abcdef";
         String a2 = "abcdg";
-        String a3 = "habecdef";
+        String a3 = "abecdef";
         String a4 = "adcdef";
         String a5 = "aecdef";
         List<String> list = Lists.newArrayList(a, a2, a3, a4, a5);
         log.info("getLongestStr={}", getLongestStr(list));
 
 
+        String a6 = "aa";
+        String a7 = "a";
+        List<String> list2 = Lists.newArrayList(a6, a7);
+        log.info("getLongestStr2={}", getLongestStr2(list2));
+
+    }
+
+
+
+    /**
+     * 垂直比较
+     * 很容易数组越界
+     *
+     * @param members
+     * @return
+     */
+    private String getLongestStr2(List<String> members) {
+
+        if (members == null | members.size() == 0) {
+            return "";
+        }
+        final int size = members.size();
+        int commonLength = 0;
+        int longestLength = members.get(0).length();
+        for (int j = 0; j < longestLength; j++) {
+            char c = members.get(0).charAt(j);
+            int count = 1;
+            int i = 1;
+            while (i < size && members.get(i).length() > j) {
+                if (c != members.get(i).charAt(j)) {
+                    return members.get(0).substring(0, commonLength);
+                }
+                count++;
+                i++;
+            }
+
+            if (count == size) {
+                commonLength++;
+            }
+        }
+
+
+        return members.get(0).substring(0, commonLength);
     }
 
     /**
      * 获取集合中所有字符串的最长公共字符串
+     * 水平比较
      *
      * @param members
      * @return
