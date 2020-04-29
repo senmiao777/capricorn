@@ -1,8 +1,12 @@
 package interview.string;
 
 
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * @author frank
@@ -65,6 +69,73 @@ public class InterviewQuestions {
         return 0;
     }
 
+    @Test
+    public void jdk7NewFeature2() {
+        String a = "abcdef";
+        String a2 = "abcdg";
+        String a3 = "habecdef";
+        String a4 = "adcdef";
+        String a5 = "aecdef";
+        List<String> list = Lists.newArrayList(a, a2, a3, a4, a5);
+        log.info("getLongestStr={}", getLongestStr(list));
+
+
+    }
+
+    /**
+     * 获取集合中所有字符串的最长公共字符串
+     *
+     * @param members
+     * @return
+     */
+    private String getLongestStr(List<String> members) {
+        if (CollectionUtils.isEmpty(members)) {
+            throw new RuntimeException("数组为空");
+        }
+
+        if (members.size() == 1) {
+            return members.get(0);
+        }
+
+        String temp = null;
+        for (int i = 1; i < members.size(); i++) {
+            temp = longestCommonString(members.get(i - 1), members.get(i));
+            if (temp == null) {
+                return null;
+            }
+        }
+        return temp;
+    }
+
+
+    /**
+     * 获取两个字符串的最长公共字符
+     *
+     * @param first
+     * @param second
+     * @return
+     */
+    private String longestCommonString(String first, String second) {
+        if (first == null || second == null) {
+            return null;
+        }
+        /**
+         * 获取短字符串的长度
+         */
+        int length = first.length() > second.length() ? second.length() : first.length();
+        int commonLength = 0;
+        for (int i = 0; i < length; i++) {
+            if (first.charAt(i) == second.charAt(i)) {
+                commonLength++;
+            } else {
+                break;
+            }
+        }
+        if (commonLength == 0) {
+            return null;
+        }
+        return first.substring(0, commonLength);
+    }
 
 }
 
