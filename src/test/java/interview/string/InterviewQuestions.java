@@ -36,7 +36,7 @@ public class InterviewQuestions {
         }
         nums[4] = 5;
         nums[6] = 7;
-        final int repeatNumber = findRepeatNumber(nums);
+        final int repeatNumber = findRepeatNumber2(nums);
         log.info("repeatNumber={}", repeatNumber);
     }
 
@@ -60,6 +60,28 @@ public class InterviewQuestions {
                 return num;
             } else {
                 numCount.put(num, num);
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 建立一个新的数组，用数组存数据，就好像建立索引
+     *
+     * @param nums
+     * @return
+     */
+    public int findRepeatNumber2(int[] nums) {
+
+        int[] newNumbers = new int[nums.length];
+        /**
+         * 遍历数组
+         */
+        for (int num : nums) {
+            if (newNumbers[num] == -1) {
+                return num;
+            } else {
+                newNumbers[num] = -1;
             }
         }
         return -1;
