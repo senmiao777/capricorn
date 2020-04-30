@@ -37,7 +37,7 @@ public class InterviewQuestions {
         nums[4] = 5;
         nums[6] = 7;
         final int repeatNumber = findRepeatNumber(nums);
-        log.info("repeatNumber={}",repeatNumber);
+        log.info("repeatNumber={}", repeatNumber);
     }
 
     /**
@@ -51,14 +51,16 @@ public class InterviewQuestions {
      */
     public int findRepeatNumber(int[] nums) {
         Map<Integer, Integer> numCount = new HashMap<>(nums.length * 2);
-        for (int i = 0; i < nums.length; i++) {
 
-            if (numCount.containsKey(nums[i])) {
-                return nums[i];
+        /**
+         * 遍历数组
+         */
+        for (int num : nums) {
+            if (numCount.containsKey(num)) {
+                return num;
             } else {
-                numCount.put(nums[i], nums[i]);
+                numCount.put(num, num);
             }
-
         }
         return -1;
     }
