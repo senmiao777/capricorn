@@ -18,6 +18,25 @@ import java.util.Map;
 @Slf4j
 public class InterviewQuestions {
 
+
+    /**
+     *
+     */
+    @Test
+    public void testUnduplicate() {
+        String s = "abcabcbb";
+
+    }
+
+    private int longestUnduplicateNumber(String s) {
+        if (s == null || s.equals("")) {
+            return 0;
+        }
+
+
+        return 0;
+    }
+
     /**
      * 在一个长度为 n 的数组 nums 里的所有数字都在 0～n-1 的范围内。
      * 数组中某些数字是重复的，但不知道有几个数字重复了，也不知道每个数字重复了几次。
