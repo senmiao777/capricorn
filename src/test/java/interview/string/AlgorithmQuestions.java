@@ -16,15 +16,17 @@ import java.util.Map;
  * @date 2019年7月29日18:32:57
  */
 @Slf4j
-public class InterviewQuestions {
+public class AlgorithmQuestions {
 
 
     /**
-     *
+     * 获取最长不重复字符个数
      */
     @Test
     public void testUnduplicate() {
-        String s = "abcabcbb";
+        String s = "abcadbcbb";
+        final int i = longestUnduplicateNumber(s);
+        log.info("longestUnduplicateNumber is {}", i);
 
     }
 
@@ -33,9 +35,28 @@ public class InterviewQuestions {
             return 0;
         }
 
+        final int length = s.length();
 
-        return 0;
+        int index = 0;
+        int result = 0;
+        Map<Character, Integer> position = new HashMap(length);
+        for (int i = 0; i < length; i++) {
+
+            /**
+             * 到某个位置重复了，说明“之前没重复”
+             * 有重复的，就把这个位置跳过去，从下一位置开始算
+             */
+            if (position.containsKey(s.charAt(i))) {
+                index = Math.max(index, position.get(s.charAt(i)) + 1);
+            }
+            position.put(s.charAt(i), i);
+            result = Math.max(result, i - index + 1);
+        }
+
+
+        return result;
     }
+
 
     /**
      * 在一个长度为 n 的数组 nums 里的所有数字都在 0～n-1 的范围内。
