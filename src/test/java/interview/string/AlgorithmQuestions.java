@@ -18,7 +18,80 @@ import java.util.Map;
 @Slf4j
 public class AlgorithmQuestions {
 
+    /**
+     * 判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。
+     */
+    @Test
+    public void testCycle() {
 
+        long a = 21120L;
+        log.info("palindrome ={}", palindrome(a));
+        int b = 21120;
+        log.info("palindrome2 ={}", palindrome2(b));
+    }
+
+    /**
+     * palindrome
+     * 英[ˈpælɪndrəʊm]
+     * 1、怎么知道一个数字有多少位？
+     * 了避免数字反转可能导致的溢出问题，考虑只反转数字的一半？
+     * 毕竟，如果该数字是回文，其后半部分反转后应该与原始数字的前半部分相同。
+     * <p>
+     * 例如，输入 1221，我们可以将数字 “1221” 的后半部分从 “21” 反转为 “12”，并将其与前半部分 “12” 进行比较，因为二者相同，我们得知数字 1221 是回文。
+     * <p>
+     * 2、怎么知道数字到了一半了？
+     * 这个是关键，如果，“后半部分”的数字，大于等于“前半部分”的数字，那就说明到了一半了
+     * 链接：https://leetcode-cn.com/problems/palindrome-number/solution/hui-wen-shu-by-leetcode/
+     */
+    private boolean palindrome(long num) {
+        if (num < 0) {
+            return false;
+        }
+
+        long number = num;
+        long reverse = 0L;
+        while (number / 10 > 0) {
+            reverse = reverse * 10 + number % 10;
+            number /= 10;
+        }
+        reverse = reverse * 10 + number % 10;
+        return reverse == num;
+    }
+
+    private boolean palindrome2(int num) {
+        if (num < 0) {
+            return false;
+        }
+        if (num < 10) {
+            return true;
+        }
+        /**
+         * 2200
+         * 21120
+         * reverse =  0    2     21
+         * num     2112    211   21
+         * ->只要一个大于10的数字的最后一位是0，那肯定不是回文数了
+         */
+        if (num % 10 == 0) {
+            return false;
+        }
+
+        int reverse = 0;
+        while (reverse < num) {
+            reverse = reverse * 10 + num % 10;
+
+            num /= 10;
+        }
+
+        if (reverse == num) {
+            return true;
+        }
+
+        /**
+         * 原值是12321,reverse = 123,num =12这种情况
+         */
+        return num != 0 && reverse == num * 10 + reverse % 10;
+    }
 
     /**
      * Implement atoi which converts a string to an integer.
@@ -62,7 +135,7 @@ public class AlgorithmQuestions {
      * Output: -2147483648
      * Explanation: The number "-91283472332" is out of the range of a 32-bit signed integer.
      * Thefore INT_MIN (−231) is returned.
-     *
+     * <p>
      * 几个要注意的点：
      * 1、边界，是否超过int的最大值
      * 2、正负号
