@@ -111,26 +111,72 @@ public class CommonTest {
     @Test
     public void ttest() {
 
-        String s = "0123456789";
+        String s = "-2147483646";
 
+        log.info("getNumber={}", getNumber(s));
+    }
 
+    private int getNumber(String s) {
         final char BLANK = ' ';
         final char PLUS = '+';
         final char MINUS = '-';
-
+        boolean negative = false;
+        int num = 0;
+        int min = Integer.valueOf('0');
+        int max = Integer.valueOf('9');
+        boolean findFirst = false;
         for (int i = 0; i < s.length(); i++) {
-            log.info("{} 的 ascii 值为{}", s.charAt(i), Integer.valueOf(s.charAt(i)));
+
+            if (!findFirst) {
+                if (s.charAt(i) == BLANK) {
+                    continue;
+                } else if (s.charAt(i) == PLUS) {
+                    findFirst = true;
+                    continue;
+                } else if (s.charAt(i) == MINUS) {
+                    findFirst = true;
+                    negative = true;
+                    continue;
+                } else {
+                    return 0;
+                }
+            }
+
+            /**
+             * 非数字，结束
+             */
+            if (s.charAt(i) < min || s.charAt(i) > max) {
+                break;
+            }
+            int currentValue = s.charAt(i) - min;
+            if (!negative && (Integer.MAX_VALUE / 10) == num) {
+                if (Integer.MAX_VALUE % 10 <= currentValue) {
+                    return Integer.MAX_VALUE;
+                }
+                return num * 10 + currentValue;
+            }
+            if (negative && -(Integer.MIN_VALUE / 10) == num) {
+                if (-(Integer.MIN_VALUE % 10) <= currentValue) {
+                    return Integer.MIN_VALUE;
+                }
+                return -(num * 10 + currentValue);
+            }
+            num = num * 10 + currentValue;
         }
 
-
+        return negative ? -num : num;
     }
+
 
     @Test
     public void jdk7NewFeature() {
 
         int value = 1_000_000;
+        int value2 = 1000000;
         log.info("value={}", value);
-
+        log.info("value={}", value == value2);
+        log.info("-Integer.MIN_VALUE % 10={}", -(Integer.MIN_VALUE % 10));
+        log.info("-0 * 10={}", -0 * 10);
         /**
          * 1个字节8位
          * 2个字节16位
