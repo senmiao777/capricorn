@@ -18,6 +18,8 @@ import java.util.Map;
 @Slf4j
 public class AlgorithmQuestions {
 
+
+
     /**
      * Implement atoi which converts a string to an integer.
      * <p>
@@ -60,6 +62,10 @@ public class AlgorithmQuestions {
      * Output: -2147483648
      * Explanation: The number "-91283472332" is out of the range of a 32-bit signed integer.
      * Thefore INT_MIN (−231) is returned.
+     *
+     * 几个要注意的点：
+     * 1、边界，是否超过int的最大值
+     * 2、正负号
      */
     @Test
     public void testGetNumber() {
