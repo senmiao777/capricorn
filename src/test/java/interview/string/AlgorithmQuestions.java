@@ -83,14 +83,12 @@ public class AlgorithmQuestions {
             num /= 10;
         }
 
-        if (reverse == num) {
+       /* if (reverse == num) {
             return true;
         }
-
-        /**
-         * 原值是12321,reverse = 123,num =12这种情况
-         */
-        return num != 0 && reverse == num * 10 + reverse % 10;
+        //原值是12321,reverse = 123,num =12这种情况
+        return reverse == num * 10 + reverse % 10;*/
+        return reverse == num || reverse % 10 == num;
     }
 
     /**
