@@ -109,6 +109,23 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
     @Test
+    public void ttest() {
+
+        String s = "0123456789";
+
+
+        final char BLANK = ' ';
+        final char PLUS = '+';
+        final char MINUS = '-';
+
+        for (int i = 0; i < s.length(); i++) {
+            log.info("{} 的 ascii 值为{}", s.charAt(i), Integer.valueOf(s.charAt(i)));
+        }
+
+
+    }
+
+    @Test
     public void jdk7NewFeature() {
 
         int value = 1_000_000;
