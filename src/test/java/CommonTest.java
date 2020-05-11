@@ -30,10 +30,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.annotation.Rollback;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.io.Serializable;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.ByteBuffer;
@@ -122,7 +119,7 @@ public class CommonTest {
      * 如果没有,则在常量池中新创建一个"abcd".
      * 下一次如果有String s1 = "abcd",又会将s1指向"abcd"这个对象,即以这形式声明的字符串,只要值相等,任何多个引用都指向同一对象.
      * String s = new String("XXX");这种方式创建的字符串对象不会放到串池里
-     *
+     * <p>
      * jdk1.7 之前 hotspot JVM中常量池位于方法区，而jdk1.7之后，常量池从方法区移除，移到了堆中。
      */
     @Test
@@ -240,10 +237,54 @@ public class CommonTest {
     }
 
     @Test
+    public void testRead() {
+        final int END = -1;
+        final int ZERO = 0;
+        int BUFFER_SIZE = 16;
+        int num = 10;
+        // String path = "A:/test.txt";
+        String path = "D:/test/t1.txt";
+        try {
+            FileInputStream inputStream = new FileInputStream(path);
+            FileChannel inChannel = inputStream.getChannel();
+
+            ByteBuffer bytebuf = ByteBuffer.allocate(BUFFER_SIZE);
+            CharsetDecoder decoder = Charset.defaultCharset().newDecoder();
+            if (num < BUFFER_SIZE) {
+                inChannel.read(bytebuf);
+                bytebuf.flip();
+                //对bytebuf进行解码，避免乱码
+                CharBuffer decode = decoder.decode(bytebuf);
+                //  log.info("decode.toString()={}",decode.toString());
+                System.out.println(decode.toString().substring(ZERO, num));
+                //清空缓冲区，再次放入数据
+                bytebuf.clear();
+            } else {
+                while ((inChannel.read(bytebuf)) != END && num > ZERO) {
+                    bytebuf.flip();
+                    CharBuffer decode = decoder.decode(bytebuf);
+                    bytebuf.clear();
+                    // 最后一次读取，缓冲区字符超过了需要的个数
+                    if (num < BUFFER_SIZE) {
+                        System.out.println(decode.toString().substring(ZERO, num));
+                    } else {
+                        System.out.println(decode.toString());
+                    }
+                    num -= BUFFER_SIZE;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("文件未找到");
+        } catch (IOException ie) {
+            System.out.println("文件读取异常,error=" + ie.getStackTrace());
+        }
+    }
+
+    @Test
     public void testNio() {
         HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
         objectObjectHashMap.put("k", "v");
-        String path = "D:/test/codeList.txt";
+        String path = "D:/test/t1.txt";
         try {
             FileInputStream inputStream = new FileInputStream(path);
             FileChannel inChannel = inputStream.getChannel();
@@ -253,19 +294,11 @@ public class CommonTest {
 
 
             while ((inChannel.read(bytebuf)) != -1) {//读取通道数据到缓冲区中,非-1就代表有数据
-                /**
-                 * 确定缓冲区数据的起点和终点，读取的是 0~limit 范围内的数据
-                 public final Buffer flip() {
-                 limit = position;
-                 position = 0;
-                 mark = -1;
-                 return this;
-                 }
-                 */
+
                 bytebuf.flip();
                 //对bytebuf进行解码，避免乱码
                 CharBuffer decode = decoder.decode(bytebuf);
-                log.info("decode={}", decode.toString());
+                System.out.println(decode.toString());
                 //清空缓冲区，再次放入数据
                 bytebuf.clear();
 
