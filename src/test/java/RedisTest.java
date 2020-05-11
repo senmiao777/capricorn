@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.redis.connection.RedisStringCommands;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -41,12 +43,45 @@ public class RedisTest {
     @Qualifier("nothing")
     private Beverage nothingTest;
 
+    public Boolean setBit(String key, Integer index, Boolean tag) {
+        return (Boolean) redisTemplate.execute((RedisCallback<Boolean>) con -> con.setBit(key.getBytes(), index, tag));
+    }
+
+    public Boolean getBit(String key, Integer index) {
+        return (Boolean) redisTemplate.execute((RedisCallback<Boolean>) con -> con.getBit(key.getBytes(), index));
+    }
+
+    /**
+     * 统计bitmap中，value为1的个数，非常适用于统计网站的每日活跃用户数等类似的场景
+     *
+     * @param key
+     * @return
+     */
+    public Long bitCount(String key) {
+        return (Long) redisTemplate.execute((RedisCallback<Long>) con -> con.bitCount(key.getBytes()));
+    }
+
+    public Long bitCount(String key, int start, int end) {
+        return (Long) redisTemplate.execute((RedisCallback<Long>) con -> con.bitCount(key.getBytes(), start, end));
+    }
+
+    public Long bitOp(RedisStringCommands.BitOperation op, String saveKey, String... desKey) {
+        byte[][] bytes = new byte[desKey.length][];
+        for (int i = 0; i < desKey.length; i++) {
+            bytes[i] = desKey[i].getBytes();
+        }
+        return (Long) redisTemplate.execute((RedisCallback<Long>) con -> con.bitOp(op, saveKey.getBytes(), bytes));
+    }
+
+
     @Test
     public void testmachineGun() {
 
-       log.info("what={}",nothingTest.cost());
+        log.info("what={}", nothingTest.cost());
+
 
     }
+
     @Test
     public void testt2() {
         User u1 = User.generateUser();

@@ -25,19 +25,19 @@ public class Java8Test {
         test(3);
     }
 
-    private void test(int num){
+    private void test(int num) {
         int t = 3;
-        if(num == 1){
-            t=1;
+        if (num == 1) {
+            t = 1;
             log.info("1111");
 
-        }else if(num == 2){
-            t=2;
+        } else if (num == 2) {
+            t = 2;
             log.info("1111");
-        }else {
+        } else {
             return;
         }
-        log.info("here t={}",t);
+        log.info("here t={}", t);
     }
 
     @Test
@@ -57,14 +57,15 @@ public class Java8Test {
         log.info("user = {}", user);
 
         log.info("user2 ={}", getId(u2));
-        
+
         List<String> list = new ArrayList<>(20);
         final boolean add = list.add("23");
 
         try {
             final User user2 = Optional.ofNullable(u2).orElseThrow(Exception::new);
-            Optional.ofNullable(u2).ifPresent(a->{});
-           // Optional.ofNullable(u2).map(a ->{log.info(":");return null;}).orElse(log.info(""););
+            Optional.ofNullable(u2).ifPresent(a -> {
+            });
+            // Optional.ofNullable(u2).map(a ->{log.info(":");return null;}).orElse(log.info(""););
             log.info("user2 ={}", user2);
         } catch (Exception e) {
             log.info("Exception user2 e={}", e);
@@ -78,7 +79,7 @@ public class Java8Test {
         Optional.ofNullable(u).map(a -> {
             log.info("22");
             return null;
-        }).orElse( 1L
+        }).orElse(1L
 
         );
         return 1L;

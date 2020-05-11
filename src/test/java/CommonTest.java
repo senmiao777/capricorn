@@ -105,6 +105,33 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
+
+
+
+    @Test
+    public void jdk7NewFeature() {
+
+        int value = 1_000_000;
+        int value2 = 1000000;
+        log.info("value={}", value);
+        log.info("value={}", value == value2);
+        log.info("-Integer.MIN_VALUE % 10={}", -(Integer.MIN_VALUE % 10));
+        log.info("-0 * 10={}", -0 * 10);
+        /**
+         * 1个字节8位
+         * 2个字节16位
+         * 4个字节32位
+         * 8个字节64位
+         */
+        byte num1 = 0b00000010;
+        short num2 = 0b0000000000000111;
+        int num3 = 0b10100001010001011010000101000101;
+        long num4 = 0b0010000101000101101000010100010110100001010001011010000101000101L;
+        log.info("binaryValue num1={},num2={},num3={},num4={},", num1, num2, num3, num4);
+
+
+    }
+
     /**
      * equals 比较的是内容
      * == 比较的是两个引用指向的是不是同一个地址，即同一个对象

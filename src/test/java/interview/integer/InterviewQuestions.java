@@ -2,6 +2,7 @@ package interview.integer;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -15,6 +16,57 @@ import java.util.Set;
  */
 @Slf4j
 public class InterviewQuestions {
+
+
+    @Test
+    public void wash() {
+        int n = 10;
+        int[] numbers = new int[n];
+        for (int i = 0; i < n; i++) {
+            numbers[i] = i;
+        }
+
+        for (int i = 0; i < n; i++) {
+            log.info("before={}",numbers[i]);
+        }
+
+        int count =7;
+        wash(numbers, count);
+        for (int i = 0; i < numbers.length; i++) {
+            log.info("after={}",numbers[i]);
+        }
+    }
+
+    /**
+     * 随机从数组中取出N个不重复的数
+     *
+     * @param nums
+     * @param n
+     * @return
+     */
+    private void wash(int[] nums, int n) {
+
+        int len = nums.length;
+        if (n > len) {
+            throw new RuntimeException("越界异常");
+        }
+
+        if (n == len) {
+            return;
+        }
+
+
+        int index = 0;
+        int temp = 0;
+        for(byte i = 0;i< n;i++){
+            index = RandomUtils.nextInt(i +1,len);
+            log.info("index ={}",index);
+            temp = nums[i];
+            nums[i] = nums[index];
+            nums[index] = temp;
+        }
+    }
+
 
     /**
      * Given a 32-bit signed integer, reverse digits of an integer.
@@ -140,7 +192,7 @@ public class InterviewQuestions {
                 } else if ('+' == current) {
                     continue;
                 } else {
-                    result = Integer.valueOf(s.substring(i,i+1));
+                    result = Integer.valueOf(s.substring(i, i + 1));
                 }
             } else {
                 if (!c.contains(current)) {
@@ -154,7 +206,7 @@ public class InterviewQuestions {
                 } else if (result == Integer.MAX_VALUE / 10 && (int) current > Integer.MAX_VALUE % 10) {
                     return flag * Integer.MAX_VALUE;
                 }
-                result = result * 10 + Integer.valueOf(s.substring(i,i+1));
+                result = result * 10 + Integer.valueOf(s.substring(i, i + 1));
             }
 
         }
