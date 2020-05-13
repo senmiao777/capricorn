@@ -114,6 +114,10 @@ public class CommonTest {
     @Test
     public void jdk7NewFeature() {
 
+        String s1 = "123";
+        String s2 = "311";
+        log.info("",s1.equals(s2));
+
         int value = 1_000_000;
         int value2 = 1000000;
         log.info("value={}", value);

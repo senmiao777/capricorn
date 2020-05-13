@@ -18,6 +18,63 @@ import java.util.Map;
 @Slf4j
 public class AlgorithmQuestions {
 
+
+    @Test
+    public void testLongestPalindrom() {
+        String s = "0ababab5";
+        String s1 = "0abcddcbab5";
+
+        log.info("getLongestPalindrom(s)={}", getLongestPalindrom(s));
+    }
+
+    /**
+     * 中心扩展发解决找出最长回文子串
+     *
+     * @param s
+     * @return
+     */
+    private String getLongestPalindrom(String s) {
+        int start = 0;
+        int end = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int length1 = longestLength(i, i, s);
+            log.info("i={},length1={}", i, length1);
+            int length2 = longestLength(i, i + 1, s);
+            /**
+             * 找到了最大的距离，怎么把左右的位置记录下来？
+             */
+            int result = Math.max(length1, length2);
+            log.info("i={},length2={}", i, length2);
+            if (result > end - start) {
+                start = i - (result - 1) / 2;
+                end = i + result / 2;
+            }
+
+        }
+        return s.substring(start, end+1);
+    }
+
+    /**
+     * 注意
+     * 1、传进来的值要拷贝一个副本用，直接用会导致“下一次”的位置是错的
+     * 2、left >= 0,不是>0,为啥？没想明白，举例试试确实是要这么做
+     *
+     * @param i
+     * @param j
+     * @param s
+     * @return
+     */
+    private int longestLength(int i, int j, String s) {
+        int left = i;
+        int right = j;
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        return right - left - 1;
+    }
+
+
     /**
      * 判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。
      */
