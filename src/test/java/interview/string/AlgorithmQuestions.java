@@ -20,6 +20,63 @@ public class AlgorithmQuestions {
 
 
     @Test
+    public void testZ() {
+        String s = "LEETCODEISHIRING";
+
+        log.info("getLongestPalindrom(s)={}", zCycle(s, 3));
+    }
+
+
+    private String zCycle(String s, int hight) {
+        final int length = s.length();
+        if (hight >= length || hight == 1) {
+            return s;
+        }
+
+        int wide = length / hight + 1;
+
+        int[][] matrix = new int[wide][hight];
+        int y = 0;
+
+        int x = 0;
+
+        for (int i = 0; i < length; i++) {
+            matrix[x][y] = s.charAt(i);
+            if (x % (hight - 1) == 0) {
+                y++;
+            }
+
+            if (x != 0 && x % (hight - 1) != 0) {
+                x++;
+                y--;
+            }
+
+            /**
+             * 一列的最后一个元素
+             */
+            if (y != 0 && y % hight == 0) {
+                x++;
+                y = y - 2;
+            }
+
+
+        }
+
+        StringBuilder a = new StringBuilder();
+        for (int i = 0; i < wide; i++) {
+            for (int j = 0; j < hight; j++) {
+                if (matrix[i][j] > 0) {
+                    a.append(String.valueOf(matrix[i][j]));
+                }
+            }
+        }
+        log.info("s={}", a.toString());
+
+        return null;
+    }
+
+
+    @Test
     public void testLongestPalindrom() {
         String s = "0ababab5";
         String s1 = "0abcddcbab5";
@@ -51,7 +108,7 @@ public class AlgorithmQuestions {
             }
 
         }
-        return s.substring(start, end+1);
+        return s.substring(start, end + 1);
     }
 
     /**
