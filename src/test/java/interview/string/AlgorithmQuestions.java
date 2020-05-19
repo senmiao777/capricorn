@@ -54,7 +54,7 @@ public class AlgorithmQuestions {
             /**
              * 一列的最后一个元素
              */
-            if (y != 0 && y % hight == 0) {
+            if (y == hight) {
                 x++;
                 y = y - 2;
             }
