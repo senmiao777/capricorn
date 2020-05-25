@@ -113,10 +113,11 @@ public class CommonTest {
     public void testMap222() {
         int m = 2;
         log.info("{} >>> 1={}",m,m >>> 1);
+        log.info("1 << 30 ={}",1 << 30);
         int n =2;
         final int res = n |= n >>> 1;
         log.info("{} >>> 1={}",n,res);
-        for (int i = 0; i < 17; i++) {
+        for (int i = 0; i < 18; i++) {
             log.info("input {},output={}", i,tableSizeFor(i));
         }
     }

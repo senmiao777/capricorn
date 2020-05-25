@@ -19,6 +19,24 @@ import java.util.Map;
 @Slf4j
 public class AlgorithmQuestions {
 
+    @Test
+    public void testMaxWater() {
+        int[] nums = {1, 8, 6, 2, 5, 4, 8, 3, 7};
+        final int maxVolume = getMaxVolume(nums);
+        log.info("getMaxVolume={}",maxVolume);
+    }
+
+    private int getMaxVolume(int[] nums) {
+        int length = nums.length;
+
+        int volume = 0;
+        for(int i = 0;i < length;i++){
+            for(int j = i+1 ;j< length;j++){
+                volume = Math.max(volume,(j-i)* Math.min(nums[i],nums[j]));
+            }
+        }
+        return volume;
+    }
 
     @Test
     public void testZ() {
