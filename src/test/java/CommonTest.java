@@ -106,14 +106,37 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
 
+    static final int MAXIMUM_CAPACITY = 1 << 30;
 
+
+    @Test
+    public void testMap222() {
+        int m = 2;
+        log.info("{} >>> 1={}",m,m >>> 1);
+        int n =2;
+        final int res = n |= n >>> 1;
+        log.info("{} >>> 1={}",n,res);
+        for (int i = 0; i < 17; i++) {
+            log.info("input {},output={}", i,tableSizeFor(i));
+        }
+    }
+
+    private int tableSizeFor(int cap) {
+        int n = cap - 1;
+        n |= n >>> 1;
+        n |= n >>> 2;
+        n |= n >>> 4;
+        n |= n >>> 8;
+        n |= n >>> 16;
+        return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
+    }
 
     @Test
     public void jdk7NewFeature() {
 
         String s1 = "123";
         String s2 = "311";
-        log.info("",s1.equals(s2));
+        log.info("", s1.equals(s2));
 
         int value = 1_000_000;
         int value2 = 1000000;
