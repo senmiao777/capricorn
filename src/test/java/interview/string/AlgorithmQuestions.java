@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,27 +25,82 @@ public class AlgorithmQuestions {
         String s = "LEETCODEISHIRING";
 //          LDREOEIIECIHNTSG
 //          LDREOEIIECIHNTSG
-        log.info("getLongestPalindrom(s)={}", zCycle(s, 4));
+        log.info("getLongestPalindrom(s)={}", zCycle2(s, 3));
     }
 
+    /**
+     * 按行读取方式
+     *
+     * @param s
+     * @param height
+     * @return
+     */
+    private String zCycle2(String s, int height) {
 
-    private String zCycle(String s, int hight) {
-        final int length = s.length();
-        if (hight >= length || hight == 1) {
+        if (s == null) {
             return s;
         }
 
-        int[][] matrix = new int[hight][length];
+        final int length = s.length();
+        if (height >= length) {
+            return s;
+        }
+
+        List<StringBuilder> lineContents = new ArrayList<>(height);
+
+        for (int i = 0; i < height; i++) {
+            lineContents.add(new StringBuilder());
+        }
+        /**
+         * 行数移动标识，false：向下；true:向上
+         */
+        boolean up = true;
+        int currentLine = 0;
+        for (int i = 0; i < length; i++) {
+            log.info("i={},currentLine={}", i, currentLine);
+            StringBuilder builder = lineContents.get(currentLine);
+            builder.append(s.charAt(i));
+            /**
+             * 第一行和最后一行，需要改变标识
+             */
+            if (currentLine == 0 || currentLine == (height - 1)) {
+                up = !up;
+            }
+            currentLine += (up ? -1 : 1);
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < height; i++) {
+            result = result.append(lineContents.get(i));
+        }
+
+        return result.toString();
+    }
+
+    /**
+     * 二维数组的方式，时间复杂度，空间复杂度都很高
+     *
+     * @param s
+     * @param height
+     * @return
+     */
+    private String zCycle(String s, int height) {
+        final int length = s.length();
+        if (height >= length || height == 1) {
+            return s;
+        }
+
+        int[][] matrix = new int[height][length];
         int y = 0;
 
         int x = 0;
 
         for (int i = 0; i < length; i++) {
             matrix[x][y] = s.charAt(i);
-            if (y % (hight - 1) == 0) {
+            if (y % (height - 1) == 0) {
                 x++;
             }
-            if (y % (hight - 1) > 0) {
+            if (y % (height - 1) > 0) {
                 y++;
                 x--;
             }
@@ -52,16 +108,16 @@ public class AlgorithmQuestions {
             /**
              * 一列的最后一个元素
              */
-            if (x == hight) {
+            if (x == height) {
                 y++;
-                x = hight - 2;
+                x = height - 2;
             }
 
 
         }
 
         StringBuilder a = new StringBuilder();
-        for (int i = 0; i < hight; i++) {
+        for (int i = 0; i < height; i++) {
             for (int j = 0; j < length; j++) {
                 if (matrix[i][j] > 0) {
                     a.append(String.valueOf((char) matrix[i][j]));
