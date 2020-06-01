@@ -13,7 +13,6 @@ import com.frank.designpattern.template.Ford;
 import com.frank.designpattern.template.Hummer;
 import com.frank.designpattern.template.MotorVehicle;
 import lombok.extern.slf4j.Slf4j;
-import ognl.EnumerationIterator;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -110,7 +109,7 @@ public class DesignPatternTest {
         /**
          * EnumerationIterator作为一个适配器，使Enumeration具有Iterator的遍历方法
          */
-        EnumerationIterator enumerationIterator = new EnumerationIterator(elements);
+
 
         String path = "D://test/123.txt";
         try {
