@@ -22,8 +22,28 @@ public class AlgorithmQuestions {
     @Test
     public void testMaxWater() {
         int[] nums = {1, 8, 6, 2, 5, 4, 8, 3, 7};
-        final int maxVolume = getMaxVolume(nums);
+        final int maxVolume = getMaxVolume2(nums);
         log.info("getMaxVolume={}", maxVolume);
+    }
+
+    private int getMaxVolume2(int[] nums) {
+
+        int start = 0;
+        int end = nums.length - 1;
+        int volume = 0;
+        for (int i = 0; i < nums.length && start <= end; i++) {
+            volume = Math.max(volume, (end - start) * Math.min(nums[start], nums[end]));
+            /**
+             * start下标对应的高度低，则start后移
+             * end下标对应的高度低，则end前移
+             */
+            if (nums[start] < nums[end]) {
+                start++;
+            } else {
+                end--;
+            }
+        }
+        return volume;
     }
 
     private int getMaxVolume(int[] nums) {
