@@ -6,7 +6,9 @@ import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -16,6 +18,33 @@ import java.util.Set;
  */
 @Slf4j
 public class InterviewQuestions {
+
+    @Test
+    public void twoSum() {
+        int[] nums = {2, 7, 11, 15};
+        int target = 9;
+        log.info("twoSum ={}",twoSum(nums,target));
+    }
+
+    private int[] twoSum(int[] nums, int target) {
+        /**
+         * 数组的元素为key,元素坐标为value
+         */
+        Map<Integer, Integer> index = new HashMap<>();
+        final int[] result = new int[2];
+        index.put(nums[0], 0);
+        for (int i = 1; i < nums.length; i++) {
+            if (index.get(target - nums[i]) != null) {
+                result[0] = index.get(target - nums[i]);
+                result[1] = i;
+                return result;
+            }else {
+                index.put(nums[i],i);
+            }
+
+        }
+        return result;
+    }
 
 
     @Test
@@ -27,13 +56,13 @@ public class InterviewQuestions {
         }
 
         for (int i = 0; i < n; i++) {
-            log.info("before={}",numbers[i]);
+            log.info("before={}", numbers[i]);
         }
 
-        int count =7;
+        int count = 7;
         wash(numbers, count);
         for (int i = 0; i < numbers.length; i++) {
-            log.info("after={}",numbers[i]);
+            log.info("after={}", numbers[i]);
         }
     }
 
@@ -58,9 +87,9 @@ public class InterviewQuestions {
 
         int index = 0;
         int temp = 0;
-        for(byte i = 0;i< n;i++){
-            index = RandomUtils.nextInt(i +1,len);
-            log.info("index ={}",index);
+        for (byte i = 0; i < n; i++) {
+            index = RandomUtils.nextInt(i + 1, len);
+            log.info("index ={}", index);
             temp = nums[i];
             nums[i] = nums[index];
             nums[index] = temp;

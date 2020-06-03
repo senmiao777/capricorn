@@ -14,10 +14,51 @@ import java.util.Map;
 /**
  * @author frank
  * @version 1.0
- * @date 2019年7月29日18:32:57
+ * @date 2020年5月29日18:32:57
  */
 @Slf4j
 public class AlgorithmQuestions {
+
+
+    @Test
+    public void testThreeSum() {
+        int[] nums = {-1, 0, 1, 2, -1, -4};
+        final int[][] threeSum = getThreeSum(nums);
+        for (int i = 0; i < threeSum.length; i++) {
+            log.info("s={}", threeSum[i]);
+        }
+    }
+
+    private int[][] getThreeSum(int[] nums) {
+        final int length = nums.length;
+        Map<Integer, Integer> numbers = new HashMap<>();
+        for (int i = 0; i < length; i++) {
+            numbers.put(i, nums[i]);
+        }
+        int count = 0;
+        int sum = 0;
+        int twoSum;
+
+        int[][] result = new int[length][];
+        for (int i = 0; i < length - 2; i++) {
+            twoSum = sum - nums[i];
+            for (int j = i + 1; j < length; j++) {
+                for(int k = j +1;k<length;k++){
+                    if (numbers.get(k)  == twoSum - nums[j]) {
+                        int[] temp = new int[3];
+                        temp[0] = nums[i];
+                        temp[1] = nums[j];
+                        temp[2] = nums[k];
+                        result[count] = temp;
+                        count++;
+                    }
+                }
+
+            }
+        }
+        return result;
+    }
+
 
     @Test
     public void testMaxWater() {
