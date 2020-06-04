@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author frank
@@ -27,6 +24,9 @@ public class AlgorithmQuestions {
         for (int i = 0; i < threeSum.length; i++) {
             log.info("s={}", threeSum[i]);
         }
+
+        final int[][] threeSum2 = getThreeSum2(nums);
+        log.info("threeSum2={}", threeSum2);
     }
 
     private int[][] getThreeSum(int[] nums) {
@@ -43,8 +43,8 @@ public class AlgorithmQuestions {
         for (int i = 0; i < length - 2; i++) {
             twoSum = sum - nums[i];
             for (int j = i + 1; j < length; j++) {
-                for(int k = j +1;k<length;k++){
-                    if (numbers.get(k)  == twoSum - nums[j]) {
+                for (int k = j + 1; k < length; k++) {
+                    if (numbers.get(k) == twoSum - nums[j]) {
                         int[] temp = new int[3];
                         temp[0] = nums[i];
                         temp[1] = nums[j];
@@ -55,6 +55,60 @@ public class AlgorithmQuestions {
                 }
 
             }
+        }
+        return result;
+    }
+
+    int[][] getThreeSum2(int[] nums) {
+        int[][] result = new int[nums.length][];
+        if (nums.length < 3) {
+            return result;
+        }
+        log.info("nums={}", nums);
+        Arrays.sort(nums);
+
+        final int length = nums.length;
+
+        int count = 0;
+        for (int i = 0; i < length; i++) {
+
+            int start = i + 1;
+            int end = length - 1;
+
+            /**
+             * 第一个值都大于零了，后边在加两个数不可能等于零
+             */
+            if (nums[i] > 0) {
+                break;
+            }
+
+            if (nums[end] < 0) {
+                break;
+            }
+
+            while (start < end) {
+                if (nums[i] + nums[start] + nums[end] < 0) {
+                    start++;
+                } else if (nums[i] + nums[start] + nums[end] > 0) {
+                    end--;
+                } else {
+                    /**
+                     * 比较前两个元素，去重
+                     */
+                    if (count > 0 && result[count - 1][0] == nums[i] && result[count - 1][1] == nums[start]) {
+                        continue;
+                    }
+                    int[] temp = new int[3];
+                    temp[0] = nums[i];
+                    temp[1] = nums[start];
+                    temp[2] = nums[end];
+                    result[count] = temp;
+                    count++;
+                    start++;
+                }
+            }
+
+
         }
         return result;
     }
