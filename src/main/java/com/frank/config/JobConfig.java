@@ -7,6 +7,7 @@ import com.dangdang.ddframe.job.lite.api.JobScheduler;
 import com.dangdang.ddframe.job.lite.config.LiteJobConfiguration;
 import com.dangdang.ddframe.job.reg.zookeeper.ZookeeperRegistryCenter;
 import com.frank.job.simple.MyFirstJob;
+import com.frank.job.simple.MySecondJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -27,11 +28,24 @@ public class JobConfig {
         return new MyFirstJob();
     }
 
+    @Bean
+    public SimpleJob mySecondJob() {
+        return new MySecondJob()
+    }
+
     @Bean(initMethod = "init")
     public JobScheduler myFirstJobScheduler(final SimpleJob myFirstJob, @Value("${myFirstJob.cron}") final String cron,
                                             @Value("${myFirstJob.shardingTotalCount}") final int shardingTotalCount,
                                             @Value("${myFirstJob.shardingItemParameters}") final String shardingItemParameters) {
         LiteJobConfiguration jobConfiguration = createJobConfiguration(myFirstJob.getClass(), cron, shardingTotalCount, shardingItemParameters);
+        return new JobScheduler(regCenter, jobConfiguration);
+    }
+
+    @Bean(initMethod = "init")
+    public JobScheduler mySecondJobScheduler(final SimpleJob mySecondJob, @Value("${mySecondJob.cron}") final String cron,
+                                             @Value("${mySecondJob.shardingTotalCount}") final int shardingTotalCount,
+                                             @Value("${mySecondJob.shardingItemParameters}") final String shardingItemParameters) {
+        LiteJobConfiguration jobConfiguration = createJobConfiguration(mySecondJob.getClass(), cron, shardingTotalCount, shardingItemParameters);
         return new JobScheduler(regCenter, jobConfiguration);
     }
 
