@@ -30,7 +30,7 @@ public class JobConfig {
 
     @Bean
     public SimpleJob mySecondJob() {
-        return new MySecondJob()
+        return new MySecondJob();
     }
 
     @Bean(initMethod = "init")
