@@ -9,6 +9,7 @@ import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.Stack;
 
 /**
  * @author frank
@@ -19,26 +20,76 @@ import java.util.*;
 public class TopInterviewQuestions {
 
 
+    /**
+     * 判断是否是有效括号对
+     * https://leetcode.com/problems/valid-parentheses/
+     */
     @Test
     public void testValidParentheses() {
-        String s = "()[]{}";
-        log.info("valid={}",valid(s));
+        String s = "(){[()]}{}";
+        log.info("valid={}", valid(s));
 
 
     }
 
 
+    /**
+     * 注意，当Stack里没有元素时，调用peek方法会跑抛异常
+     *
+     * @param str
+     * @return
+     */
     private boolean valid(String str) {
 
         if ("".equals(str)) {
             return true;
         }
         final int length = str.length();
-        if (length / 2 != 0) {
+        if (length % 2 != 0) {
+            return false;
+        }
+        final char start = str.charAt(0);
+        if (start == '}' || start == ']' || start == ')') {
+            return false;
+        }
+        final char end = str.charAt(length - 1);
+        if (end == '{' || end == '[' || end == '(') {
             return false;
         }
 
-        return false;
+
+        Map<Character, Character> config = new HashMap<>(8);
+        config.put('}', '{');
+        config.put(']', '[');
+        config.put(')', '(');
+
+        Stack<Character> container = new Stack();
+        for (int i = 0; i < length; i++) {
+            if (str.charAt(i) == '}') {
+                if (container.empty() || !config.get('}').equals(container.peek())) {
+                    return false;
+                } else {
+                    container.pop();
+                }
+            } else if (str.charAt(i) == ']') {
+                if (container.empty() || !config.get(']').equals(container.peek())) {
+                    return false;
+                } else {
+                    container.pop();
+                }
+            } else if (str.charAt(i) == ')') {
+                if (container.empty() || !config.get(')').equals(container.peek())) {
+                    return false;
+                } else {
+                    container.pop();
+                }
+            } else {
+                container.push(str.charAt(i));
+            }
+        }
+
+
+        return container.empty();
     }
 
 
