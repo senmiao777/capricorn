@@ -19,45 +19,89 @@ public class AlgorithmQuestions {
 
     @Test
     public void testThreeSum() {
-        int[] nums = {-1, 0, 1, 2, -1, -4};
-        final int[][] threeSum = getThreeSum(nums);
-        for (int i = 0; i < threeSum.length; i++) {
-            log.info("s={}", threeSum[i]);
-        }
+        //int[] nums = {-1, 0, 1, 2, -1, -4};
+        int[] nums = {-4, -2, -2, -2, 0, 1, 2, 2, 2, 3, 3, 4, 4, 6, 6};
+
 
         final int[][] threeSum2 = getThreeSum2(nums);
-        log.info("threeSum2={}", threeSum2);
+
+        for (int[] i : threeSum2) {
+            log.info("member={}", i);
+        }
+
+        List<List<Integer>> threeSum3 = getThreeSum3(nums);
+
+        for (List<Integer> i : threeSum3) {
+            log.info("i={}", i);
+        }
     }
 
-    private int[][] getThreeSum(int[] nums) {
-        final int length = nums.length;
-        Map<Integer, Integer> numbers = new HashMap<>();
-        for (int i = 0; i < length; i++) {
-            numbers.put(i, nums[i]);
+    List<List<Integer>> getThreeSum3(int[] nums) {
+        if (nums.length < 3) {
+            return new ArrayList<>();
         }
+        Arrays.sort(nums);
+        List<List<Integer>> res = new ArrayList<>();
+        final int length = nums.length;
         int count = 0;
-        int sum = 0;
-        int twoSum;
-        int[][] result = new int[length][];
-        for (int i = 0; i < length - 2; i++) {
-            twoSum = sum - nums[i];
-            for (int j = i + 1; j < length; j++) {
-                for (int k = j + 1; k < length; k++) {
-                    if (numbers.get(k) == twoSum - nums[j]) {
-                        int[] temp = new int[3];
-                        temp[0] = nums[i];
-                        temp[1] = nums[j];
-                        temp[2] = nums[k];
-                        result[count] = temp;
-                        count++;
+        for (int i = 0; i < length; i++) {
+            int start = i + 1;
+            int end = length - 1;
+            /**
+             * 第一个值都大于零了，后边在加两个数不可能等于零
+             */
+            if (nums[i] > 0) {
+                break;
+            }
+            if (nums[end] < 0) {
+                break;
+            }
+            /**
+             * 怎么防止重复呢？
+             * 用过的元素不再使用，就不会重复了。
+             * 比如你上次用的i下标取出的元素值为8，那下次如果i+1下标取出的元素值仍为8的话，就直接跳过。
+             */
+            if (res.size() > 0 && res.get(count - 1).get(0) == nums[i]) {
+                continue;
+            }
+            while (start < end) {
+                if (nums[i] + nums[start] + nums[end] < 0) {
+                    start++;
+                } else if (nums[i] + nums[start] + nums[end] > 0) {
+                    end--;
+                } else {
+                    /**
+                     * 比较前两个元素，去重，然后左下标右移
+                     * 有缺陷
+                     * 比如，排序后的数组元素是-4, -2, -2, -2, 0, 1, 2, 2, 2, 3, 3, 4, 4, 6, 6
+                     * 结果有重复[-2, -2, 4]，[-2, 0, 2]，[-2, -2, 4]，[-2, 0, 2]
+                     *
+                     * 比如你上次用的start-1下标取出的元素值为8，那下次如果start下标取出的元素值仍为8的话，就直接跳过。
+                     */
+                    if ((start > i + 1) && (nums[start - 1] == nums[start])) {
+                        start++;
+                        continue;
                     }
+                    List<Integer> temp = new ArrayList<>(4);
+                    temp.add(nums[i]);
+                    temp.add(nums[start]);
+                    temp.add(nums[end]);
+                    res.add(temp);
+                    count++;
+                    start++;
                 }
-
             }
         }
-        return result;
+        return res.subList(0, count);
     }
 
+
+    /**
+     * 看到数组，想着排序，很有帮助。很多情况下排好序问题就好解决了。
+     *
+     * @param nums
+     * @return
+     */
     int[][] getThreeSum2(int[] nums) {
         int[][] result = new int[nums.length][];
         if (nums.length < 3) {
@@ -65,7 +109,7 @@ public class AlgorithmQuestions {
         }
         log.info("nums={}", nums);
         Arrays.sort(nums);
-
+        log.info("after sort nums={}", nums);
         final int length = nums.length;
 
         int count = 0;
@@ -91,9 +135,7 @@ public class AlgorithmQuestions {
                 } else if (nums[i] + nums[start] + nums[end] > 0) {
                     end--;
                 } else {
-                    /**
-                     * 当前和上个数组的前两个元素比较，去重
-                     */
+
                     if (count > 0 && result[count - 1][0] == nums[i] && result[count - 1][1] == nums[start]) {
                         start++;
                         continue;
@@ -109,6 +151,45 @@ public class AlgorithmQuestions {
             }
 
 
+        }
+        int[][] finalResult = new int[count][];
+        System.arraycopy(result, 0, finalResult, 0, count);
+        return finalResult;
+    }
+
+
+    /**
+     * 代码low且有bug，仅展示思路
+     *
+     * @param nums
+     * @return
+     */
+    private int[][] getThreeSum(int[] nums) {
+        final int length = nums.length;
+        Map<Integer, Integer> numbers = new HashMap<>();
+        for (int i = 0; i < length; i++) {
+            numbers.put(i, nums[i]);
+        }
+        int count = 0;
+        int sum = 0;
+        int twoSum;
+
+        int[][] result = new int[length][];
+        for (int i = 0; i < length - 2; i++) {
+            twoSum = sum - nums[i];
+            for (int j = i + 1; j < length; j++) {
+                for (int k = j + 1; k < length; k++) {
+                    if (numbers.get(k) == twoSum - nums[j]) {
+                        int[] temp = new int[3];
+                        temp[0] = nums[i];
+                        temp[1] = nums[j];
+                        temp[2] = nums[k];
+                        result[count] = temp;
+                        count++;
+                    }
+                }
+
+            }
         }
         return result;
     }
