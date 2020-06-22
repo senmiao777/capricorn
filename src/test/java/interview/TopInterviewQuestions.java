@@ -18,6 +18,30 @@ import java.util.*;
 @Slf4j
 public class TopInterviewQuestions {
 
+
+    @Test
+    public void testValidParentheses() {
+        String s = "()[]{}";
+        log.info("valid={}",valid(s));
+
+
+    }
+
+
+    private boolean valid(String str) {
+
+        if ("".equals(str)) {
+            return true;
+        }
+        final int length = str.length();
+        if (length / 2 != 0) {
+            return false;
+        }
+
+        return false;
+    }
+
+
     /**
      * 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
      * 输出：7 -> 0 -> 8

@@ -38,7 +38,6 @@ public class AlgorithmQuestions {
         int count = 0;
         int sum = 0;
         int twoSum;
-
         int[][] result = new int[length][];
         for (int i = 0; i < length - 2; i++) {
             twoSum = sum - nums[i];
@@ -93,9 +92,10 @@ public class AlgorithmQuestions {
                     end--;
                 } else {
                     /**
-                     * 比较前两个元素，去重
+                     * 当前和上个数组的前两个元素比较，去重
                      */
                     if (count > 0 && result[count - 1][0] == nums[i] && result[count - 1][1] == nums[start]) {
+                        start++;
                         continue;
                     }
                     int[] temp = new int[3];
