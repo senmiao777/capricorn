@@ -24,15 +24,57 @@ public class TopInterviewQuestions {
      */
     @Test
     public void testPosition() {
-        int[] nums = {1, 3, 5, 6};
-        int target = 2;
+        int[] nums = {1, 2, 4, 6, 7};
+        int target = 3;
         log.info("Position={}", searchPosition(nums, target));
 
 
     }
 
     private int searchPosition(int[] nums, int target) {
-        return 0;
+
+        final int length = nums.length;
+        if (nums[0] >= target) {
+            return 0;
+        }
+        if (nums[length - 1] == target) {
+            return length - 1;
+        }
+        if (nums[length - 1] < target) {
+            return length;
+        }
+
+        /**
+         * 二分查找
+         *
+         [1,2,4,6,7] 3
+         3 ->1
+         */
+        int start = 1;
+        int end = length - 1;
+
+        for (int i = 1; i < length - 1; i++) {
+            int middle = (start + end) / 2;
+            if (nums[middle] == target) {
+                return middle;
+            } else if (nums[middle] < target) {
+                start = middle + 1;
+            } else {
+                end = middle - 1;
+            }
+            /**
+             * 当start >= end时，注意可能有多种情况，注意下标的确定
+             */
+            if (start >= end) {
+                if (nums[start] >= target) {
+                    return start;
+                } else {
+                    return start + 1;
+                }
+            }
+
+        }
+        return 1;
     }
 
     /**
