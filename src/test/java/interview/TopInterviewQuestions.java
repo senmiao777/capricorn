@@ -19,6 +19,21 @@ import java.util.Stack;
 @Slf4j
 public class TopInterviewQuestions {
 
+    /**
+     * Search Insert Position
+     */
+    @Test
+    public void testPosition() {
+        int[] nums = {1, 3, 5, 6};
+        int target = 2;
+        log.info("Position={}", searchPosition(nums, target));
+
+
+    }
+
+    private int searchPosition(int[] nums, int target) {
+        return 0;
+    }
 
     /**
      * 判断是否是有效括号对
@@ -65,23 +80,35 @@ public class TopInterviewQuestions {
 
         Stack<Character> container = new Stack();
         for (int i = 0; i < length; i++) {
-            if (str.charAt(i) == '}') {
-                if (container.empty() || !config.get('}').equals(container.peek())) {
+//            if (str.charAt(i) == '}') {
+//                if (container.empty() || !config.get('}').equals(container.peek())) {
+//                    return false;
+//                } else {
+//                    container.pop();
+//                }
+//            } else if (str.charAt(i) == ']') {
+//                if (container.empty() || !config.get(']').equals(container.peek())) {
+//                    return false;
+//                } else {
+//                    container.pop();
+//                }
+//            } else if (str.charAt(i) == ')') {
+//                if (container.empty() || !config.get(')').equals(container.peek())) {
+//                    return false;
+//                } else {
+//                    container.pop();
+//                }
+//            } else {
+//                container.push(str.charAt(i));
+//            }
+            /**
+             * 优化下写法
+             */
+            char c = str.charAt(i);
+            if (config.containsKey(c)) {
+                char top = container.empty() ? '?' : container.pop();
+                if (top != config.get(c)) {
                     return false;
-                } else {
-                    container.pop();
-                }
-            } else if (str.charAt(i) == ']') {
-                if (container.empty() || !config.get(']').equals(container.peek())) {
-                    return false;
-                } else {
-                    container.pop();
-                }
-            } else if (str.charAt(i) == ')') {
-                if (container.empty() || !config.get(')').equals(container.peek())) {
-                    return false;
-                } else {
-                    container.pop();
                 }
             } else {
                 container.push(str.charAt(i));
