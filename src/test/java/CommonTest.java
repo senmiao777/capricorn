@@ -123,6 +123,16 @@ public class CommonTest {
             add = add.getNext();
         }
 
+        LinkedOneWayList list2 = new LinkedOneWayList();
+        list2.addTop(1);
+        list2.addTop(2);
+        list2.addTop(3);
+        ListNode add2 = list2.addTop(4);
+        while (add2.getNext() !=null){
+            log.info("add2={}",add2.getVal());
+            add2 = add2.getNext();
+        }
+
         int m = 2;
         log.info("{} >>> 1={}",m,m >>> 1);
         log.info("1 << 30 ={}",1 << 30);

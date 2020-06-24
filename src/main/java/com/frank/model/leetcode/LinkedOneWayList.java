@@ -23,14 +23,14 @@ public class LinkedOneWayList {
         return head;
     }
 
-    public ListNode addTop(int num){
+    public ListNode addTop(int num) {
         if (head == null) {
             ListNode node = new ListNode(num, null);
             head = node;
-            tail = node;
         } else {
             ListNode node = new ListNode(num, null);
-            tail.setNext(node);
+            node.setNext(head);
+            head = node;
         }
         return head;
     }
