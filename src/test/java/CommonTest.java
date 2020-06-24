@@ -4,6 +4,8 @@ import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.User;
 import com.frank.exception.ResubmitException;
 import com.frank.model.JsonResult;
+import com.frank.model.leetcode.LinkedOneWayList;
+import com.frank.model.leetcode.ListNode;
 import com.frank.other.Node;
 import com.frank.other.SingleTon;
 import com.frank.repository.mysql.IncomeStatementRepository;
@@ -111,6 +113,16 @@ public class CommonTest {
 
     @Test
     public void testMap222() {
+        LinkedOneWayList list = new LinkedOneWayList();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        ListNode add = list.add(4);
+        while (add.getNext() !=null){
+            log.info("add={}",add.getVal());
+            add = add.getNext();
+        }
+
         int m = 2;
         log.info("{} >>> 1={}",m,m >>> 1);
         log.info("1 << 30 ={}",1 << 30);
