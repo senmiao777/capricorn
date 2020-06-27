@@ -16,6 +16,30 @@ import java.util.*;
 @Slf4j
 public class AlgorithmQuestions {
 
+    /**
+     * 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。
+     * <p>
+     * 给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
+     */
+    @Test
+    public void testPhoneNumberCombination() {
+
+    }
+
+    private String getNumber(Character number) {
+        Map<Character, String> config = new HashMap<>();
+        config.put('2', "abc");
+        config.put('3', "def");
+        config.put('4', "ghi");
+        config.put('5', "jkl");
+        config.put('6', "mno");
+        config.put('7', "pqrs");
+        config.put('8', "tuv");
+        config.put('9', "wxyz");
+
+        return config.get(number);
+    }
+
 
     @Test
     public void testThreeSum() {
