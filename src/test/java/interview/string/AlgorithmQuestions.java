@@ -1,6 +1,7 @@
 package interview.string;
 
 
+import com.frank.model.leetcode.LetterCombination;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -23,21 +24,13 @@ public class AlgorithmQuestions {
      */
     @Test
     public void testPhoneNumberCombination() {
+        LetterCombination combination = new LetterCombination();
+        List<String> strings = combination.letterCombinations("234");
+        log.info("strings={}", strings);
 
-    }
-
-    private String getNumber(Character number) {
-        Map<Character, String> config = new HashMap<>();
-        config.put('2', "abc");
-        config.put('3', "def");
-        config.put('4', "ghi");
-        config.put('5', "jkl");
-        config.put('6', "mno");
-        config.put('7', "pqrs");
-        config.put('8', "tuv");
-        config.put('9', "wxyz");
-
-        return config.get(number);
+        String s = "12";
+        String substring = s.substring(1);
+        log.info("substring={}",substring);
     }
 
 
