@@ -110,7 +110,44 @@ public class CommonTest {
 
     static final int MAXIMUM_CAPACITY = 1 << 30;
 
+    @Test
+    public void testMap2222() {
+        LinkedOneWayList list = new LinkedOneWayList();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        list.add(5);
+        list.add(6);
+        list.add(7);
+        ListNode add = list.add(8);
+        ListNode head = add;
+//        while (add.getNext() != null) {
+//            log.info("add={}", add.getVal());
+//            add = add.getNext();
+//        }
+//        log.info("add={}", add.getVal());
+        ListNode fast = head;
+        ListNode slow = head;
 
+        ListNode reverse = new ListNode(head.getVal(),null);
+        ListNode temp;
+        while (fast.getNext() != null) {
+            fast = fast.getNext();
+            temp = slow.getNext();
+            temp.setNext(reverse);
+            reverse = temp;
+            slow = slow.getNext();
+            if (fast.getNext() != null) {
+                fast = fast.getNext();
+            }
+        }
+
+        while (reverse.getNext() != null) {
+            log.info("reverse={}", reverse.getVal());
+            reverse = reverse.getNext();
+        }
+    }
     @Test
     public void testMap222() {
         int a = 1;
@@ -124,18 +161,6 @@ public class CommonTest {
         int c = 1;
         int d = ++c;
         log.info("d={}", d);
-
-
-        LinkedOneWayList list = new LinkedOneWayList();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        ListNode add = list.add(4);
-        while (add.getNext() != null) {
-            log.info("add={}", add.getVal());
-            add = add.getNext();
-        }
-
         LinkedOneWayList list2 = new LinkedOneWayList();
         list2.addTop(1);
         list2.addTop(2);
