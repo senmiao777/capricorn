@@ -117,36 +117,45 @@ public class CommonTest {
         list.add(2);
         list.add(3);
         list.add(4);
-        list.add(5);
-        list.add(6);
-        list.add(7);
-        ListNode add = list.add(8);
+        list.add(4);
+        list.add(3);
+        list.add(2);
+        ListNode add = list.add(1);
         ListNode head = add;
 //        while (add.getNext() != null) {
 //            log.info("add={}", add.getVal());
 //            add = add.getNext();
 //        }
 //        log.info("add={}", add.getVal());
+        final boolean palindrome = palindrome(head);
+        log.info("palindrome={}", palindrome);
+
+    }
+
+    private boolean palindrome(ListNode head) {
         ListNode fast = head;
         ListNode slow = head;
 
-        ListNode reverse = new ListNode(head.getVal(),null);
+        ListNode reverse = new ListNode(head.getVal(), null);
         ListNode temp;
         while (fast.getNext() != null) {
             fast = fast.getNext();
             slow = slow.getNext();
-            temp = new ListNode(slow.getVal(),reverse);
+            temp = new ListNode(slow.getVal(), reverse);
             reverse = temp;
             if (fast.getNext() != null) {
                 fast = fast.getNext();
+            } else {
+                while (reverse.getVal() == slow.getVal()) {
+                    reverse = reverse.getNext();
+                    slow = slow.getNext();
+                }
+                return slow.getNext() == null && reverse.getNext() == null;
             }
         }
-
-        while (reverse.getNext() != null) {
-            log.info("reverse={}", reverse.getVal());
-            reverse = reverse.getNext();
-        }
+        return false;
     }
+
     @Test
     public void testMap222() {
         int a = 1;
