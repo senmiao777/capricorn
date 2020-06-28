@@ -113,6 +113,19 @@ public class CommonTest {
 
     @Test
     public void testMap222() {
+        int a =1;
+        int b = a++;
+        log.info("b={}",b);
+
+        int e =1;
+        int f = (e++);
+        log.info("f={}",f);
+
+        int c = 1;
+        int d = ++c;
+        log.info("d={}",d);
+
+
         LinkedOneWayList list = new LinkedOneWayList();
         list.add(1);
         list.add(2);

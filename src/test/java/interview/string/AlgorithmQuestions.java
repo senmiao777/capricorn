@@ -25,7 +25,7 @@ public class AlgorithmQuestions {
     @Test
     public void testPhoneNumberCombination() {
         LetterCombination combination = new LetterCombination();
-        List<String> strings = combination.letterCombinations("234");
+        List<String> strings = combination.letterCombinations2("234");
         log.info("strings={}", strings);
 
         String s = "12";
