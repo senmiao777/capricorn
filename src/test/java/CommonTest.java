@@ -134,10 +134,9 @@ public class CommonTest {
         ListNode temp;
         while (fast.getNext() != null) {
             fast = fast.getNext();
-            temp = slow.getNext();
-            temp.setNext(reverse);
-            reverse = temp;
             slow = slow.getNext();
+            temp = new ListNode(slow.getVal(),reverse);
+            reverse = temp;
             if (fast.getNext() != null) {
                 fast = fast.getNext();
             }
