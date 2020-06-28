@@ -16,9 +16,21 @@ import java.util.Map;
 @Slf4j
 @NoArgsConstructor
 public class LetterCombination {
+
+
     public static Map<String, String> config;
     public static Map<Character, String> charConfig;
-
+    static {
+        charConfig = new HashMap<>(16);
+        charConfig.put('2', "abc");
+        charConfig.put('3', "def");
+        charConfig.put('4', "ghi");
+        charConfig.put('5', "jkl");
+        charConfig.put('6', "mno");
+        charConfig.put('7', "pqrs");
+        charConfig.put('8', "tuv");
+        charConfig.put('9', "wxyz");
+    }
     public List<String> letterCombinations(String digits) {
         List<String> result = new ArrayList<>();
         recursion(result, digits, new StringBuilder());
@@ -53,12 +65,6 @@ public class LetterCombination {
         }
     }
 
-    public static void main(String[] args) {
-
-
-
-    }
-
 
     private void recursion2(String str, int index, StringBuilder sb) {
 
@@ -71,13 +77,8 @@ public class LetterCombination {
         String numberString = getNumberString2(currentNumber);
         for (int i = 0; i < numberString.length(); i++) {
             char c = numberString.charAt(i);
-            int i1 = (index + 1);
-            log.info("current StringBuilder={},current char={},current index={}", sb, c, i1);
-            recursion2(str,i1 , new StringBuilder(sb).append(c));
-
+            recursion2(str,index + 1 , new StringBuilder(sb).append(c));
         }
-
-
     }
 
     static {
@@ -92,17 +93,7 @@ public class LetterCombination {
         config.put("9", "wxyz");
     }
 
-    static {
-        charConfig = new HashMap<>(16);
-        charConfig.put('2', "abc");
-        charConfig.put('3', "def");
-        charConfig.put('4', "ghi");
-        charConfig.put('5', "jkl");
-        charConfig.put('6', "mno");
-        charConfig.put('7', "pqrs");
-        charConfig.put('8', "tuv");
-        charConfig.put('9', "wxyz");
-    }
+
 
     private String getNumberString(String number) {
         return config.get(number);

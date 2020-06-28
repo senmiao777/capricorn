@@ -113,17 +113,17 @@ public class CommonTest {
 
     @Test
     public void testMap222() {
-        int a =1;
+        int a = 1;
         int b = a++;
-        log.info("b={}",b);
+        log.info("b={}", b);
 
-        int e =1;
+        int e = 1;
         int f = (e++);
-        log.info("f={}",f);
+        log.info("f2={}", f);
 
         int c = 1;
         int d = ++c;
-        log.info("d={}",d);
+        log.info("d={}", d);
 
 
         LinkedOneWayList list = new LinkedOneWayList();
@@ -131,8 +131,8 @@ public class CommonTest {
         list.add(2);
         list.add(3);
         ListNode add = list.add(4);
-        while (add.getNext() !=null){
-            log.info("add={}",add.getVal());
+        while (add.getNext() != null) {
+            log.info("add={}", add.getVal());
             add = add.getNext();
         }
 
@@ -141,19 +141,19 @@ public class CommonTest {
         list2.addTop(2);
         list2.addTop(3);
         ListNode add2 = list2.addTop(4);
-        while (add2.getNext() !=null){
-            log.info("add2={}",add2.getVal());
+        while (add2.getNext() != null) {
+            log.info("add2={}", add2.getVal());
             add2 = add2.getNext();
         }
 
         int m = 2;
-        log.info("{} >>> 1={}",m,m >>> 1);
-        log.info("1 << 30 ={}",1 << 30);
-        int n =2;
+        log.info("{} >>> 1={}", m, m >>> 1);
+        log.info("1 << 30 ={}", 1 << 30);
+        int n = 2;
         final int res = n |= n >>> 1;
-        log.info("{} >>> 1={}",n,res);
+        log.info("{} >>> 1={}", n, res);
         for (int i = 0; i < 18; i++) {
-            log.info("input {},output={}", i,tableSizeFor(i));
+            log.info("input {},output={}", i, tableSizeFor(i));
         }
     }
 
