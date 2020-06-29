@@ -110,16 +110,20 @@ public class CommonTest {
 
     static final int MAXIMUM_CAPACITY = 1 << 30;
 
+
     @Test
     public void testMap2222() {
         LinkedOneWayList list = new LinkedOneWayList();
         list.add(1);
-        list.add(2);
-        list.add(3);
-        list.add(4);
-        list.add(4);
-        list.add(3);
-        list.add(2);
+//        list.add(2);
+//        list.add(3);
+//        list.add(4);
+//        list.add(4);
+//        list.add(5);
+//        list.add(5);
+//        list.add(4);
+//        list.add(3);
+//        list.add(2);
         ListNode add = list.add(1);
         ListNode head = add;
 //        while (add.getNext() != null) {
@@ -132,28 +136,52 @@ public class CommonTest {
 
     }
 
+    /**
+     * 判断一个单向链表是否为“回文链表”
+     *
+     * @param head
+     * @return
+     */
     private boolean palindrome(ListNode head) {
+        if (head.getNext() == null) {
+            return true;
+        }
         ListNode fast = head;
         ListNode slow = head;
-
+        /**
+         * 计数，为了确定链表节点是奇数个还是偶数个
+         */
+        int count = 0;
         ListNode reverse = new ListNode(head.getVal(), null);
         ListNode temp;
         while (fast.getNext() != null) {
+            count++;
             fast = fast.getNext();
             slow = slow.getNext();
             temp = new ListNode(slow.getVal(), reverse);
             reverse = temp;
             if (fast.getNext() != null) {
                 fast = fast.getNext();
-            } else {
-                while (reverse.getVal() == slow.getVal()) {
-                    reverse = reverse.getNext();
-                    slow = slow.getNext();
-                }
-                return slow.getNext() == null && reverse.getNext() == null;
+                count++;
             }
         }
-        return false;
+        /**
+         * 链表节点个数为偶数的时候，reverse会“多走一步”，debug调试看出来的
+         * 所以回退一步
+         */
+        if ((count + 1) % 2 == 0) {
+            reverse = reverse.getNext();
+        }
+
+        while (reverse != null && slow != null) {
+            if (reverse.getVal() == slow.getVal()) {
+                reverse = reverse.getNext();
+                slow = slow.getNext();
+            } else {
+                return false;
+            }
+        }
+        return slow == null && reverse == null;
     }
 
     @Test
