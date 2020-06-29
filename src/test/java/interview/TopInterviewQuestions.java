@@ -29,9 +29,57 @@ public class TopInterviewQuestions {
         list.add(1);
         list.add(2);
         list.add(3);
-        list.add(4);
-        ListNode head = list.add(5);
+        ListNode head = list.add(4);
+        log.info("before reverse={}", head);
+//        final ListNode reverse = reverse(head);
+        final ListNode reverse = reverse2(head);
+        log.info("after reverse={}", reverse);
+    }
 
+    /**
+     * 遍历，创建一个新的链表
+     *
+     * @param head
+     * @return
+     */
+    private ListNode reverse(ListNode head) {
+        if (head == null || head.getNext() == null) {
+            return head;
+        }
+        ListNode tail = null;
+        ListNode temp = null;
+        while (head != null) {
+            if (tail == null) {
+                tail = new ListNode(head.getVal(), null);
+            } else {
+                temp = new ListNode(head.getVal(), tail);
+                tail = temp;
+            }
+            head = head.getNext();
+        }
+        return tail;
+    }
+
+    /**
+     * 遍历，指针反转
+     *
+     * @param head
+     * @return
+     */
+    private ListNode reverse2(ListNode head) {
+        ListNode previous = null;
+        ListNode current = head;
+        ListNode next;
+        /**
+         * 当前不为空，不是当前的next不为空
+         */
+        while (current != null) {
+            next = current.getNext();
+            current.setNext(previous);
+            previous = current;
+            current = next;
+        }
+        return previous;
     }
 
 
