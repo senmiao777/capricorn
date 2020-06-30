@@ -2,6 +2,7 @@ package interview.string;
 
 
 import com.frank.model.leetcode.LetterCombination;
+import com.frank.model.leetcode.ListNode;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -9,18 +10,93 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
-/**
- * @author frank
- * @version 1.0
- * @date 2020年5月29日18:32:57
- */
 @Slf4j
 public class AlgorithmQuestions {
 
+    @Test
+    public void testFind() {
+
+        ListNode tail = new ListNode(14, null);
+        ListNode a1 = new ListNode(10, tail);
+        ListNode a2 = new ListNode(8, a1);
+        ListNode a = new ListNode(2, a2);
+        ListNode one = new ListNode(1, a);
+        final ListNode latestN = findLatestN(one, 2);
+        log.info("latestN={}",latestN);
+    }
+
+    private ListNode findLatestN(ListNode head, int target) {
 
 
+        int count = 0;
+        ListNode first = head;
+        ListNode slow = head;
+        ListNode pre = head;
+        while (head != null) {
+            if (count == target) {
+                slow = slow.getNext();
+            }
+            if (count < target) {
+                count++;
+            }
+            head = head.getNext();
+        }
+
+        return slow;
+    }
 
 
+    @Test
+    public void testMerge() {
+        ListNode tail = new ListNode(14, null);
+        ListNode a1 = new ListNode(10, tail);
+        ListNode a2 = new ListNode(8, a1);
+        ListNode a = new ListNode(2, a2);
+        ListNode one = new ListNode(1, a);
+
+        ListNode tail2 = new ListNode(24, null);
+        ListNode b2 = new ListNode(7, tail2);
+        ListNode another = new ListNode(4, b2);
+
+        final ListNode merge = merge(one, another);
+        log.info("merge={}", merge);
+    }
+
+    /**
+     * Input: 1->2->4,
+     * 1->3->4
+     * Output: 1->1->2->3->4->4
+     *
+     * @param one
+     * @param another
+     * @return
+     */
+    private ListNode merge(ListNode one, ListNode another) {
+
+        if (one == null) {
+            return another;
+        }
+        if (another == null) {
+            return one;
+        }
+
+        ListNode anotherTemp;
+        ListNode head = one.getVal() <= another.getVal() ? one : another;
+        ListNode pre = head;
+        while (one != null && another != null) {
+            if (one.getVal() > another.getVal()) {
+                anotherTemp = another.getNext();
+                pre.setNext(another);
+                pre = another;
+                another.setNext(one);
+                another = anotherTemp;
+            }
+            one = one.getNext();
+            pre = pre.getNext();
+        }
+
+        return null;
+    }
 
 
     /**
@@ -36,7 +112,7 @@ public class AlgorithmQuestions {
 
         String s = "12";
         String substring = s.substring(1);
-        log.info("substring={}",substring);
+        log.info("substring={}", substring);
     }
 
 

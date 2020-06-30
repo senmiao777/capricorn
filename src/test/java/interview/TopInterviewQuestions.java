@@ -16,6 +16,27 @@ import java.util.Stack;
 public class TopInterviewQuestions {
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * 判断链表有没有环
+     */
     @Test
     public void testCycle() {
 
@@ -24,7 +45,6 @@ public class TopInterviewQuestions {
         ListNode b = new ListNode(3,a);
         ListNode c = new ListNode(4,b);
         ListNode d = new ListNode(5,c);
-
         tail.setNext(c);
 
         final boolean b1 = hasCycle(d);
