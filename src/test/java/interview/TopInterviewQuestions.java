@@ -12,13 +12,71 @@ import org.junit.Test;
 import java.util.*;
 import java.util.Stack;
 
-/**
- * @author frank
- * @version 1.0
- * @date 2018/3/9 0004 下午 18:50
- */
 @Slf4j
 public class TopInterviewQuestions {
+
+
+    @Test
+    public void testCycle() {
+
+        ListNode tail = new ListNode(1,null);
+        ListNode a = new ListNode(2,tail);
+        ListNode b = new ListNode(3,a);
+        ListNode c = new ListNode(4,b);
+        ListNode d = new ListNode(5,c);
+
+        tail.setNext(c);
+
+        final boolean b1 = hasCycle(d);
+        log.info("hasCycle={}",b1);
+
+    }
+
+    /**
+     * 快慢指针
+     * @param head
+     * @return
+     */
+    private boolean hasCycle(ListNode head) {
+
+        if (head == null || head.getNext() == null) {
+            return false;
+        }
+        ListNode fast = head.getNext();
+        ListNode slow = head;
+        while (fast != null) {
+            if (slow == fast) {
+                return true;
+            }
+            fast = fast.getNext();
+            slow = slow.getNext();
+            if (fast != null) {
+                fast = fast.getNext();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 访问过的节点记录在set里，有重复则说明有环
+     */
+    private boolean hasCycle2(ListNode head) {
+
+        if (head == null || head.getNext() == null) {
+            return false;
+        }
+
+        Set<ListNode> set = new HashSet<>();
+
+        while (head != null) {
+            if(set.contains(head)){
+                return true;
+            }
+            set.add(head);
+            head = head.getNext();
+        }
+        return false;
+    }
 
     /**
      * 单向链表反转
