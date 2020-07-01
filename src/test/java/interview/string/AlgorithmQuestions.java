@@ -21,17 +21,22 @@ public class AlgorithmQuestions {
         ListNode a2 = new ListNode(8, a1);
         ListNode a = new ListNode(2, a2);
         ListNode one = new ListNode(1, a);
-        final ListNode latestN = findLatestN(one, 2);
-        log.info("latestN={}",latestN);
+        final ListNode latestN = deleteLatestN(one, 1);
+        log.info("latestN={}", latestN);
     }
 
-    private ListNode findLatestN(ListNode head, int target) {
+    /**
+     * 要删除倒数第N个节点，则找到倒数第N+1个节点，N+1 的 next 指向 N的next
+     *
+     * @param head
+     * @param target
+     * @return
+     */
+    private ListNode deleteLatestN(ListNode head, int target) {
 
-
-        int count = 0;
-        ListNode first = head;
+        int count = -1;
         ListNode slow = head;
-        ListNode pre = head;
+        ListNode res = head;
         while (head != null) {
             if (count == target) {
                 slow = slow.getNext();
@@ -42,7 +47,21 @@ public class AlgorithmQuestions {
             head = head.getNext();
         }
 
-        return slow;
+        /**
+         * 删除头结点，特殊处理
+         */
+        if (slow == res && count < target) {
+            return res.getNext();
+        }
+        ListNode current = slow;
+        slow = slow.getNext();
+        if (slow == null) {
+            current.setNext(null);
+        } else {
+            current.setNext(slow.getNext());
+        }
+
+        return res;
     }
 
 
