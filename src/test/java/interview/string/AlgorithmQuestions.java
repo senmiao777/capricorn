@@ -37,6 +37,12 @@ public class AlgorithmQuestions {
         int count = -1;
         ListNode slow = head;
         ListNode res = head;
+        /**
+         * for (int i = 1; i <= n + 1; i++) {
+         *   first = first.next;
+         * }
+         *
+         */
         while (head != null) {
             if (count == target) {
                 slow = slow.getNext();
