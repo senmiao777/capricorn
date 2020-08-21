@@ -14,5 +14,9 @@ public interface IStockService {
 
     Stock findByStockName(String stockName);
 
+    Stock save(Stock stock);
+
+    Stock saveWithRuntimeException(Stock stock);
+
     List<Stock> findByArea(String area);
 }

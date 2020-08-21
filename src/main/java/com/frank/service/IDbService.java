@@ -1,6 +1,7 @@
 package com.frank.service;
 
 import com.frank.entity.mysql.Benefit;
+import com.frank.entity.mysql.Stock;
 import com.frank.entity.mysql.User;
 
 import java.util.List;
@@ -25,4 +26,9 @@ public interface IDbService {
      * @param benefit
      */
     void update(List<User> userList, Benefit benefit);
+
+    void saveUserAndStock(User user,Stock stock);
+
+    void saveUserAndStockWithException(User user,Stock stock);
+
 }
