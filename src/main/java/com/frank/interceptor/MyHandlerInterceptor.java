@@ -4,6 +4,7 @@ import com.frank.enums.Common;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.MDC;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,11 @@ public class MyHandlerInterceptor extends HandlerInterceptorAdapter {
         MDC.put(Common.TRACING_ID.getValue(), String.valueOf(RandomUtils.nextInt(100000000, 999999999)));
         log.info("请求开始url={},IP={}", request.getServletPath(), Objects.toString(request.getHeader(Common.REAL_IP.getValue()), Common.DEFAULT_IP.getValue()));
         return super.preHandle(request, response, handler);
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        super.postHandle(request, response, handler, modelAndView);
     }
 
     @Override
