@@ -33,6 +33,7 @@ public class ExecutorConfig {
         // rejection-policy：当pool已经达到max size的时候，如何处理新任务
         // 如果QueueCapacity 都爆了 ,使用主线程跑任务  CallerRunsPolicy
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
+        executor.setAllowCoreThreadTimeOut(true);
         executor.initialize();
         return executor;
     }

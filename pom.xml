@@ -280,6 +280,18 @@
             <artifactId>cglib</artifactId>
             <version>3.1</version>
         </dependency>
+       <!-- <dependency>
+            <groupId>com.frank</groupId>
+            <artifactId>simple</artifactId>
+            <version>1.1-SNAPSHOT</version>
+        </dependency>-->
+
+        <dependency>
+            <groupId>com.frank</groupId>
+            <artifactId>simple2</artifactId>
+            <!--1.22-SNAPSHOT是个稳定版本-->
+            <version>1.25-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 

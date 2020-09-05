@@ -57,8 +57,11 @@ public class DbServiceImpl implements IDbService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void saveUserAndStock(User user, Stock stock) {
 
+        userService.save(user);
+        stockService.saveWithRuntimeException(stock);
     }
 
     @Override

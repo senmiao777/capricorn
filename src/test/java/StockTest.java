@@ -7,6 +7,7 @@ import com.frank.model.Result;
 import com.frank.repository.mysql.BenefitRepository;
 import com.frank.repository.mysql.IncomeStatementRepository;
 import com.frank.service.IDbService;
+import com.frank.service.IUserService;
 import com.frank.util.GenerateUtil;
 import com.frank.util.HttpUtil;
 import com.google.common.base.Splitter;
@@ -59,6 +60,9 @@ public class StockTest {
     @Autowired
     private IDbService dbService;
 
+    @Autowired
+    private IUserService userService;
+
 //    @Autowired
 //    @Qualifier(value="testTaskPoolExecutor")
 //    private Executor testTaskPoolExecutor;
@@ -75,13 +79,24 @@ public class StockTest {
     volatile int count = 0;
 
     @Test
+    public void testSave(){
+
+        User byPhone = userService.findByPhone(13286230000L);
+        //userService.update(byPhone);
+        byPhone.setAge(66);
+
+    }
+
+    @Test
     public void testTransaction() {
         User user =User.generateUser();
         user.setUserName("事务测试");
         Stock stock = new Stock();
         stock.setCode("test00");
         stock.setArea("江苏");
-        dbService.saveUserAndStockWithException(user,stock);
+       // dbService.saveUserAndStockWithException(user,stock);
+        dbService.saveUserAndStock(user,stock);
+
     }
 
     @Test
