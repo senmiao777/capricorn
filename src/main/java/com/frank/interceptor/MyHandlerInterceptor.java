@@ -9,6 +9,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -30,6 +31,15 @@ public class MyHandlerInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+
+        if (modelAndView != null) {
+            log.info("modelAndView={}", modelAndView.toString());
+            Map<String, Object> modelMap = modelAndView.getModelMap();
+            log.info("modelMap={},isEmpty={}", modelMap.toString(), modelMap.isEmpty());
+        } else {
+            log.info("modelAndView is null");
+
+        }
         super.postHandle(request, response, handler, modelAndView);
     }
 
