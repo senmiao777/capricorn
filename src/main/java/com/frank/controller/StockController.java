@@ -95,7 +95,7 @@ public class StockController {
         return JsonResult.buildSuccessResult(stock);
     }
 
-    @RequestMapping(value = "/info2", method = RequestMethod.POST)
+    @RequestMapping(value = "/info3", method = RequestMethod.POST)
     public JsonResult info2(@RequestParam String code, @RequestParam String value) {
 
         log.info("code={},value={}", code, value);

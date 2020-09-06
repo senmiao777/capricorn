@@ -40,6 +40,7 @@ public class MyHandlerInterceptor extends HandlerInterceptorAdapter {
             log.info("modelAndView is null");
 
         }
+
         super.postHandle(request, response, handler, modelAndView);
     }
 
