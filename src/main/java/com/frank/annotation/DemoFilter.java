@@ -1,11 +1,13 @@
 package com.frank.annotation;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Map;
 
 /**
@@ -16,6 +18,7 @@ import java.util.Map;
 
 @WebFilter(filterName = "EncrypteFilter", urlPatterns = "/*")
 @Configuration
+@Slf4j
 public class DemoFilter implements Filter {
 
     @Override
@@ -34,13 +37,18 @@ public class DemoFilter implements Filter {
         for (Map.Entry<String, String[]> param : params.entrySet()) {
             String key = param.getKey();  // 参数名
             String[] value = param.getValue();  // 参数值
-            System.out.println("key="+ key+"value="+value);
+            System.out.println("key=" + key + "value=" + value[0]);
 
+        }
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String name = headerNames.nextElement();
+            log.info("header name={},value={}", name, request.getHeader(name));
         }
 
         if (stockCode != null) {
             int i = 1100;
-            System.out.println("url="+ request.getRequestURL());
+            System.out.println("url=" + request.getRequestURL());
             request.setAttribute("userId", i);
 
         } else {
