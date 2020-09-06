@@ -29,14 +29,20 @@ public class MyHandlerInterceptor extends HandlerInterceptorAdapter {
         MDC.put(Common.TRACING_ID.getValue(), String.valueOf(RandomUtils.nextInt(100000000, 999999999)));
         log.info("请求开始url={},IP={}", request.getServletPath(), Objects.toString(request.getHeader(Common.REAL_IP.getValue()), Common.DEFAULT_IP.getValue()));
 
-        if(handler instanceof HandlerMethod) {
-            HandlerMethod h = (HandlerMethod)handler;
+        if (handler instanceof HandlerMethod) {
+            HandlerMethod h = (HandlerMethod) handler;
             boolean b = h.hasMethodAnnotation(Encrypt.class);
-            if(b){
-                System.out.println("---------方法："+request.getRequestURI() + "加了Encrypt注解");
-            }else {
-                System.out.println("---------方法："+request.getRequestURI() + "没有Encrypt注解");
+            if (b) {
+                System.out.println("---------方法：" + request.getRequestURI() + "加了Encrypt注解");
+            } else {
+                System.out.println("---------方法：" + request.getRequestURI() + "没有Encrypt注解");
             }
+
+            /**
+             * 这个注解是加在类上的，如果查出来的annotation 不为null，那么说明也是需要加密的
+             */
+            Encrypt annotation = h.getMethod().getDeclaringClass().getAnnotation(Encrypt.class);
+            System.out.println(request.getRequestURI() + "获取类上的注解annotation=" + annotation);
         }
 
         return super.preHandle(request, response, handler);
