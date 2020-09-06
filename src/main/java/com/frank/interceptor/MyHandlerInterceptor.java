@@ -33,9 +33,9 @@ public class MyHandlerInterceptor extends HandlerInterceptorAdapter {
             HandlerMethod h = (HandlerMethod)handler;
             boolean b = h.hasMethodAnnotation(Encrypt.class);
             if(b){
-                System.out.println("---------方法："+request.getMethod() + "加了Encrypt注解");
+                System.out.println("---------方法："+request.getRequestURI() + "加了Encrypt注解");
             }else {
-                System.out.println("---------方法："+request.getMethod() + "没有Encrypt注解");
+                System.out.println("---------方法："+request.getRequestURI() + "没有Encrypt注解");
             }
         }
 
