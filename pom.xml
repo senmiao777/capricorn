@@ -290,7 +290,7 @@
             <groupId>com.frank</groupId>
             <artifactId>simple2</artifactId>
             <!--1.22-SNAPSHOT是个稳定版本-->
-            <version>1.25-SNAPSHOT</version>
+            <version>1.28-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

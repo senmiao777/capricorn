@@ -1,9 +1,11 @@
 package com.frank.interceptor;
 
+import com.frank.annotation.Encrypt;
 import com.frank.enums.Common;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.MDC;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -26,6 +28,17 @@ public class MyHandlerInterceptor extends HandlerInterceptorAdapter {
         request.setAttribute(Common.REQUEST_AT.getValue(), System.currentTimeMillis());
         MDC.put(Common.TRACING_ID.getValue(), String.valueOf(RandomUtils.nextInt(100000000, 999999999)));
         log.info("请求开始url={},IP={}", request.getServletPath(), Objects.toString(request.getHeader(Common.REAL_IP.getValue()), Common.DEFAULT_IP.getValue()));
+
+        if(handler instanceof HandlerMethod) {
+            HandlerMethod h = (HandlerMethod)handler;
+            boolean b = h.hasMethodAnnotation(Encrypt.class);
+            if(b){
+                System.out.println("---------方法："+request.getMethod() + "加了Encrypt注解");
+            }else {
+                System.out.println("---------方法："+request.getMethod() + "没有Encrypt注解");
+            }
+        }
+
         return super.preHandle(request, response, handler);
     }
 
