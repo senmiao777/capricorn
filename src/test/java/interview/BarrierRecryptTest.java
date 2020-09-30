@@ -71,6 +71,10 @@ public class BarrierRecryptTest {
         for (int j = 0; j < columnNumber; j++) {
             for (int i = 0; i <= line; i++) {
 
+                /**
+                 * 最后一行需要判断是否空位
+                 * 有空位直接跳过
+                 */
                 if (i == line) {
                     if (i1 > 0) {
                         i1--;
