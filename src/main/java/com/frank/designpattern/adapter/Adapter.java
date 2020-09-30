@@ -1,5 +1,7 @@
 package com.frank.designpattern.adapter;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author: sb
  * @time: 2018-07-19 15:31
@@ -25,7 +27,7 @@ package com.frank.designpattern.adapter;
  * InputStreamReader作为一个适配器，实现了字节流到字符流的转换。
  *
  */
-
+@Slf4j
 public class Adapter implements Target {
 
     /**
@@ -44,6 +46,7 @@ public class Adapter implements Target {
          * 这里进行适配工作
          * 将Adaptee适配成Target的子类Adapter
          */
+        log.info("---这是适配器类的方法----");
         adaptee.adapteeMethod1();
     }
 }

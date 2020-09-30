@@ -1,5 +1,6 @@
 package com.frank.controller;
 
+import com.frank.annotation.Encrypt;
 import com.frank.annotation.RedisLock;
 import com.frank.entity.mysql.TestUser;
 import com.frank.entity.mysql.User;
@@ -10,11 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.Map;
@@ -25,16 +22,29 @@ import java.util.Map;
  * 以及各种校验
  */
 @Slf4j
+@Encrypt
 @RestController
 @RequestMapping(value = "/t/user")
 public class UserController {
 
-    @Autowired
-    private RestTemplate restTemplate;
 
     @Autowired
     private UserRepository userRepository;
+    @RequestMapping(value = "/entity/{id}", method = RequestMethod.GET)
+    public JsonResult getUser(@PathVariable Long id) {
+        log.info("getUser id={}", id);
+        User one = userRepository.findOne(id);
+        return JsonResult.buildSuccessResult(one);
 
+    }
+
+    @RequestMapping(value = "/{id}/suffix", method = RequestMethod.GET)
+    public JsonResult getUserSuffix(@PathVariable Long id) {
+        log.info("getUserSuffix id={}", id);
+        User one = userRepository.findOne(id);
+        return JsonResult.buildSuccessResult(one);
+
+    }
 
     /**
      * 根据id删除用户
@@ -77,7 +87,7 @@ public class UserController {
             Class.forName("big.sister.Whatever");
         } catch (ClassNotFoundException e) {
             log.error("Class.forName e={}", ExceptionUtils.getStackTrace(e));
-           // return JsonResult.buildErrorResult("人为异常");
+            // return JsonResult.buildErrorResult("人为异常");
         }
         ClassLoader classLoader = UserController.class.getClassLoader();
 
@@ -111,6 +121,8 @@ public class UserController {
         return JsonResult.buildSuccessResult(u);
 
     }
+
+
 
 
     /**

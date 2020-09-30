@@ -15,4 +15,12 @@ public interface IUserService {
 
     boolean batchSave(List<User> userList);
 
+    int updatePhone(Long phone, Long id);
+
+    User findByPhone(Long phone);
+
+    User findAndUpdate(Long phone);
+
+
+    User update(User user);
 }

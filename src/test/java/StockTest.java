@@ -1,9 +1,13 @@
 import com.alibaba.fastjson.JSON;
 import com.frank.entity.mysql.Benefit;
 import com.frank.entity.mysql.IncomeStatement;
+import com.frank.entity.mysql.Stock;
+import com.frank.entity.mysql.User;
 import com.frank.model.Result;
 import com.frank.repository.mysql.BenefitRepository;
 import com.frank.repository.mysql.IncomeStatementRepository;
+import com.frank.service.IDbService;
+import com.frank.service.IUserService;
 import com.frank.util.GenerateUtil;
 import com.frank.util.HttpUtil;
 import com.google.common.base.Splitter;
@@ -17,8 +21,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
@@ -34,10 +43,10 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Created by Administrator on 2017/4/25 0025.
  */
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@SpringBootApplication
-//@ComponentScan(basePackages = "com.frank")
-//@SpringBootTest(classes = StockTest.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootApplication
+@ComponentScan(basePackages = "com.frank")
+@SpringBootTest(classes = StockTest.class)
 //@Rollback(false)
 @Slf4j
 public class StockTest {
@@ -47,6 +56,12 @@ public class StockTest {
 
     @Autowired
     private IncomeStatementRepository incomeStatementRepository;
+
+    @Autowired
+    private IDbService dbService;
+
+    @Autowired
+    private IUserService userService;
 
 //    @Autowired
 //    @Qualifier(value="testTaskPoolExecutor")
@@ -64,7 +79,29 @@ public class StockTest {
     volatile int count = 0;
 
     @Test
+    public void testSave(){
+
+        User byPhone = userService.findByPhone(13286230000L);
+        //userService.update(byPhone);
+        byPhone.setAge(66);
+
+    }
+
+    @Test
+    public void testTransaction() {
+        User user =User.generateUser();
+        user.setUserName("事务测试");
+        Stock stock = new Stock();
+        stock.setCode("test00");
+        stock.setArea("江苏");
+       // dbService.saveUserAndStockWithException(user,stock);
+        dbService.saveUserAndStock(user,stock);
+
+    }
+
+    @Test
     public void testVolatile() {
+
 
         Executor executor = Executors.newScheduledThreadPool(10);
         for (int i = 0; i < 100; i++) {

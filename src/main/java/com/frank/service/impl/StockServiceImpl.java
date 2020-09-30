@@ -10,6 +10,8 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -49,5 +51,22 @@ public class StockServiceImpl implements IStockService {
     @Override
     public List<Stock> findByArea(String area) {
         return null;
+    }
+
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Stock save(Stock stock) {
+        return stockRepository.save(stock);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Stock saveWithRuntimeException(Stock stock) {
+        Stock save = stockRepository.save(stock);
+        if ("test00".equals(stock.getCode())) {
+            throw new RuntimeException();
+        }
+        return save;
     }
 }
