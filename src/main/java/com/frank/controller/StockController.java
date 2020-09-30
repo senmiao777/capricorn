@@ -1,7 +1,5 @@
 package com.frank.controller;
 
-import com.auto.config.GetHashCodeClass;
-import com.auto.config.JustTest;
 import com.frank.annotation.Encrypt;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.Stock;
@@ -47,12 +45,6 @@ public class StockController {
     @Autowired
     private IStockService stockService;
 
-    @Autowired
-    private GetHashCodeClass hashCodeClass;
-
-    @Autowired
-    private JustTest justTest;
-
     /**
      * 每秒发十个令牌
      */
@@ -78,35 +70,8 @@ public class StockController {
 
     }
 
-    /**
-     * 根据股票代码查询该股票基本信息
-     * rateLimiter限制访问速度
-     *
-     * @param stockCode
-     * @return
-     */
-    @RequestMapping(value = "/info", method = RequestMethod.GET)
-    public JsonResult info(@RequestParam String stockCode) {
 
-        log.info("stockCode={},等待时间={}", stockCode, rateLimiter.acquire());
-        Stock stock = stockRepository.findByStockCode(stockCode);
 
-        log.info("stockCode={},hashCodeClass.getName={},justTest={}", stockCode, hashCodeClass.getName(), justTest.getTestString());
-
-        return JsonResult.buildSuccessResult(stock);
-    }
-
-    @Encrypt
-    @RequestMapping(value = "/info3", method = RequestMethod.POST)
-    public JsonResult info3(@RequestParam String code, @RequestParam String value) {
-
-        log.info("code={},value={}", code, value);
-        Stock stock = stockRepository.findByStockCode(code);
-
-        log.info("code={},value={},hashCodeClass.getName={},justTest={}", code, value, hashCodeClass.getName(), justTest.getTestString());
-
-        return JsonResult.buildSuccessResult(stock);
-    }
 
     @RequestMapping(value = "/short/{id}", method = RequestMethod.GET)
     public void shortresource(HttpServletResponse response, @PathVariable("id") Long id) {
