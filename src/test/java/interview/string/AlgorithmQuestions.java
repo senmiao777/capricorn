@@ -14,6 +14,83 @@ import java.util.*;
 public class AlgorithmQuestions {
 
     @Test
+    public void testBarrierEncrypt() {
+        /**
+         * 密文=hwepteont+lrct+llre+odys+
+         * 明文=helloworldencrypttest++++
+         */
+        String plaintext = "helloworldencrypttest";
+        String ciphertext = encode1(plaintext, 5);
+        System.out.println("密文=" + ciphertext);
+        System.out.println("明文=" + decode1(ciphertext,5));
+
+
+    }
+
+    /**
+     * 栅栏解密
+     */
+    private String decode1(String ciphertext, int columnNumber) {
+        int length = ciphertext.length();
+        char[] chars = ciphertext.toCharArray();
+        int newLength = length%columnNumber == 0? length : (length/columnNumber+1) * columnNumber;
+        char[] result = new char[newLength];
+        int line = length / columnNumber;
+        int i1 = length % columnNumber;
+        int index = 0;
+        for (int j = 0; j < columnNumber; j++) {
+            for (int i = 0; i <= line; i++) {
+                if (i == line) {
+                    if (i1 > 0) {
+                        i1--;
+                    } else {
+                        continue;
+                    }
+                }
+                result[index] = chars[j + columnNumber * i];
+                index++;
+            }
+        }
+
+        return new String(result);
+    }
+
+    /**
+     * 栅栏加密
+     */
+    private String encode1(String plaintext, int columnNumber) {
+        int length = plaintext.length();
+        char[] chars = plaintext.toCharArray();
+        int newLength = length%columnNumber == 0? length : (length/columnNumber+1) * columnNumber;
+        char[] result = new char[newLength];
+        // 行数
+        int line = length / columnNumber;
+
+        /**
+         * 余数，不需要补位的个数
+         */
+        int i1 = length % columnNumber;
+        int index = 0;
+        for (int j = 0; j < columnNumber; j++) {
+            for (int i = 0; i <= line; i++) {
+                if (i == line ) {
+                    if (i1 > 0) {
+                        result[index] = chars[j + columnNumber * i];
+                        i1--;
+                    } else {
+                        result[index] = '+';
+                    }
+                }else {
+                    result[index] = chars[j + columnNumber * i];
+                }
+
+                index++;
+            }
+        }
+        return new String(result);
+    }
+
+    @Test
     public void testFind() {
 
         ListNode tail = new ListNode(14, null);
@@ -37,6 +114,12 @@ public class AlgorithmQuestions {
         int count = -1;
         ListNode slow = head;
         ListNode res = head;
+        /**
+         * for (int i = 1; i <= n + 1; i++) {
+         *   first = first.next;
+         * }
+         *
+         */
         while (head != null) {
             if (count == target) {
                 slow = slow.getNext();
