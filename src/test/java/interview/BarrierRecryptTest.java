@@ -45,16 +45,16 @@ public class BarrierRecryptTest {
      * 加密的时候有几列，解密的时候就有几行
      * 竖着读
      * <p>
-     * hetc
-     * enad
+     * hetj
+     * enak
      * lcb
      * lrc
      * oyd
      * wpe
      * otf
      * rtg
-     * lea
-     * dsb
+     * leh
+     * dsi
      */
     private String decode2(String ciphertext, int lineNumber) {
         int length = ciphertext.length();
@@ -136,12 +136,10 @@ public class BarrierRecryptTest {
      * 字符串还有剩余字符，则跳到下一行，重复上一步操作，然后竖着读取,得到的结果即为密文
      * 根据这个规律， 计算出每个字符在密文中的位置
      * <p>
-     * hello
-     * world
-     * encry
-     * pttes
-     * tabcd
-     * ef
+     * helloworld
+     * encrypttes
+     * tabcdefghi
+     * jk
      * 这个方法好理解
      */
     private String encode2(String plaintext, int columnNumber) {
