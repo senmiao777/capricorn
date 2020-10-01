@@ -131,7 +131,7 @@ public class BarrierRecryptTest {
 
     /**
      * 栅栏加密
-     * 共columnNumber列
+     * 共columnNumber列,例子中columnNumber=10
      * 逻辑上：读取明文字符，依次填充第一行第一列，第一行第二列，直到达到第一行第columnNumber列
      * 字符串还有剩余字符，则跳到下一行，重复上一步操作，然后竖着读取,得到的结果即为密文
      * 根据这个规律， 计算出每个字符在密文中的位置
