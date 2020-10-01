@@ -8,12 +8,10 @@ public class BarrierRecryptTest {
 
     @Test
     public void testBarrierEncrypt() throws Exception {
-
-     /*   String ciphertext = encode1(plaintext, 11);
-        System.out.println("密文=" + ciphertext);
-        String ciphertext2 = encode2(plaintext, 11);
+        String plain = "helloworldencrypttestabcdefghijk";
+        String ciphertext2 = encode2(plain, 11);
         System.out.println("密文=" + ciphertext2);
-        System.out.println("明文=" + decode2(ciphertext, 11));*/
+        System.out.println("明文=" + decode2(ciphertext2, 11));
 
         for (int i = 3; i < 20; i++) {
             String plaintext = RandomNum.createRandomString(RandomUtils.nextInt(10, 200));
