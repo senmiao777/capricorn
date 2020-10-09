@@ -39,6 +39,22 @@ public class BarrierRecryptTest {
         String s4 = new String(chars2);
         System.out.println("两次异或之后=" + s4);
         log.info("两次异或之后 equals={}", s4.equals(s));
+
+        String afterBase64 = Base64.getEncoder().withoutPadding().encodeToString(s3.getBytes());
+        log.info("afterBase64={}", afterBase64);
+        byte[] decode = Base64.getDecoder().decode(afterBase64.getBytes());
+
+        String s5 = new String(decode);
+        log.info("s5={},抑或之后的密文eq={}", s5, s5.equals(s3));
+        char[] chars5 = new char[s5.length()];
+        for (int i = 0; i < s5.length(); i++) {
+            int i1 = s5.charAt(i) ^ i;
+            chars5[i] = (char) i1;
+        }
+        String s6 = new String(chars5);
+
+        log.info("两次异或之后 equals={}", s6.equals(s));
+
     }
 
     @Test
