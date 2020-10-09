@@ -1,10 +1,45 @@
 package interview;
 
 import com.frank.util.RandomNum;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 
+import java.util.Base64;
+
+@Slf4j
 public class BarrierRecryptTest {
+
+    /**
+     * 根据一个数抑或另一个数操两次得到本身，进行简单的加密
+     * Exclusive-OR
+     * <p>
+     * N^0 = N ，N^N = 0 （想想为什么）
+     * <p>
+     * <p>
+     * 异或满足结合率 A^B^C = A^(B^C) 和交换律A^B = B^A
+     * 所以A^B^B = A^(B^B) = A^0 = A
+     */
+    @Test
+    public void testXOR() {
+        String s = "https://blog.csdn.net/qq_30054961/article/details/82456069?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param";
+        char[] chars = new char[s.length()];
+        for (int i = 0; i < s.length(); i++) {
+            int i1 = s.charAt(i) ^ i;
+            chars[i] = (char) i1;
+        }
+        String s3 = new String(chars);
+        System.out.println("异或之后=" + s3);
+
+        char[] chars2 = new char[s3.length()];
+        for (int i = 0; i < s3.length(); i++) {
+            int i1 = s3.charAt(i) ^ i;
+            chars2[i] = (char) i1;
+        }
+        String s4 = new String(chars2);
+        System.out.println("两次异或之后=" + s4);
+        log.info("两次异或之后 equals={}", s4.equals(s));
+    }
 
     @Test
     public void testBarrierEncrypt() throws Exception {
