@@ -1,5 +1,7 @@
 package interview;
 
+import com.alibaba.fastjson.JSON;
+import com.frank.entity.mysql.User;
 import com.frank.util.RandomNum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
@@ -22,7 +24,10 @@ public class BarrierRecryptTest {
      */
     @Test
     public void testXOR() {
-        String s = "https://blog.csdn.net/qq_30054961/article/details/82456069?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param";
+        //String s = "https://blog.csdn.net/qq_30054961/article/details/82456069?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param";
+        String s = JSON.toJSONString(User.generateUser());
+        System.out.println("明文是=" + s);
+
         char[] chars = new char[s.length()];
         for (int i = 0; i < s.length(); i++) {
             int i1 = s.charAt(i) ^ i;
