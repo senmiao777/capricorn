@@ -99,16 +99,14 @@ public class BarrierRecryptTest {
 
         char[] chars = new char[s.length()];
         for (int i = 0; i < s.length(); i++) {
-            int i1 = s.charAt(i) ^ i;
-            chars[i] = (char) i1;
+            chars[i] = (char) (s.charAt(i) ^ (i<<2));
         }
         String s3 = new String(chars);
         System.out.println("异或之后=" + s3);
 
         char[] chars2 = new char[s3.length()];
         for (int i = 0; i < s3.length(); i++) {
-            int i1 = s3.charAt(i) ^ i;
-            chars2[i] = (char) i1;
+            chars2[i] = (char)(s3.charAt(i) ^ (i<<2));
         }
         String s4 = new String(chars2);
         System.out.println("两次异或之后=" + s4);
@@ -122,8 +120,7 @@ public class BarrierRecryptTest {
         log.info("s5={},抑或之后的密文eq={}", s5, s5.equals(s3));
         char[] chars5 = new char[s5.length()];
         for (int i = 0; i < s5.length(); i++) {
-            int i1 = s5.charAt(i) ^ i;
-            chars5[i] = (char) i1;
+            chars5[i] = (char) (s5.charAt(i) ^ (i<<2));
         }
         String s6 = new String(chars5);
 
