@@ -20,13 +20,13 @@ public class BarrierRecryptTest {
      * 将110000101100101转换为十进制得到24933，获取24933的ascii码值，得到字符XXXX
      */
     @Test
-    public void ys(){
+    public void ys() {
         String mnw = "12j3jhk1s-12h3-12j3h712-as2h-23Oas";
         System.out.println("压缩前：" + mnw + "，长度： " + mnw.length());
         String miw = yasuo(mnw);
-        System.out.println("压缩后："+miw +"，长度："+ miw.length());
+        System.out.println("压缩后：" + miw + "，长度：" + miw.length());
         String hy = jem(miw);
-        System.out.println("还原后："+hy +"，长度："+ hy.length());
+        System.out.println("还原后：" + hy + "，长度：" + hy.length());
     }
 
     private String yasuo(String mnw) {
@@ -61,7 +61,6 @@ public class BarrierRecryptTest {
     }
 
 
-
     @Test
     public void findSingleNumber() {
         int[] nums = {1, 2, 3, 4, 5, 6, 7, 8, 3, 4, 5, 6, 7, 8, 1};
@@ -91,22 +90,28 @@ public class BarrierRecryptTest {
     @Test
     public void testXOR() {
         char two = 'a';
+
+
         char e = 'e';
-        log.info("ascii 值为{},{}",Integer.valueOf(two),Integer.valueOf(e));
+        log.info("ascii 值为{},{}", Integer.valueOf(two), Integer.valueOf(e));
+
+        String st = "abc";
+        int c = st.charAt(0);
+        log.info("c={}",c);
         //String s = "https://blog.csdn.net/qq_30054961/article/details/82456069?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param";
         String s = JSON.toJSONString(User.generateUser());
         System.out.println("明文是=" + s);
 
         char[] chars = new char[s.length()];
         for (int i = 0; i < s.length(); i++) {
-            chars[i] = (char) (s.charAt(i) ^ (i<<2));
+            chars[i] = (char) (s.charAt(i) ^ (i << 2));
         }
         String s3 = new String(chars);
         System.out.println("异或之后=" + s3);
 
         char[] chars2 = new char[s3.length()];
         for (int i = 0; i < s3.length(); i++) {
-            chars2[i] = (char)(s3.charAt(i) ^ (i<<2));
+            chars2[i] = (char) (s3.charAt(i) ^ (i << 2));
         }
         String s4 = new String(chars2);
         System.out.println("两次异或之后=" + s4);
@@ -120,7 +125,7 @@ public class BarrierRecryptTest {
         log.info("s5={},抑或之后的密文eq={}", s5, s5.equals(s3));
         char[] chars5 = new char[s5.length()];
         for (int i = 0; i < s5.length(); i++) {
-            chars5[i] = (char) (s5.charAt(i) ^ (i<<2));
+            chars5[i] = (char) (s5.charAt(i) ^ (i << 2));
         }
         String s6 = new String(chars5);
 
@@ -131,18 +136,18 @@ public class BarrierRecryptTest {
     @Test
     public void testBarrierEncrypt() throws Exception {
         String plain = "helloworldencrypttestabcdefghijk";
-        String ciphertext2 = encode2(plain, 11);
+        String ciphertext2 = encode(plain);
         System.out.println("密文=" + ciphertext2);
-        System.out.println("明文=" + decode2(ciphertext2, 11));
+        System.out.println("明文=" + decode(ciphertext2));
 
         for (int i = 3; i < 20; i++) {
             String plaintext = RandomNum.createRandomString(RandomUtils.nextInt(10, 200));
             System.out.println("明文=" + plaintext);
 
 
-            String ciphertext3 = encode2(plaintext, i);
+            String ciphertext3 = encode(plaintext);
             // System.out.println("密文=" + ciphertext3);
-            String s = decode2(ciphertext3, i);
+            String s = decode(ciphertext3);
             System.out.println("equals=" + s.equals(plaintext));
         }
 
@@ -160,6 +165,44 @@ public class BarrierRecryptTest {
 
     }
 
+
+    private String decode(String ciphertext) {
+        int asciiValue = ciphertext.charAt(0);
+        int lineNumber = asciiValue % 16 < 8 ? 8 : asciiValue % 16;
+        int length = ciphertext.length();
+        char[] result = new char[length];
+        int columnNumber = length / lineNumber;
+        /**
+         * 如果余数大于零，即为能填满列数的元素个数
+         */
+        int mod = length % lineNumber;
+        if (mod > 0) {
+            columnNumber = columnNumber + 1;
+        }
+        int columnMinusOne = columnNumber - 1;
+        int currentPosition = 0;
+        int currentColumn = 0;
+        int currnetLine = 0;
+
+        for (int i = 0; i < length; i++) {
+            if (mod == 0) {
+                result[currentPosition] = ciphertext.charAt(currentColumn + currnetLine * columnNumber);
+            } else {
+                if (currnetLine <= mod) {
+                    result[currentPosition] = ciphertext.charAt(currentColumn + currnetLine * columnNumber);
+                } else {
+                    result[currentPosition] = ciphertext.charAt(currentColumn + currnetLine * columnMinusOne + mod);
+                }
+            }
+            currentPosition++;
+            currnetLine++;
+            if (currnetLine == lineNumber) {
+                currnetLine = 0;
+                currentColumn++;
+            }
+        }
+        return new String(result);
+    }
     /**
      * 栅栏解密
      * 加密的时候有几列，解密的时候就有几行
@@ -262,7 +305,9 @@ public class BarrierRecryptTest {
      * jk
      * 这个方法好理解
      */
-    private String encode2(String plaintext, int columnNumber) {
+    private String encode(String plaintext) {
+        int asciiValue = plaintext.charAt(0);
+        int columnNumber = asciiValue % 16 < 8 ? 8 : asciiValue % 16;
         int length = plaintext.length();
         char[] result = new char[length];
         /**
@@ -284,6 +329,28 @@ public class BarrierRecryptTest {
         return new String(result);
     }
 
+
+    private String encode2(String plaintext, int columnNumber) {
+        int length = plaintext.length();
+        char[] result = new char[length];
+        /**
+         * 明文下标
+         */
+        int index;
+        /**
+         * 密文下标
+         */
+        int currentPosition = 0;
+        for (int i = 0; i < columnNumber; i++) {
+            index = i;
+            while (index < length) {
+                result[currentPosition] = plaintext.charAt(index);
+                index = index + columnNumber;
+                currentPosition++;
+            }
+        }
+        return new String(result);
+    }
 
     /**
      * 栅栏加密
