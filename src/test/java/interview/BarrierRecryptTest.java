@@ -11,6 +11,72 @@ import java.util.Base64;
 
 @Slf4j
 public class BarrierRecryptTest {
+    /**
+     * 字符串压缩，也可以作为一种加密方式
+     * 原理，每两个字符压缩成一个字符
+     * 比如原字符串是，ae，获取a的ASCII码值，97,转换为二进制1100001
+     * 获取e的ASCII码值，101,转换为二进制1100101(不够8位前边补0)
+     * 1100001  + 01100101 -> 110000101100101
+     * 将110000101100101转换为十进制得到24933，获取24933的ascii码值，得到字符XXXX
+     */
+    @Test
+    public void ys(){
+        String mnw = "12j3jhk1s-12h3-12j3h712-as2h-23Oas";
+        System.out.println("压缩前：" + mnw + "，长度： " + mnw.length());
+        String miw = yasuo(mnw);
+        System.out.println("压缩后："+miw +"，长度："+ miw.length());
+        String hy = jem(miw);
+        System.out.println("还原后："+hy +"，长度："+ hy.length());
+    }
+
+    private String yasuo(String mnw) {
+        StringBuilder sb = new StringBuilder();
+        int index = 0;
+        for (index = 1; index < mnw.length(); index += 2) {
+            char c1 = mnw.charAt(index - 1);
+            char c2 = mnw.charAt(index);
+            sb.append((char) (((int) c1 << 8) + (int) c2));
+        }
+        if (index == mnw.length()) {
+            sb.append(mnw.charAt(index - 1));
+        }
+        return sb.toString();
+    }
+
+    private String jem(String miw) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < miw.length(); i++) {
+            int c = miw.charAt(i);
+            String binaryString = Integer.toBinaryString(c);
+            if (binaryString.length() < 8) {
+                sb.append((char) c);
+                continue;
+            }
+            int mnwi1 = Integer.parseInt(binaryString.substring(0, binaryString.length() - 8), 2);
+            int mnwi2 = Integer.parseInt(binaryString.substring(binaryString.length() - 8), 2);
+            sb.append((char) mnwi1);
+            sb.append((char) mnwi2);
+        }
+        return sb.toString();
+    }
+
+
+
+    @Test
+    public void findSingleNumber() {
+        int[] nums = {1, 2, 3, 4, 5, 6, 7, 8, 3, 4, 5, 6, 7, 8, 1};
+        int i = singleNumber(nums);
+        log.info("单数为{}", i);
+    }
+
+    private int singleNumber(int[] nums) {
+
+        int result = 0;
+        for (int i = 0; i < nums.length; i++) {
+            result = result ^ nums[i];
+        }
+        return result;
+    }
 
     /**
      * 根据一个数抑或另一个数操两次得到本身，进行简单的加密
@@ -24,6 +90,9 @@ public class BarrierRecryptTest {
      */
     @Test
     public void testXOR() {
+        char two = 'a';
+        char e = 'e';
+        log.info("ascii 值为{},{}",Integer.valueOf(two),Integer.valueOf(e));
         //String s = "https://blog.csdn.net/qq_30054961/article/details/82456069?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param";
         String s = JSON.toJSONString(User.generateUser());
         System.out.println("明文是=" + s);
