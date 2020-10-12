@@ -102,18 +102,9 @@ public class BarrierRecryptTest {
         String s = JSON.toJSONString(User.generateUser());
         System.out.println("明文是=" + s);
 
-        char[] chars = new char[s.length()];
-        for (int i = 0; i < s.length(); i++) {
-            chars[i] = (char) (s.charAt(i) ^ (i << 2));
-        }
-        String s3 = new String(chars);
+        String s3 = XOR(s);
         System.out.println("异或之后=" + s3);
-
-        char[] chars2 = new char[s3.length()];
-        for (int i = 0; i < s3.length(); i++) {
-            chars2[i] = (char) (s3.charAt(i) ^ (i << 2));
-        }
-        String s4 = new String(chars2);
+        String s4 = XOR(s3);
         System.out.println("两次异或之后=" + s4);
         log.info("两次异或之后 equals={}", s4.equals(s));
 
@@ -123,19 +114,23 @@ public class BarrierRecryptTest {
 
         String s5 = new String(decode);
         log.info("s5={},抑或之后的密文eq={}", s5, s5.equals(s3));
-        char[] chars5 = new char[s5.length()];
-        for (int i = 0; i < s5.length(); i++) {
-            chars5[i] = (char) (s5.charAt(i) ^ (i << 2));
-        }
-        String s6 = new String(chars5);
-
+        String s6 = XOR(s5);
         log.info("两次异或之后 equals={}", s6.equals(s));
 
     }
 
+    private String XOR(String s){
+        char[] c = new char[s.length()];
+        for (int i = 0; i < s.length(); i++) {
+            c[i] = (char) (s.charAt(i) ^ (i << 2));
+        }
+        return new String(c);
+    }
+
     @Test
     public void testBarrierEncrypt() throws Exception {
-        String plain = "helloworldencrypttestabcdefghijk";
+        System.out.println(System.currentTimeMillis());
+        String plain = "00101AKsIEWQUQWdh239304scnkdKSJef1602318647918";
         String ciphertext2 = encode(plain);
         System.out.println("密文=" + ciphertext2);
         System.out.println("明文=" + decode(ciphertext2));
@@ -308,6 +303,7 @@ public class BarrierRecryptTest {
     private String encode(String plaintext) {
         int asciiValue = plaintext.charAt(0);
         int columnNumber = asciiValue % 16 < 8 ? 8 : asciiValue % 16;
+        System.out.println("columnNumber="+columnNumber);
         int length = plaintext.length();
         char[] result = new char[length];
         /**

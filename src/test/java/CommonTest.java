@@ -1,5 +1,6 @@
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.frank.concurrent.FinalTest;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.User;
 import com.frank.exception.ResubmitException;
@@ -106,10 +107,68 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
     static final int MAXIMUM_CAPACITY = 1 << 30;
+    @Test
+    public void testS2() {
 
+        log.info("---  just for test begin");
+        final FinalTest f1 = new FinalTest();
+        Runnable runnable1 = () -> {
+            f1.getNumber();
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+
+            }
+            f1.setNumber(111);
+         //   f1.getNumber();
+        };
+
+        Runnable runnable2 = () -> {
+            FinalTest f2 = new FinalTest();
+            f2.getNumber();
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+
+            }
+            f2.setNumber(222);
+        };
+
+        Runnable runnable3 = () -> {
+            FinalTest f3 = new FinalTest();
+            f3.getNumber();
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+
+            }
+            f3.setNumber(333);
+        };
+        new Thread(runnable1).start();
+        new Thread(runnable2).start();
+        new Thread(runnable3).start();
+
+        try {
+            Thread.sleep(6000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        log.info("---  just for test end");
+
+    }
 
     @Test
     public void testMap222() {
+
+        String s = FinalTest.str.get();
+        log.info("ThreadLocal test s={}",s);
+        FinalTest.str.set("set----123123lllll");
+        String s1 = FinalTest.str.get();
+        log.info("ThreadLocal test s1={}",s1);
+        FinalTest.str.remove();
+        log.info("ThreadLocal test s={}",s);
+
+
         int a = 1;
         int b = a++;
         log.info("b={}", b);
