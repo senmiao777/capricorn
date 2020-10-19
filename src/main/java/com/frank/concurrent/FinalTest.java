@@ -17,7 +17,11 @@ public class FinalTest {
         return RandomUtils.nextInt();
     });
     public static ThreadLocal<String> str = ThreadLocal.withInitial(() -> {
-        return "test123";
+        return "str1111";
+    });
+
+    public static ThreadLocal<String> str2 = ThreadLocal.withInitial(() -> {
+        return "str2222";
     });
 
 

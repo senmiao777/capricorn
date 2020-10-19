@@ -99,7 +99,10 @@ public class BarrierRecryptTest {
         int c = st.charAt(0);
         log.info("c={}",c);
         //String s = "https://blog.csdn.net/qq_30054961/article/details/82456069?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.channel_param";
-        String s = JSON.toJSONString(User.generateUser());
+        User user = User.generateUser();
+        user.setUserName("中文姓名测试说");
+        String s = JSON.toJSONString(user);
+
         System.out.println("明文是=" + s);
 
         String s3 = XOR(s);
@@ -130,12 +133,12 @@ public class BarrierRecryptTest {
     @Test
     public void testBarrierEncrypt() throws Exception {
         System.out.println(System.currentTimeMillis());
-        String plain = "00101AKsIEWQUQWdh239304scnkdKSJef1602318647918";
+        String plain = "00101中文输入复QUQWdh239304scnkdKSJef1602318647918";
         String ciphertext2 = encode(plain);
         System.out.println("密文=" + ciphertext2);
         System.out.println("明文=" + decode(ciphertext2));
 
-        for (int i = 3; i < 20; i++) {
+        /*for (int i = 3; i < 20; i++) {
             String plaintext = RandomNum.createRandomString(RandomUtils.nextInt(10, 200));
             System.out.println("明文=" + plaintext);
 
@@ -155,7 +158,7 @@ public class BarrierRecryptTest {
         }
         long l2 = System.currentTimeMillis();
 
-        System.out.println("decode2耗时=" + (l2 - l));
+        System.out.println("decode2耗时=" + (l2 - l));*/
 
 
     }
