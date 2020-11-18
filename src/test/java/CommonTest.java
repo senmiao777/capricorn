@@ -110,6 +110,9 @@ public class CommonTest {
 
     @Test
     public void testMap222() {
+        String m2 = " ";
+        char c1 = m2.charAt(0);
+        log.info("c1={}",Integer.valueOf(c1));
         int a = 1;
         int b = a++;
         log.info("b={}", b);
