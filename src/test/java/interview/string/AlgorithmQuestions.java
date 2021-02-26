@@ -52,7 +52,14 @@ public class AlgorithmQuestions {
             return 1;
         }
 
+        /**
+         * “第一步”的结果
+         */
         int front = 1;
+
+        /**
+         * “第二步”的结果
+         */
         int back = 2;
 
         int count = 0;
