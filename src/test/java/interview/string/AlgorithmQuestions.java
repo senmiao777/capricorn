@@ -13,6 +13,23 @@ import java.util.*;
 @Slf4j
 public class AlgorithmQuestions {
 
+    @Test
+    public void testDynamicPlan() {
+        int count = count(10);
+        System.out.println("count=" + count);
+
+    }
+
+    private int count(int number) {
+        if (number > 2) {
+            return count(number - 1) + count(number - 2);
+        } else if (number == 2) {
+            return 2;
+        } else {
+            return 1;
+        }
+    }
+
 
     @Test
     public void testFind() {
