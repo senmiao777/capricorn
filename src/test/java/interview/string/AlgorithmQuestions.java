@@ -20,6 +20,12 @@ public class AlgorithmQuestions {
 
     }
 
+    /**
+     * 时间复杂度 o(2^n)
+     *
+     * @param number
+     * @return
+     */
     private int count(int number) {
         if (number > 2) {
             return count(number - 1) + count(number - 2);
@@ -30,6 +36,37 @@ public class AlgorithmQuestions {
         }
     }
 
+    /**
+     * 时间复杂度 o(n)
+     * 空间复杂度o(1)
+     *
+     * @param number
+     * @return
+     */
+    private int count2(int number) {
+
+        if (number == 2) {
+            return 2;
+        }
+        if (number == 1) {
+            return 1;
+        }
+
+        int front = 1;
+        int back = 2;
+
+        int count = 0;
+
+        /**
+         * 从3开始，不是从零开始
+         */
+        for (int i = 3; i <= number; i++) {
+            count = front + back;
+            front = back;
+            back = count;
+        }
+        return count;
+    }
 
     @Test
     public void testFind() {
