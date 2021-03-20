@@ -1,11 +1,14 @@
 package com.frank.controller;
 
 import com.frank.annotation.Encrypt;
+import com.frank.annotation.MDCLog;
 import com.frank.annotation.RedisLock;
 import com.frank.entity.mysql.TestUser;
 import com.frank.entity.mysql.User;
 import com.frank.model.JsonResult;
+import com.frank.model.PathParam;
 import com.frank.repository.mysql.UserRepository;
+import com.frank.util.AnnotationScanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -30,14 +33,23 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @MDCLog
+    @RedisLock(key="#this[0]")
     @RequestMapping(value = "/entity/{id}", method = RequestMethod.GET)
     public JsonResult getUser(@PathVariable Long id) {
         log.info("getUser id={}", id);
+        AnnotationScanUtil.init();
+        String uri = "/t/user/entity/12";
+        PathParam pathParam = AnnotationScanUtil.getPathParam(uri);
+        log.info("pathParam={}", pathParam);
         User one = userRepository.findOne(id);
         return JsonResult.buildSuccessResult(one);
 
     }
 
+    @MDCLog
+    @RedisLock(key="#this[0]")
     @RequestMapping(value = "/{id}/suffix", method = RequestMethod.GET)
     public JsonResult getUserSuffix(@PathVariable Long id) {
         log.info("getUserSuffix id={}", id);

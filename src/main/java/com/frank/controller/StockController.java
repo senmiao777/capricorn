@@ -1,6 +1,6 @@
 package com.frank.controller;
 
-import com.frank.annotation.Encrypt;
+import com.frank.annotation.RedisLock;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.Stock;
 import com.frank.model.JsonResult;
@@ -50,10 +50,12 @@ public class StockController {
      */
     RateLimiter rateLimiter = RateLimiter.create(10);
 
+    @RedisLock(key="123")
     @ApiOperation(value = "跳转到Echart页面")
     @RequestMapping("/hello")
     public String helloHtml() {
         //  map.put("hello","hello");
+
         return "/firstEchart.html";
     }
 

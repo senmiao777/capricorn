@@ -1,4 +1,4 @@
-package com.frank.controller.test.controller;
+package com.frank.controller.test.whatever;
 
 import com.frank.annotation.Encrypt;
 import com.frank.annotation.MDCLog;
@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @Encrypt
 @RestController
-@RequestMapping(value = "/sub/t/user")
-public class SubController {
+@RequestMapping(value = "/what/t/user")
+public class WhateverController {
 
 
     @Autowired
@@ -33,12 +33,12 @@ public class SubController {
     @MDCLog
     @RedisLock(key = "#this[0]")
     @RequestMapping(value = "/entity/{id}", method = RequestMethod.GET)
-    public JsonResult getUser234234(@PathVariable Long id) {
-        log.info("SubController getUser id={}", id);
+    public JsonResult getUserwerwe(@PathVariable Long id) {
+        log.info("WhateverController getUser id={}", id);
         AnnotationScanUtil.init();
         String uri = "/t/user/entity/12";
         PathParam pathParam = AnnotationScanUtil.getPathParam(uri);
-        log.info("SubController pathParam={}", pathParam);
+        log.info("WhateverController pathParam={}", pathParam);
         User one = userRepository.findOne(id);
         return JsonResult.buildSuccessResult(one);
 

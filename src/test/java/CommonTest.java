@@ -1,14 +1,17 @@
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.frank.concurrent.FinalTest;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.User;
 import com.frank.exception.ResubmitException;
 import com.frank.model.JsonResult;
+import com.frank.model.PathParam;
 import com.frank.model.leetcode.LinkedOneWayList;
 import com.frank.model.leetcode.ListNode;
 import com.frank.other.Node;
 import com.frank.other.SingleTon;
 import com.frank.repository.mysql.IncomeStatementRepository;
+import com.frank.util.AnnotationScanUtil;
 import com.frank.util.GenerateUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -106,58 +109,20 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
     static final int MAXIMUM_CAPACITY = 1 << 30;
+
     @Test
-    public void testS2() {
-
-        log.info("---  just for test begin");
-        final FinalTest f1 = new FinalTest();
-        Runnable runnable1 = () -> {
-            f1.getNumber();
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
-
-            }
-            f1.setNumber(111);
-         //   f1.getNumber();
-        };
-
-        Runnable runnable2 = () -> {
-            FinalTest f2 = new FinalTest();
-            f2.getNumber();
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-
-            }
-            f2.setNumber(222);
-        };
-
-        Runnable runnable3 = () -> {
-            FinalTest f3 = new FinalTest();
-            f3.getNumber();
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-
-            }
-            f3.setNumber(333);
-        };
-        new Thread(runnable1).start();
-        new Thread(runnable2).start();
-        new Thread(runnable3).start();
-
-        try {
-            Thread.sleep(6000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        log.info("---  just for test end");
-
+    public void testGetPath() {
+        AnnotationScanUtil.init();
+        String uri = "/t/user/entity/12";
+        PathParam pathParam = AnnotationScanUtil.getPathParam(uri);
+        log.info("pathParam={}", pathParam);
     }
 
     @Test
     public void testMap222() {
+        String m2 = " ";
+        char c1 = m2.charAt(0);
+        log.info("c1={}", Integer.valueOf(c1));
 
         String s = FinalTest.str.get();
         log.info("ThreadLocal test s={}",s);
