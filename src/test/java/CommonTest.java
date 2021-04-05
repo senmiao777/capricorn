@@ -11,6 +11,7 @@ import com.frank.model.leetcode.ListNode;
 import com.frank.other.Node;
 import com.frank.other.SingleTon;
 import com.frank.repository.mysql.IncomeStatementRepository;
+import com.frank.repository.mysql.NamespaceErrorTotalRepository;
 import com.frank.util.AnnotationScanUtil;
 import com.frank.util.GenerateUtil;
 import com.google.common.collect.Lists;
@@ -104,6 +105,9 @@ public class CommonTest {
     @Autowired
     private IncomeStatementRepository incomeStatementRepository;
 
+    @Autowired
+    private NamespaceErrorTotalRepository namespaceErrorTotalRepository;
+
     private String PASS = "PASS";
     private String FAIL = "FAIL";
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
@@ -111,7 +115,15 @@ public class CommonTest {
     static final int MAXIMUM_CAPACITY = 1 << 30;
 
     @Test
+    public void testRandom() {
+        RandomUtils.nextInt();
+        new Random().nextInt();
+        ThreadLocalRandom.current().nextInt();
+    }
+
+    @Test
     public void testGetPath() {
+
         AnnotationScanUtil.init();
         String uri = "/t/user/entity/12";
         PathParam pathParam = AnnotationScanUtil.getPathParam(uri);
