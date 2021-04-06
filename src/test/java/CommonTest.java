@@ -5,14 +5,12 @@ import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.User;
 import com.frank.exception.ResubmitException;
 import com.frank.model.JsonResult;
-import com.frank.model.PathParam;
 import com.frank.model.leetcode.LinkedOneWayList;
 import com.frank.model.leetcode.ListNode;
 import com.frank.other.Node;
 import com.frank.other.SingleTon;
 import com.frank.repository.mysql.IncomeStatementRepository;
 import com.frank.repository.mysql.NamespaceErrorTotalRepository;
-import com.frank.util.AnnotationScanUtil;
 import com.frank.util.GenerateUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -177,10 +175,6 @@ public class CommonTest {
     @Test
     public void testGetPath() {
 
-        AnnotationScanUtil.init();
-        String uri = "/t/user/entity/12";
-        PathParam pathParam = AnnotationScanUtil.getPathParam(uri);
-        log.info("pathParam={}", pathParam);
     }
 
     @Test

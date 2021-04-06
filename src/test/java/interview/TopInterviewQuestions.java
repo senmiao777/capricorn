@@ -966,8 +966,8 @@ public class TopInterviewQuestions {
 
         int number = 3;
         /**
-         <<      :     左移运算符，num << 1,相当于num乘以2
-         >>      :     右移运算符，num >> 1,相当于num除以2
+         <<      :     左移运算符，num << 1,相当于num乘以2的一次方
+         >>      :     右移运算符，num >> 1,相当于num除以2的一次方
          >>>    :     无符号右移，忽略符号位，空位都以0补齐
          M << N   == M 乘以 2的N次方
          */
