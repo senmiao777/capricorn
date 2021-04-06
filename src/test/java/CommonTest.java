@@ -119,6 +119,59 @@ public class CommonTest {
         RandomUtils.nextInt();
         new Random().nextInt();
         ThreadLocalRandom.current().nextInt();
+        int[] nums = {0, 0, 1, 1, 1, 1, 2, 3, 3};
+        int count = removeDuplicate(nums);
+
+
+        log.info("数组长度为{}", count);
+        for (int i : nums) {
+            log.info("{}", i);
+        }
+    }
+
+    /**
+     * 输入：nums = [0,0,1,1,1,1,2,3,3]
+     * 输出：7, nums = [0,0,1,1,2,3,3]
+     * 创建新数组，往新数组添加元素的思想
+     *
+     * @param nums
+     * @return
+     */
+    private int removeDuplicate(int[] nums) {
+        if (nums == null) {
+            return 0;
+        }
+        int length = nums.length;
+        if (length < 3) {
+            return length;
+        }
+
+        int index = 0;
+        for (int i = 0; i < length; i++) {
+            /**
+             * 认为在创建一个新的数组
+             * 数组不到两个元素，或者当前元素和前一个元素不同，不会构成连续三个相同元素
+             * 则往数组里添加元素，数组下标加一
+             */
+            if (index < 2 || nums[i] != nums[index - 2]) {
+                nums[index] = nums[i];
+                index++;
+            }
+        }
+        /**
+         * 或者直接从第三个元素开始
+         * int index = 2;
+         * if ( nums[i] != nums[index - 2]) {
+         *   nums[index] = nums[i];
+         *  index++;
+         *  }
+         */
+        return index;
+    }
+
+    private int removeDuplicate2(int[] nums) {
+
+        return 1;
     }
 
     @Test
@@ -137,12 +190,12 @@ public class CommonTest {
         log.info("c1={}", Integer.valueOf(c1));
 
         String s = FinalTest.str.get();
-        log.info("ThreadLocal test s={}",s);
+        log.info("ThreadLocal test s={}", s);
         FinalTest.str.set("set----123123lllll");
         String s1 = FinalTest.str.get();
-        log.info("ThreadLocal test s1={}",s1);
+        log.info("ThreadLocal test s1={}", s1);
         FinalTest.str.remove();
-        log.info("ThreadLocal test s={}",s);
+        log.info("ThreadLocal test s={}", s);
 
 
         int a = 1;
