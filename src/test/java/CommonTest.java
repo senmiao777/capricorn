@@ -112,6 +112,74 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
     static final int MAXIMUM_CAPACITY = 1 << 30;
 
+
+    /**
+     * 给你两个有序整数数组 nums1 和 nums2，请你将 nums2 合并到 nums1 中，使 nums1 成为一个有序数组。
+     * 初始化 nums1 和 nums2 的元素数量分别为 m 和 n 。你可以假设 nums1 的空间大小等于 m + n，这样它就有足够的空间保存来自 nums2 的元素。
+     * 链接：https://leetcode-cn.com/problems/merge-sorted-array
+     */
+    @Test
+    public void testMerge() {
+        /*int[] nums1 = {1, 2, 3, 0, 0, 0};
+        int[] nums2 = {4, 5, 6};
+        merge(nums1, 3, nums2, 3);*/
+        int[] nums1 = {1};
+        int[] nums2 = {};
+        merge(nums1, 1, nums2, 0);
+
+        for(int j:nums1){
+            System.out.println(j);
+        }
+
+    }
+
+    /**
+     * 归并排序
+     * @param nums1
+     * @param m
+     * @param nums2
+     * @param n
+     */
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int firstIndex = 0;
+        int secondIndex = 0;
+        int temp[] = new int[nums1.length];
+        /**
+         * 相等，
+         */
+        int index = 0;
+        while (firstIndex < m && secondIndex < n) {
+            if (nums1[firstIndex] <= nums2[secondIndex]) {
+                temp[index] = nums1[firstIndex];
+                firstIndex++;
+            } else if (nums1[firstIndex] > nums2[secondIndex]) {
+                temp[index] = nums2[secondIndex];
+                secondIndex++;
+            }
+            index++;
+        }
+
+        while(firstIndex < m){
+            temp[index] = nums1[firstIndex];
+            firstIndex ++;
+            index ++;
+
+        }
+
+        while(secondIndex < n){
+            temp[index] = nums2[secondIndex];
+            secondIndex ++;
+            index ++;
+
+        }
+
+        for(int i=0;i< m+n;i++){
+            nums1[i] = temp[i];
+        }
+
+
+    }
+
     @Test
     public void testRandom() {
         RandomUtils.nextInt();
@@ -169,7 +237,29 @@ public class CommonTest {
 
     private int removeDuplicate2(int[] nums) {
 
-        return 1;
+        if (nums == null) {
+            return 0;
+        }
+        int length = nums.length;
+        if (length < 3) {
+            return length;
+        }
+
+        int index = 0;
+        int repeat = 1;
+        for (int i = 1; i < length; i++) {
+            if (nums[index] == nums[i] && repeat < 2) {
+                index++;
+                nums[index] = nums[i];
+                repeat++;
+            } else if (nums[index] != nums[i]) {
+                index++;
+                nums[index] = nums[i];
+                repeat = 1;
+            }
+        }
+
+        return index + 1;
     }
 
     @Test
