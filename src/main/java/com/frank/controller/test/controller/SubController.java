@@ -5,9 +5,7 @@ import com.frank.annotation.MDCLog;
 import com.frank.annotation.RedisLock;
 import com.frank.entity.mysql.User;
 import com.frank.model.JsonResult;
-import com.frank.model.PathParam;
 import com.frank.repository.mysql.UserRepository;
-import com.frank.util.AnnotationScanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,10 +33,6 @@ public class SubController {
     @RequestMapping(value = "/entity/{id}", method = RequestMethod.GET)
     public JsonResult getUser234234(@PathVariable Long id) {
         log.info("SubController getUser id={}", id);
-        AnnotationScanUtil.init();
-        String uri = "/t/user/entity/12";
-        PathParam pathParam = AnnotationScanUtil.getPathParam(uri);
-        log.info("SubController pathParam={}", pathParam);
         User one = userRepository.findOne(id);
         return JsonResult.buildSuccessResult(one);
 
