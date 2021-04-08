@@ -42,4 +42,39 @@ public class ArrayTest {
 
 
     }
+
+    private int removeDuplicates(int[] nums) {
+
+        if (nums == null) {
+            return 0;
+        }
+        int length = nums.length;
+        if (length < 3) {
+            return length;
+        }
+        // 待替换位置下标
+        int index = 0;
+        int t = nums[0];
+        int repeat = 0;
+        // 发生替换的次数
+        int count = 0;
+        // 重复出现超过两次，则该位置需要替换为新的元素
+        for (int i = 1; i < length; i++) {
+            if (nums[i] == t) {
+                repeat++;
+            }
+            if (repeat > 2) {
+                index = i;
+                count++;
+            }
+
+            // 当第一次出现不重复的数字，替换
+            if (nums[i] != t) {
+                t = nums[i];
+                nums[index] = t;
+                index++;
+            }
+        }
+        return length - count;
+    }
 }
