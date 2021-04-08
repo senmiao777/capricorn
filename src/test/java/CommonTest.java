@@ -112,6 +112,52 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
     static final int MAXIMUM_CAPACITY = 1 << 30;
 
+    @Test
+    public void testFindMin() {
+
+    }
+
+    private int fingMin(int[] nums) {
+        int length = nums.length;
+        if (length == 1) {
+            return nums[0];
+        }
+        if (nums[0] < nums[length - 1]) {
+            return nums[0];
+        }
+
+        int head = 0;
+        int tail = length - 1;
+        int middle;
+        while (head < tail) {
+            /**
+             * 知道是用二分查找，看在这个middle的值怎么获取
+             * 为什么不是 middle = (head + tail) / 2 ???
+             *
+             * 目标值右边的情况会比较简单，容易区分，所以比较mid与right而不比较mid与left。
+             */
+            middle = head + (tail - head) / 2;
+            /**
+             * 有序，最小值在另一半
+             */
+            if (nums[middle] < nums[tail]) {
+                tail = middle ;
+
+                /**
+                 * 值在前半部分
+                 */
+            } else {
+                /**
+                 * nums[middle] > nums[tail],所以middle位置一定不是最小值
+                 * 下一个位置才可能是
+                 */
+                head = middle + 1;
+            }
+
+        }
+        return nums[head];
+    }
+
 
     /**
      * 给你两个有序整数数组 nums1 和 nums2，请你将 nums2 合并到 nums1 中，使 nums1 成为一个有序数组。
@@ -127,7 +173,7 @@ public class CommonTest {
         int[] nums2 = {};
         merge(nums1, 1, nums2, 0);
 
-        for(int j:nums1){
+        for (int j : nums1) {
             System.out.println(j);
         }
 
@@ -135,6 +181,7 @@ public class CommonTest {
 
     /**
      * 归并排序
+     *
      * @param nums1
      * @param m
      * @param nums2
@@ -159,21 +206,21 @@ public class CommonTest {
             index++;
         }
 
-        while(firstIndex < m){
+        while (firstIndex < m) {
             temp[index] = nums1[firstIndex];
-            firstIndex ++;
-            index ++;
+            firstIndex++;
+            index++;
 
         }
 
-        while(secondIndex < n){
+        while (secondIndex < n) {
             temp[index] = nums2[secondIndex];
-            secondIndex ++;
-            index ++;
+            secondIndex++;
+            index++;
 
         }
 
-        for(int i=0;i< m+n;i++){
+        for (int i = 0; i < m + n; i++) {
             nums1[i] = temp[i];
         }
 
