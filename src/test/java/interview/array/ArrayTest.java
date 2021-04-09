@@ -23,8 +23,8 @@ public class ArrayTest {
      */
     @Test
     public void testFindMinValue() {
-        int[] nums = {3, 4, 5, 1, 2};
-        int minValue = findMinValue(nums);
+        int[] nums = {9,1,2,3, 4, 5, 6, 7, 8};
+        int minValue = findMinValue2(nums);
         System.out.println("minValue=" + minValue);
 
     }
@@ -42,6 +42,9 @@ public class ArrayTest {
         if (nums[0] < nums[length - 1]) {
             return nums[0];
         }
+        /**
+         * 当前元素比上一个元素小，即找到了最小值
+         */
         for (int i = 1; i < length; i++) {
             if (nums[i - 1] > nums[i]) {
                 return nums[i];
@@ -55,20 +58,8 @@ public class ArrayTest {
      *
      * @return
      */
-    private int findMinValue2() {
-        int[] nums = {3, 4, 5, 1, 2};
-        int length = nums.length;
-        if (length == 1) {
-            return nums[0];
-        }
-        if (nums[0] < nums[length - 1]) {
-            return nums[0];
-        }
-        for (int i = 1; i < length; i++) {
-            if (nums[i - 1] > nums[i]) {
-                return nums[i];
-            }
-        }
+    private int findMinValue2(int[] nums) {
+
         return 0;
     }
 
