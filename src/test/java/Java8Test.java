@@ -4,6 +4,10 @@ import org.assertj.core.util.Lists;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -19,6 +23,31 @@ public class Java8Test {
 
     public String[] strs = {"new", "Java8", "new", "feature", "Stream", "API"};
     public int[] intStrs = {12, 136, 22, 35, 66};
+
+    @Test
+    public void testAtomicReference() throws InterruptedException {
+        AtomicReference<User> reference = new AtomicReference<>();
+        User u = new User();
+        u.setUserName("test1");
+        reference.set(u);
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+
+        for (int i=0;i< 100;i++){
+            executorService.submit(()->{
+                User user = User.generateUser();
+                boolean b = reference.compareAndSet(u, user);
+                System.out.println("result"+b+",user="+user);
+            });
+        }
+
+        User user = reference.get();
+        System.out.println("reference.get()user="+user);
+
+
+        Thread.sleep(1000L);
+        System.out.println("reference2.get()user="+user);
+
+    }
 
     @Test
     public void testOptional2() {
