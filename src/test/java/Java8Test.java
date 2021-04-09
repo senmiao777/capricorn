@@ -30,22 +30,34 @@ public class Java8Test {
         User u = new User();
         u.setUserName("test1");
         reference.set(u);
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
 
-        for (int i=0;i< 100;i++){
+        for (int i=0;i< 10;i++){
             executorService.submit(()->{
                 User user = User.generateUser();
                 boolean b = reference.compareAndSet(u, user);
-                System.out.println("result"+b+",user="+user);
+                System.out.println("result="+b+",user="+user);
             });
         }
 
-        User user = reference.get();
-        System.out.println("reference.get()user="+user);
+        User u2 = new User();
+        u2.setUserName("test222");
+        AtomicReference<User> atomicReference3 = new AtomicReference<>(u2);
 
+        User u3 = new User();
+        u3.setUserName("test3333");
 
-        Thread.sleep(1000L);
-        System.out.println("reference2.get()user="+user);
+        /**
+         * 设置新值，返回老值
+         */
+        User simpleObject2 = atomicReference3.getAndSet(u3);
+
+        System.out.println(simpleObject2 +"|分割线|"+atomicReference3.get());
+
+        System.out.println("reference.user11="+reference.get());
+
+        Thread.sleep(200L);
+        System.out.println("reference.user22="+reference.get());
 
     }
 
