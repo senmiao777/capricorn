@@ -23,10 +23,40 @@ public class ArrayTest {
      */
     @Test
     public void testFindMinValue() {
-        int[] nums = {9,1,2,3, 4, 5, 6, 7, 8};
+        int[] nums = {9, 1, 2, 3, 4, 5, 6, 7, 8};
         int minValue = findMinValue2(nums);
         System.out.println("minValue=" + minValue);
 
+    }
+
+    @Test
+    public void testFindNthValue() {
+
+        int nthValue = findNthValue(10);
+        System.out.println("nthValue=" + nthValue);
+
+    }
+
+    private int findNthValue(int n) {
+        Set<Integer> values = new HashSet<>(n);
+
+        int[] factors = {2, 3, 5};
+        PriorityQueue<Integer> heap = new PriorityQueue();
+        values.add(1);
+        heap.offer(1);
+
+        int temp;
+        int result = 1;
+        for (int i = 0; i < n; i++) {
+            result = heap.poll();
+            for (int f : factors) {
+                temp = result * f;
+                if (values.add(temp)) {
+                    heap.offer(temp);
+                }
+            }
+        }
+        return result;
     }
 
     /**
