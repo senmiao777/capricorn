@@ -41,19 +41,24 @@ public class ArrayTest {
      * 找到第N个丑数，最小堆实现方式
      * 每次都从堆（由丑数构成的队列里）里取出一个元素，取N次，即为第N个丑数
      * 每次取数后，都由当前元素分别乘以 2,3,5得到新的丑数放到队列中（这一步需要用的Set去重）
+     *
      * @param n
      * @return
      */
     private int findNthValue(int n) {
-        Set<Integer> values = new HashSet<>(n);
+        Set<Long> values = new HashSet<>(n);
 
         int[] factors = {2, 3, 5};
-        PriorityQueue<Integer> heap = new PriorityQueue();
-        values.add(1);
-        heap.offer(1);
+        PriorityQueue<Long> heap = new PriorityQueue();
+        values.add(1L);
+        heap.offer(1L);
 
-        int temp;
-        int result = 1;
+        long temp;
+        long result = 1L;
+        /**
+         * 时间复杂度 o ( n * log(n))
+         * 空间复杂度 n (Set<3n, PriorityQueue<3n)
+         */
         for (int i = 0; i < n; i++) {
             result = heap.poll();
             for (int f : factors) {
@@ -63,7 +68,7 @@ public class ArrayTest {
                 }
             }
         }
-        return result;
+        return (int) result;
     }
 
     /**
