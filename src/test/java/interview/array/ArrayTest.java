@@ -32,11 +32,18 @@ public class ArrayTest {
     @Test
     public void testFindNthValue() {
 
-        int nthValue = findNthValue(10);
+        int nthValue = findNthValue(1);
         System.out.println("nthValue=" + nthValue);
 
     }
 
+    /**
+     * 找到第N个丑数，最小堆实现方式
+     * 每次都从堆（由丑数构成的队列里）里取出一个元素，取N次，即为第N个丑数
+     * 每次取数后，都由当前元素分别乘以 2,3,5得到新的丑数放到队列中（这一步需要用的Set去重）
+     * @param n
+     * @return
+     */
     private int findNthValue(int n) {
         Set<Integer> values = new HashSet<>(n);
 
