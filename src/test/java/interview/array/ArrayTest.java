@@ -63,6 +63,8 @@ public class ArrayTest {
             long yy = 10;
             /**
              * 小于等于
+             *
+             * 这里是为了判断需要补位的位数
              */
             while (xx <= x) {
                 xx = xx * 10;
