@@ -69,7 +69,7 @@ public class ArrayTest {
 
 
         if (array[0] == 0) {
-            return "";
+            return "0";
         }
         StringBuilder result = new StringBuilder();
         for (Integer i : array) {
