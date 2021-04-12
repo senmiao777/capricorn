@@ -12,6 +12,73 @@ import java.util.*;
 @Slf4j
 public class ArrayTest {
 
+
+    @Test
+    public void testStringSort() {
+        int[] strings = {3, 30, 34, 5, 9};
+        Integer[] array = {3, 30, 34, 5, 9};
+
+        Arrays.sort(array, (x, y) -> {
+
+            return y-x;
+        });
+
+        for(Integer i:array){
+            System.out.println(i);
+        }
+
+        Arrays.sort(strings);
+        System.out.println("结果=" + largestNumber(strings));
+
+
+//        System.out.println(strings);
+
+    }
+
+    /**
+     * 给定一组非负整数 nums，重新排列每个数的顺序（每个数不可拆分）使之组成一个最大的整数。
+     * <p>
+     * 注意：输出结果可能非常大，所以你需要返回一个字符串而不是整数
+     * 输入：nums = [3,30,34,5,9]
+     * 输出："9534330"
+     *
+     * @param nums
+     * @return
+     */
+    private String largestNumber(int[] nums) {
+
+        Integer[] array = new Integer[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            array[i] = nums[i];
+        }
+
+        Arrays.sort(array, (x, y) -> {
+            long xx = 10;
+            long yy = 10;
+            /**
+             * 小于等于
+             */
+            while (xx <= x) {
+                xx = xx * 10;
+            }
+            while (yy <= y) {
+                yy = yy * 10;
+            }
+            return (int) (-(x * yy + y) + (y * xx + x));
+        });
+
+
+        if (array[0] == 0) {
+            return "";
+        }
+        StringBuilder result = new StringBuilder();
+        for (Integer i : array) {
+            result.append(i.toString());
+        }
+        return result.toString();
+
+    }
+
     /**
      * 已知一个长度为 n 的数组，预先按照升序排列，经由 1 到 n 次 旋转 后，得到输入数组。例如，原数组 nums = [0,1,2,4,5,6,7] 在变化后可能得到：
      * 若旋转 4 次，则可以得到 [4,5,6,7,0,1,2]
