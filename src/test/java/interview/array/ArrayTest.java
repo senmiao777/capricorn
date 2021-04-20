@@ -12,6 +12,53 @@ import java.util.*;
 @Slf4j
 public class ArrayTest {
 
+    @Test
+    public void testRepeatOnce() {
+        int[] nums = {0, 1, 2, 2, 3, 0, 4, 2};
+        int count = repeatOnce(nums, 2);
+        for (int i = 0; i < count; i++) {
+            System.out.println(nums[i]);
+        }
+    }
+
+    /**
+     * 给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。
+     *
+     * 不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+     *
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array
+     */
+    public int repeatOnce(int[] nums,int n){
+        return 0;
+    }
+
+
+    @Test
+    public void testRemoveElement() {
+        int[] nums = {0, 1, 2, 2, 3, 0, 4, 2};
+        int count = removeElement(nums, 2);
+        for (int i = 0; i < count; i++) {
+            System.out.println(nums[i]);
+        }
+    }
+
+    public int removeElement(int[] nums, int val) {
+        int length = 0;
+        if (nums == null || (length = nums.length) == 0) {
+            return length;
+        }
+
+        int index = 0;
+        for (int i = 0; i < length; i++) {
+            if (nums[i] != val) {
+                nums[index] = nums[i];
+                index++;
+            }
+        }
+        return index;
+    }
+
 
     @Test
     public void testStringSort() {
@@ -20,10 +67,10 @@ public class ArrayTest {
 
         Arrays.sort(array, (x, y) -> {
 
-            return y-x;
+            return y - x;
         });
 
-        for(Integer i:array){
+        for (Integer i : array) {
             System.out.println(i);
         }
 
