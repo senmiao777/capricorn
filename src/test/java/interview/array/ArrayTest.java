@@ -14,17 +14,46 @@ public class ArrayTest {
 
     @Test
     public void testStrStr() {
-        String haystack = "hello";
-        String needle = "ll";
+        String haystack = "hellog";
+        String needle = "llo";
         int i = strStr(haystack, needle);
         System.out.println("position=" + i);
     }
 
     public int strStr(String haystack, String needle) {
+        int result = 0;
         if ("".equals(haystack) || "".equals(needle)) {
-            return 0;
+            return result;
         }
-        return 0;
+
+        int index = 0;
+
+        for (int i = 0; i < haystack.length(); i++) {
+            if (haystack.charAt(i) == needle.charAt(index)) {
+                int j = i;
+                result = i;
+                while (index < needle.length() && j < haystack.length()) {
+                    if (haystack.charAt(j) == needle.charAt(index)) {
+                        j++;
+                        index++;
+                    } else {
+                        break;
+                    }
+                }
+                if (index == needle.length()) {
+                    return result;
+                }
+
+                if (j == haystack.length()) {
+                    return -1;
+                }
+
+                index = 0;
+                continue;
+            }
+
+        }
+        return -1;
     }
 
     @Test
