@@ -13,6 +13,21 @@ import java.util.*;
 public class ArrayTest {
 
     @Test
+    public void testStrStr() {
+        String haystack = "hello";
+        String needle = "ll";
+        int i = strStr(haystack, needle);
+        System.out.println("position=" + i);
+    }
+
+    public int strStr(String haystack, String needle) {
+        if ("".equals(haystack) || "".equals(needle)) {
+            return 0;
+        }
+        return 0;
+    }
+
+    @Test
     public void testRepeatOnce() {
         int[] nums = {0, 1, 2, 2, 3, 0, 4, 2};
         int count = repeatOnce(nums, 2);
@@ -23,13 +38,13 @@ public class ArrayTest {
 
     /**
      * 给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。
-     *
+     * <p>
      * 不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
-     *
+     * <p>
      * 来源：力扣（LeetCode）
      * 链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array
      */
-    public int repeatOnce(int[] nums,int n){
+    public int repeatOnce(int[] nums, int n) {
         return 0;
     }
 
