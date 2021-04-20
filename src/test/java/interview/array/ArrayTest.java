@@ -14,15 +14,15 @@ public class ArrayTest {
 
     @Test
     public void testStrStr() {
-        String haystack = "hellog";
-        String needle = "llo";
+        String haystack = "";
+        String needle = "a";
         int i = strStr(haystack, needle);
         System.out.println("position=" + i);
     }
 
     public int strStr(String haystack, String needle) {
         int result = 0;
-        if ("".equals(haystack) || "".equals(needle)) {
+        if ("".equals(needle)) {
             return result;
         }
 
@@ -40,14 +40,22 @@ public class ArrayTest {
                         break;
                     }
                 }
+                /**
+                 * 如果长度相等，说明needl走到了最后，找到了子串
+                 */
                 if (index == needle.length()) {
                     return result;
                 }
 
+                /**
+                 * 如果因为haystack结束了而退出，说明needle还没有最后，没找到子串
+                 */
                 if (j == haystack.length()) {
                     return -1;
                 }
-
+                /**
+                 * 其他情况i下移，继续找
+                 */
                 index = 0;
                 continue;
             }
