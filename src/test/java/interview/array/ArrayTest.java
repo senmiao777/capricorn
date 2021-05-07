@@ -9,8 +9,40 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
-@Slf4j
+//@Slf4j
 public class ArrayTest {
+
+    @Test
+    public void testXor() {
+        int n = 10;
+        int start = 5;
+        System.out.println("result=" + xorOperation(n, start));
+    }
+
+    /**
+     * 给你两个整数，n 和 start 。
+     * <p>
+     * 数组 nums 定义为：nums[i] = start + 2*i（下标从 0 开始）且 n == nums.length 。
+     * 请返回 nums 中所有元素按位异或（XOR）后得到的结果。
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/xor-operation-in-an-array
+     * <p>
+     * 输入：n = 4, start = 3
+     * 输出：8
+     * 解释：数组 nums 为 [3, 5, 7, 9]，其中 (3 ^ 5 ^ 7 ^ 9) = 8.
+     */
+    int xorOperation(int n, int start) {
+        int result = start;
+        if (n == 1) {
+            return result;
+        }
+
+        for (int i = 1; i < n; i++) {
+            result = result ^ (start + 2 * i);
+        }
+
+        return result;
+    }
 
     @Test
     public void testStrStr() {
