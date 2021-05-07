@@ -2,6 +2,7 @@ package lambda;
 
 import org.junit.Test;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class ConsumerDemo2 {
@@ -36,6 +37,32 @@ public class ConsumerDemo2 {
         Consumer<StringBuilder> consumerAppend = s -> s.append(" and then operate");
         consumer.andThen(consumerAppend).accept(sb);
         System.out.println(sb);
+    }
+
+    @Test
+    public void testBiConsumer(){
+
+        StringBuilder sb = new StringBuilder();
+        BiConsumer<String, String> biConsumer = (a, b) -> {
+            sb.append(a);
+            sb.append(b);
+            a = a + "789";
+            System.out.println("a="+a+",b="+b);
+
+        };
+//        biConsumer.accept("Hello ", "Jack!");
+//        System.out.println(sb);
+
+        BiConsumer<String,String> biConsumer1 = (x,y) ->{
+            sb.append("testst");
+            x = x + "123";
+            y = y + "456";
+            System.out.println("x="+x+",y="+y+",sb="+sb);
+        };
+
+        biConsumer.andThen(biConsumer1).accept("hello","lambda");
+
+
     }
 
 }
