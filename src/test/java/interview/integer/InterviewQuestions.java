@@ -20,6 +20,42 @@ import java.util.Set;
 public class InterviewQuestions {
 
     @Test
+    public void getWay(){
+        System.out.println(getWays(100));
+    }
+
+    int getWays(int n) {
+        if (n == 1) {
+            return 1;
+        }
+        if (n == 2) {
+            return 2;
+        }
+        return getWays(n-1) + getWays(n-2);
+    }
+
+
+
+
+    int getWays2(int n) {
+        if (n == 1) {
+            return 1;
+        }
+        if (n == 2) {
+            return 2;
+        }
+        int a = 1;
+        int b = 2;
+        int temp = 0;
+        for (int i = 3; i <= n; i++) {
+            temp = a + b;
+            a = b;
+            b = temp;
+        }
+        return temp;
+    }
+
+    @Test
     public void twoSum() {
         int[] nums = {2, 7, 11, 15};
         int target = 9;
