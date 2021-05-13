@@ -21,10 +21,10 @@ public class InterviewQuestions {
 
     @Test
     public void getWay(){
-        System.out.println(getWays(100));
+        System.out.println(getWays2(100));
     }
 
-    int getWays(int n) {
+    long getWays(int n) {
         if (n == 1) {
             return 1;
         }
@@ -37,16 +37,16 @@ public class InterviewQuestions {
 
 
 
-    int getWays2(int n) {
+    long getWays2(int n) {
         if (n == 1) {
             return 1;
         }
         if (n == 2) {
             return 2;
         }
-        int a = 1;
-        int b = 2;
-        int temp = 0;
+        long a = 1;
+        long b = 2;
+        long temp = 0;
         for (int i = 3; i <= n; i++) {
             temp = a + b;
             a = b;
