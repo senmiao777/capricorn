@@ -13,6 +13,67 @@ import java.util.*;
 @Slf4j
 public class AlgorithmQuestions {
 
+    @Test
+    public void testDynamicPlan() {
+        int count = count(10);
+        System.out.println("count=" + count);
+
+    }
+
+    /**
+     * 时间复杂度 o(2^n)
+     *
+     * @param number
+     * @return
+     */
+    private int count(int number) {
+        if (number > 2) {
+            return count(number - 1) + count(number - 2);
+        } else if (number == 2) {
+            return 2;
+        } else {
+            return 1;
+        }
+    }
+
+    /**
+     * 时间复杂度 o(n)
+     * 空间复杂度o(1)
+     *
+     * @param number
+     * @return
+     */
+    private int count2(int number) {
+
+        if (number == 2) {
+            return 2;
+        }
+        if (number == 1) {
+            return 1;
+        }
+
+        /**
+         * “第一步”的结果
+         */
+        int front = 1;
+
+        /**
+         * “第二步”的结果
+         */
+        int back = 2;
+
+        int count = 0;
+
+        /**
+         * 从3开始，不是从零开始
+         */
+        for (int i = 3; i <= number; i++) {
+            count = front + back;
+            front = back;
+            back = count;
+        }
+        return count;
+    }
 
     @Test
     public void testFind() {

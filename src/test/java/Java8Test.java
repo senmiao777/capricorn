@@ -4,6 +4,10 @@ import org.assertj.core.util.Lists;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -19,6 +23,43 @@ public class Java8Test {
 
     public String[] strs = {"new", "Java8", "new", "feature", "Stream", "API"};
     public int[] intStrs = {12, 136, 22, 35, 66};
+
+    @Test
+    public void testAtomicReference() throws InterruptedException {
+        AtomicReference<User> reference = new AtomicReference<>();
+        User u = new User();
+        u.setUserName("test1");
+        reference.set(u);
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+        for (int i=0;i< 10;i++){
+            executorService.submit(()->{
+                User user = User.generateUser();
+                boolean b = reference.compareAndSet(u, user);
+                System.out.println("result="+b+",user="+user);
+            });
+        }
+
+        User u2 = new User();
+        u2.setUserName("test222");
+        AtomicReference<User> atomicReference3 = new AtomicReference<>(u2);
+
+        User u3 = new User();
+        u3.setUserName("test3333");
+
+        /**
+         * 设置新值，返回老值
+         */
+        User simpleObject2 = atomicReference3.getAndSet(u3);
+
+        System.out.println(simpleObject2 +"|分割线|"+atomicReference3.get());
+
+        System.out.println("reference.user11="+reference.get());
+
+        Thread.sleep(200L);
+        System.out.println("reference.user22="+reference.get());
+
+    }
 
     @Test
     public void testOptional2() {
