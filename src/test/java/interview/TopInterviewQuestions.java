@@ -16,22 +16,38 @@ import java.util.Stack;
 public class TopInterviewQuestions {
 
 
+    /**
+     * 判断链表有没有环
+     */
+    @Test
+    public void testCycle2() {
+        int[] nums = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
+        int count = removeDuplicates2(nums);
+        for (int i = 0; i < count; i++) {
+            System.out.println(nums[i]);
+        }
+    }
 
+    public int removeDuplicates2(int[] nums) {
+        int length;
+        if (nums == null || (length = nums.length) == 0) {
+            return 0;
+        }
+        if (length == 1) {
+            return length;
+        }
 
+        int index = 1;
+        for (int i = 1; i < length; i++) {
+            if (nums[i - 1] != nums[i]) {
+                nums[index] = nums[i];
+                index++;
+            }
+        }
 
+        return index;
 
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 
     /**
@@ -40,20 +56,21 @@ public class TopInterviewQuestions {
     @Test
     public void testCycle() {
 
-        ListNode tail = new ListNode(1,null);
-        ListNode a = new ListNode(2,tail);
-        ListNode b = new ListNode(3,a);
-        ListNode c = new ListNode(4,b);
-        ListNode d = new ListNode(5,c);
+        ListNode tail = new ListNode(1, null);
+        ListNode a = new ListNode(2, tail);
+        ListNode b = new ListNode(3, a);
+        ListNode c = new ListNode(4, b);
+        ListNode d = new ListNode(5, c);
         tail.setNext(c);
 
         final boolean b1 = hasCycle(d);
-        log.info("hasCycle={}",b1);
+        log.info("hasCycle={}", b1);
 
     }
 
     /**
      * 快慢指针
+     *
      * @param head
      * @return
      */
@@ -89,7 +106,7 @@ public class TopInterviewQuestions {
         Set<ListNode> set = new HashSet<>();
 
         while (head != null) {
-            if(set.contains(head)){
+            if (set.contains(head)) {
                 return true;
             }
             set.add(head);

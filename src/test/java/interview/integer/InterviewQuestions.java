@@ -6,10 +6,7 @@ import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author frank
@@ -20,10 +17,51 @@ import java.util.Set;
 public class InterviewQuestions {
 
     @Test
+    public void testLargestNumber() {
+        int[] nums = {3,30,34,5,9};
+        System.out.println(largestNumber(nums));
+    }
+
+    private String largestNumber(int[] nums) {
+        int length = nums.length;
+        Integer[] array = new Integer[length];
+        for (int i = 0; i < length; i++) {
+            array[i] = nums[i];
+        }
+
+        Arrays.sort(array, (x, y) -> {
+            long times = 10;
+            long times2 = 10;
+            int a = x;
+            int b = y;
+            while (a / 10 > 0) {
+                a = a / 10;
+                times = times * 10;
+            }
+
+            while (b / 10 > 0) {
+                b = b / 10;
+                times2 = times2 * 10;
+            }
+            return (int) ((y * times + x) - (x * times2 + y));
+        });
+
+        if (array[0] == 0) {
+            return "0";
+        }
+        StringBuilder result = new StringBuilder();
+        for (Integer i : array) {
+            result.append(i.toString());
+        }
+        return result.toString();
+
+    }
+
+    @Test
     public void twoSum() {
         int[] nums = {2, 7, 11, 15};
         int target = 9;
-        log.info("twoSum ={}",twoSum(nums,target));
+        log.info("twoSum ={}", twoSum(nums, target));
     }
 
     private int[] twoSum(int[] nums, int target) {
@@ -38,8 +76,8 @@ public class InterviewQuestions {
                 result[0] = index.get(target - nums[i]);
                 result[1] = i;
                 return result;
-            }else {
-                index.put(nums[i],i);
+            } else {
+                index.put(nums[i], i);
             }
 
         }

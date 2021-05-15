@@ -7,6 +7,7 @@ import com.frank.exception.ResubmitException;
 import com.frank.model.JsonResult;
 import com.frank.model.leetcode.LinkedOneWayList;
 import com.frank.model.leetcode.ListNode;
+import com.frank.model.leetcode.Trie;
 import com.frank.other.Node;
 import com.frank.other.SingleTon;
 import com.frank.repository.mysql.IncomeStatementRepository;
@@ -113,11 +114,163 @@ public class CommonTest {
     static final int MAXIMUM_CAPACITY = 1 << 30;
 
     @Test
+    public void testTrie(){
+        Trie tire = new Trie();
+        tire.insert("apple");
+        tire.insert("analysis");
+        boolean app = tire.startsWith("app");
+        System.out.println("startwith="+app);
+
+    }
+
+    @Test
+    public void testFindNthUgly() {
+        int n = 19;
+        System.out.println("findNthUgly=" + findNthUgly(n));
+    }
+
+
+    /**
+     * 动态规划
+     *
+     * @param n
+     * @return
+     */
+    private int findNthUgly(int n) {
+        int[] result = new int[n];
+        result[0] = 1;
+
+        int current = 1;
+        int index2 = 0;
+        int index3 = 0;
+        int index5 = 0;
+        int t2;
+        int t3;
+        int t5;
+        int min;
+        int min2;
+
+        while (current < n) {
+
+            t2 = result[index2] * 2;
+            t3 = result[index3] * 3;
+            t5 = result[index5] * 5;
+
+           /* if (t2 < t3 && t2 < t5) {
+                result = t2;
+                index2 = index2 * 2;
+            } else if (t3 < t2 && t3 < t5) {
+                result = t3;
+                index3 = index3 * 3;
+            } else {
+                result = t5;
+                index5 = index5 * 5;
+            }*/
+
+            /**
+             * 开始是这么写的
+             *   t2 = index2 * 2;
+             t3 = index3 * 3;
+             t5 = index5 * 5;
+             */
+
+
+
+            /*if (t2 <= t3 && t2 < t5) {
+                result[current] = t2;
+                index2++;
+            } else if (t3 < t2 && t3 < t5) {
+                result[current] = t3;
+                index3++;
+            } else {
+                result[current] = t5;
+                index5++;
+            }*/
+            min = Math.min(t2, t3);
+            min2 = Math.min(min, t5);
+            result[current] = min2;
+           /*
+           这里不能用else if 的形式，因为 2 * 3 和 3*2是同一个结果，下标都需要加一
+           if(min2 == t2){
+                index2++;
+            }else if(min2 == t3){
+                index3++;
+            }else {
+                index5++;
+            }*/
+
+            /**
+             * 丑数数组的每个元素，都乘以2，或者3，或者5，得到下一个丑数
+             * 比如第一个元素是1，那么1分别乘以2,3,5后，得到三个丑数2,3,5，2是最小的，是丑数数组的第二个元素。
+             * 第一个元素乘以2的结果已经存到丑数数组了，所以下次是用下一个元素再乘以2
+             * 而第一个元素乘以3和5的结果还没有放到丑数数组里，所以还是用第一个元素分别乘以3和5
+             * 1 * 3 等于3，3也被放入到丑数数组里，所以下次要用第二个元素乘以3了，以此类推。每个位置都会乘以2,3,5
+             *
+             * 数组当前的index2位置已经乘过2了，下次该下一位置乘以2了
+             */
+            if (min2 == t2) {
+                index2++;
+            }
+            if (min2 == t3) {
+                index3++;
+            }
+
+            if (min2 == t5) {
+                index5++;
+            }
+
+            System.out.println("number=" + result[current]);
+            current++;
+        }
+
+
+        return result[n - 1];
+    }
+
+    @Test
+    public void testUgly() {
+        int n = -1000;
+        System.out.println("isUgly=" + ugly(n));
+    }
+
+    private boolean ugly(int n) {
+
+        /**
+         * 负数一定不是丑数，因为有个质因子-1
+         */
+        if (n <= 0) {
+            return false;
+        }
+
+        /**
+         * 先用5做除数，n变小的快，效率高
+         */
+        while (n % 5 == 0) {
+            n = n / 5;
+        }
+
+        while (n % 3 == 0) {
+            n = n / 3;
+        }
+
+        /**
+         * 开始条件是这么写的(n / 2 > 2)
+         */
+        while (n % 2 == 0) {
+            n = n / 2;
+        }
+
+
+        return n == 1;
+
+    }
+
+    @Test
     public void testFindMin() {
 
     }
 
-    private int fingMin(int[] nums) {
+    private int findMin(int[] nums) {
         int length = nums.length;
         if (length == 1) {
             return nums[0];
@@ -141,7 +294,7 @@ public class CommonTest {
              * 有序，最小值在另一半
              */
             if (nums[middle] < nums[tail]) {
-                tail = middle ;
+                tail = middle;
 
                 /**
                  * 值在前半部分
@@ -152,6 +305,57 @@ public class CommonTest {
                  * 下一个位置才可能是
                  */
                 head = middle + 1;
+            }
+
+        }
+        return nums[head];
+    }
+
+    /**
+     * 有重复元素的旋转数组查找最小值
+     */
+    private int findMin2(int[] nums) {
+        int length = nums.length;
+        if (length == 1) {
+            return nums[0];
+        }
+        if (nums[0] < nums[length - 1]) {
+            return nums[0];
+        }
+
+        int head = 0;
+        int tail = length - 1;
+        int middle;
+        while (head < tail) {
+            /**
+             * 知道是用二分查找，看在这个middle的值怎么获取
+             * 为什么不是 middle = (head + tail) / 2 ???
+             *
+             * 目标值右边的情况会比较简单，容易区分，所以比较mid与right而不比较mid与left。
+             */
+            middle = head + (tail - head) / 2;
+            /**
+             * 有序，最小值在另一半
+             */
+            if (nums[middle] < nums[tail]) {
+                tail = middle;
+
+                /**
+                 * 值在前半部分
+                 */
+            } else if (nums[middle] > nums[tail]) {
+                /**
+                 * nums[middle] > nums[tail],所以middle位置一定不是最小值
+                 * 下一个位置才可能是
+                 */
+                head = middle + 1;
+
+                /**
+                 * 中间值等于最后的值，不能说明最小值在什么位置
+                 * 但是可以确定的是，可以把tail往前移动一位，因为middle的值和tail是一样的，不会导致把最小值错过
+                 */
+            } else {
+                tail--;
             }
 
         }
