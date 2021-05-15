@@ -13,6 +13,56 @@ import java.util.*;
 @Slf4j
 public class AlgorithmQuestions {
 
+    /**
+     * 罗马数组转整数
+     * 字符          数值
+     * I             1
+     * V             5
+     * X             10
+     * L             50
+     * C             100
+     * D             500
+     * M             1000
+     * 链接：https://leetcode-cn.com/problems/roman-to-integer
+     * <p>
+     * 小的在大的左边，则减法；
+     * 小的在大的右边，则加法；
+     * 最后一位永远是加法。
+     */
+    @Test
+    public void testRoman2Int() {
+
+        String roman = "IV";
+        System.out.println( "罗马数字："+roman +" 转为整数是："+roman2int(roman));
+
+    }
+
+    private int roman2int(String roman) {
+        Map<Character, Integer> dict = new HashMap<Character, Integer>() {{
+            put('I', 1);
+            put('V', 5);
+            put('X', 10);
+            put('L', 50);
+            put('C', 100);
+            put('D', 500);
+            put('M', 1000);
+        }};
+
+        int length = roman.length();
+        int result = 0;
+        int cur;
+        for (int i = 0; i < length; i++) {
+            cur = dict.get(roman.charAt(i));
+            if (i < length - 1 && cur < dict.get(roman.charAt(i + 1))) {
+                result = result - cur;
+            } else {
+                result = result + cur;
+            }
+        }
+        return result;
+    }
+
+
     @Test
     public void testDynamicPlan() {
         int count = count(10);
