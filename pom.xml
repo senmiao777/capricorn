@@ -280,11 +280,17 @@
             <artifactId>cglib</artifactId>
             <version>3.1</version>
         </dependency>
-       <!-- <dependency>
-            <groupId>com.frank</groupId>
-            <artifactId>simple</artifactId>
-            <version>1.1-SNAPSHOT</version>
-        </dependency>-->
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.2</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- <dependency>
+             <groupId>com.frank</groupId>
+             <artifactId>simple</artifactId>
+             <version>1.1-SNAPSHOT</version>
+         </dependency>-->
 
        <!-- <dependency>
             <groupId>com.frank</groupId>
