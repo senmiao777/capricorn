@@ -44,6 +44,12 @@ public class ArrayTest {
             if('(' == currentChar){
                 stack.push(tempStr);
                 tempStr = new StringBuilder();
+                /**
+                 * 也可以这样栈里边的元素是String类型的
+                 * LinkedList<String> stack = new LinkedList<>();
+                 *  stack.push(sb.toString());
+                 *  sb.setLength(0);
+                 */
             }else if(')' == currentChar){
                 tempStr.reverse();
                 tempStr.insert(0,stack.pop());
