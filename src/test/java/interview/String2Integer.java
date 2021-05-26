@@ -2,7 +2,7 @@ package interview;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.assertj.core.util.Lists;
+import com.google.common.collect.Lists;
 import org.junit.Test;
 
 import java.util.List;
