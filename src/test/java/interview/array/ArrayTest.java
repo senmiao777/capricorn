@@ -52,6 +52,7 @@ public class ArrayTest {
                  */
             }else if(')' == currentChar){
                 tempStr.reverse();
+                // 把外层的字符串拿出来，放在前边，后边拼接当前字符串反转之后的值
                 tempStr.insert(0,stack.pop());
             }else {
                 tempStr.append(currentChar);
