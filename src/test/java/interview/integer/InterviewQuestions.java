@@ -25,8 +25,8 @@ public class InterviewQuestions {
         int right = 4;
         int i = left ^ right;
         System.out.println("异或操作结果=" + i);
-        System.out.println("res=" + hangMingDistance(left, right)
-        );
+        System.out.println("res=" + hangMingDistance(left, right));
+        System.out.println(Integer.bitCount(i));
 
 
     }
