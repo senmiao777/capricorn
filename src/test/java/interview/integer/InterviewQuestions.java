@@ -20,7 +20,32 @@ import java.util.Set;
 public class InterviewQuestions {
 
     @Test
-    public void getWay(){
+    public void testHangMingDistance() {
+        int left = 1;
+        int right = 4;
+        int i = left ^ right;
+        System.out.println("异或操作结果=" + i);
+        System.out.println("res=" + hangMingDistance(left, right)
+        );
+
+
+    }
+
+    private int hangMingDistance(int left, int right) {
+        int result = 0;
+        int xor = left ^ right;
+        int one = 1;
+        while (one <= xor) {
+            if ((one & xor) != 0) {
+                result++;
+            }
+            one = one << 1;
+        }
+        return result;
+    }
+
+    @Test
+    public void getWay() {
         System.out.println(getWays2(100));
     }
 
@@ -31,10 +56,8 @@ public class InterviewQuestions {
         if (n == 2) {
             return 2;
         }
-        return getWays(n-1) + getWays(n-2);
+        return getWays(n - 1) + getWays(n - 2);
     }
-
-
 
 
     long getWays2(int n) {
@@ -59,7 +82,7 @@ public class InterviewQuestions {
     public void twoSum() {
         int[] nums = {2, 7, 11, 15};
         int target = 9;
-        log.info("twoSum ={}",twoSum(nums,target));
+        log.info("twoSum ={}", twoSum(nums, target));
     }
 
     private int[] twoSum(int[] nums, int target) {
@@ -74,8 +97,8 @@ public class InterviewQuestions {
                 result[0] = index.get(target - nums[i]);
                 result[1] = i;
                 return result;
-            }else {
-                index.put(nums[i],i);
+            } else {
+                index.put(nums[i], i);
             }
 
         }
