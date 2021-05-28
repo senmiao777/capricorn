@@ -19,6 +19,31 @@ import java.util.Set;
 @Slf4j
 public class InterviewQuestions {
 
+
+    @Test
+    public void testHanMingDistance2(){
+        int[] nums = {4,14,2};
+        System.out.println(hangMingDistance2(nums));
+    }
+
+    private int hangMingDistance2(int[] nums) {
+        int result = 0;
+        int length = nums.length;
+        int temp = 0;
+
+        for(int i=0;i< 30;i++){
+            temp =0;
+            for(int j=0;j<length;j++){
+                if((nums[j]>>i & 1) !=0){
+                    temp ++;
+                }
+            }
+            result = result + temp * (length-temp);
+        }
+
+        return result;
+    }
+
     @Test
     public void testHangMingDistance() {
         int left = 1;
