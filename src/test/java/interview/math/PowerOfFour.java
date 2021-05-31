@@ -6,7 +6,7 @@ public class PowerOfFour {
     @Test
     public void isPowerOfFour() {
         int n = 1073741824;
-        System.out.println("res=" + powerOf4(n));
+        System.out.println("res=" +(1<<6));
     }
 
     public boolean powerOfFour(int number) {
