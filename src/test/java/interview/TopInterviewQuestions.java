@@ -983,11 +983,13 @@ public class TopInterviewQuestions {
 
         int number = 3;
         /**
-         <<      :     左移运算符，num << 1,相当于num乘以2的一次方，后边是往左移位的位数
+         M<<N    :     左移运算符，指M向左移N位
+         num << 1,相当于num乘以2的一次方，
          1<<2 结果是100，是十进制的8
+         M << N 等价于 M 乘以 2的N次方
          >>      :     右移运算符，num >> 1,相当于num除以2的一次方
          >>>    :     无符号右移，忽略符号位，空位都以0补齐
-         M << N   == M 乘以 2的N次方
+
          */
         log.info("reverse={}", number << 4);
 
