@@ -3,6 +3,22 @@ package interview.math;
 import org.junit.Test;
 
 public class PowerOfFour {
+
+
+    @Test
+    public void testIsPowerOfTwo() {
+
+    }
+
+
+    public boolean isPowerOfTwo(int n) {
+        if(n <=0){
+            return false;
+        }
+
+        return true;
+
+    }
     @Test
     public void isPowerOfFour() {
         int n = 1073741824;
@@ -50,5 +66,26 @@ public class PowerOfFour {
         //return (n > 0) && ((n & n - 1) == 0) && ((n & 0xaaaaaaaa) == 0);
         return (n > 0) && ((n & n - 1) == 0) && ((n & 0b10101010101010101010101010101010) == 0);
 
+    }
+
+    /**
+     * n & (n-1) 直接将十进制数字 n 对应的二进制表示的最低位 1 移除
+     *
+     * 假设 n 的二进制表示为 (a10⋯0) 2
+     * 其中 a 表示若干个高位，1 表示最低位的那个 1，00⋯0 表示后面的若干个 0，那么 n−1 的二进制表示为：(a01⋯1)2
+     * 我们将(a10⋯0)2与 (a01⋯1)2 进行按位与运算，高位 a 不变，在这之后的所有位都会变为 0，这样我们就将最低位的那个 1 移除了。
+     *
+     * n & (-n) 该位运算技巧可以直接获取十进制数字 n 对应的二进制表示的最低位的 1。
+     *
+     * 由于负数是按照补码规则在计算机中存储的，−n 的二进制表示为 n 的二进制表示的每一位取反再加上 1，因此它的原理如下：
+     *
+     * 假设 n 的二进制表示为 (a10⋯0)2 ，其中 a 表示若干个高位，1 表示最低位的那个 1，00⋯0 表示后面的若干个 0
+     * 则 - n的二进制表示为 (A01⋯1)2 + (1)2 = (A10⋯0)2
+     * 将两者进行按位与运算，高位全部变为 0，最低位的 1 以及之后的所有 0 不变，这样我们就获取了 n 二进制表示的最低位的 1。
+     * @param n
+     * @return
+     */
+    public boolean powerOf2(int n) {
+        return (n > 0) && ((n & n - 1) == 0);
     }
 }
