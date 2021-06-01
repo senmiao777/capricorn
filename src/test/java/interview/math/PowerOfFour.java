@@ -88,4 +88,21 @@ public class PowerOfFour {
     public boolean powerOf2(int n) {
         return (n > 0) && ((n & n - 1) == 0);
     }
+
+    /**
+     * 把int范围内2的幂全量枚举一遍
+     * @param n
+     * @return
+     */
+    public boolean powerOf22(int n) {
+        if(n<=0){
+            return false;
+        }
+        for(int i=0;i<32;i++){
+            if((1<<i) == n){
+                return true;
+            }
+        }
+        return false;
+    }
 }
