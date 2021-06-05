@@ -4,7 +4,7 @@ import com.frank.concurrent.FinalTest;
 import com.frank.service.ConcurrentService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
-import org.assertj.core.util.Lists;
+import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

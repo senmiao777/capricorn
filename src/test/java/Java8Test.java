@@ -1,6 +1,7 @@
 import com.frank.entity.mysql.User;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.util.Lists;
+
 import org.junit.Test;
 
 import java.util.*;

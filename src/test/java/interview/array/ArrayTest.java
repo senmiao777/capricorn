@@ -12,6 +12,55 @@ import java.util.*;
 //@Slf4j
 public class ArrayTest {
 
+
+    /**
+     * 翻转没对括号里的字符串
+     * 从里向外翻转
+     * (u(love)i) -> (uevoli) -> iloveu
+     */
+    @Test
+    public void testStackReverse(){
+        String s = "a(bcdefghijkl(mno)p)q";
+
+        StringBuilder stringBuilder = new StringBuilder("abc");
+        StringBuilder reverse = stringBuilder.reverse();
+        System.out.println(reverse);
+        System.out.println(stringBuilder);
+
+        stringBuilder.insert(1,"defg");
+        System.out.println(stringBuilder);
+
+        System.out.println("翻转之后="+stackReverse(s));
+    }
+
+    private String stackReverse(String str){
+
+        LinkedList<StringBuilder> stack = new LinkedList<>();
+
+        StringBuilder tempStr = new StringBuilder();
+
+        for(int i= 0 ;i< str.length();i++){
+            char currentChar = str.charAt(i);
+            if('(' == currentChar){
+                stack.push(tempStr);
+                tempStr = new StringBuilder();
+                /**
+                 * 也可以这样栈里边的元素是String类型的
+                 * LinkedList<String> stack = new LinkedList<>();
+                 *  stack.push(sb.toString());
+                 *  sb.setLength(0);
+                 */
+            }else if(')' == currentChar){
+                tempStr.reverse();
+                // 把外层的字符串拿出来，放在前边，后边拼接当前字符串反转之后的值
+                tempStr.insert(0,stack.pop());
+            }else {
+                tempStr.append(currentChar);
+            }
+        }
+        return tempStr.toString();
+    }
+
     @Test
     public void testXor() {
         int n = 10;
