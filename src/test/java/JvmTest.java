@@ -8,13 +8,15 @@ import org.junit.Test;
 public class JvmTest {
     @Test
     public void testJvmStack(){
+        int fs =0;
         System.out.println("operation result="+math());
     }
 
-    private int math(){
+    public int math(){
         int a = 7;
         int b = 8;
         int c = (a + b) * 10;
         return c;
     }
+
 }
