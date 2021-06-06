@@ -44,6 +44,12 @@ public class ListNode {
 
     }
 
+    /**
+     * 删除指定value的节点
+     * @param node
+     * @param num
+     * @return
+     */
     public static ListNode removeVal(ListNode node, int num) {
         ListNode dummyHead = new ListNode(0);
         dummyHead.next = node;
