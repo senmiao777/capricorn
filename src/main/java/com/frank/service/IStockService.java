@@ -3,6 +3,7 @@ package com.frank.service;
 import com.frank.entity.mysql.Stock;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author frank
@@ -27,4 +28,11 @@ public interface IStockService {
     Stock saveWithRuntimeException(Stock stock);
 
     List<Stock> findByArea(String area);
+
+    /**
+     * 模拟从第三方获取数据
+     * @param code
+     * @return
+     */
+    Stock findStockByRemote(String code) throws ExecutionException, InterruptedException;
 }
