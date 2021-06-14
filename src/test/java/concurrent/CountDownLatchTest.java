@@ -73,5 +73,6 @@ public class CountDownLatchTest {
             new Thread(new StockTask()).start();
             count.countDown();
         });
+
     }
 }

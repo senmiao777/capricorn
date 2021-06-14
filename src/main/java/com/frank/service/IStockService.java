@@ -12,6 +12,14 @@ import java.util.List;
 public interface IStockService {
     Stock findByStockCode(String stockCode);
 
+    /**
+     * 根据股票代码集合查询
+     *
+     * @param stockCodes
+     * @return
+     */
+    List<Stock> findByStockCodes(List<String> stockCodes);
+
     Stock findByStockName(String stockName);
 
     Stock save(Stock stock);

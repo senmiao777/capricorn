@@ -12,8 +12,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author frank
@@ -46,6 +48,15 @@ public class StockServiceImpl implements IStockService {
     @Cacheable(value = "stock", key = "#stockName")
     public Stock findByStockName(String stockName) {
         return stockRepository.findByStockName(stockName);
+    }
+
+
+    @Override
+    public List<Stock> findByStockCodes(List<String> stockCodes) {
+        if (CollectionUtils.isEmpty(stockCodes)) {
+            return null;
+        }
+        return stockRepository.findByStockCodes(stockCodes.stream().map(String::valueOf).collect(Collectors.joining(",")));
     }
 
     @Override
