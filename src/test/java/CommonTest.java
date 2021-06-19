@@ -18,6 +18,7 @@ import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.RateLimiter;
 import io.netty.util.HashedWheelTimer;
 import io.netty.util.Timeout;
+import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
@@ -36,6 +37,10 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.annotation.Rollback;
 
 import java.io.*;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryManagerMXBean;
+import java.lang.management.ThreadInfo;
+import java.lang.management.ThreadMXBean;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.ByteBuffer;
@@ -113,13 +118,95 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
     static final int MAXIMUM_CAPACITY = 1 << 30;
 
+    private String lock1 = "lock1111";
+    private String lock2 = "lock2222";
+
+
     @Test
-    public void testTrie(){
+    public void deadLockTest() throws InterruptedException, BrokenBarrierException {
+
+        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+        ThreadInfo[] threadInfos = threadMXBean.dumpAllThreads(false, false);
+
+        Arrays.stream(threadInfos).forEach(t -> {
+            System.out.println("线程id=" + t.getThreadId() + ",线程名=" + t.getThreadName());
+        });
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(3);
+
+        Thread threadA = new Thread(new Runnable() {
+            @SneakyThrows
+            @Override
+            public void run() {
+                synchronized (lock1) {
+                    System.out.println("获取到锁:" + lock1);
+                    Thread.sleep(RandomUtils.nextInt(0, 10));
+                    synchronized (lock2) {
+                        System.out.println("获取到锁:" + lock2);
+                        cyclicBarrier.await();
+                    }
+                }
+
+            }
+        });
+
+
+        Thread threadB = new Thread(new Runnable() {
+            @SneakyThrows
+            @Override
+            public void run() {
+                synchronized (lock2) {
+                    System.out.println("获取到锁:" + lock2);
+                    Thread.sleep(RandomUtils.nextInt(0, 10));
+                    synchronized (lock1) {
+                        System.out.println("获取到锁:" + lock1);
+                        cyclicBarrier.await();
+                    }
+                }
+
+            }
+        });
+
+        /**
+         * 调用start方法，才是真正的在操作系统调用了C的创建线程方法
+         * new Thread,并没有创建线程
+         */
+        threadA.start();
+        threadB.start();
+
+
+        cyclicBarrier.await();
+
+
+        Thread.sleep(50);
+        System.out.println("main线程");
+    }
+
+
+    @Test
+    public void t() {
+        FinalTest f1 = new FinalTest();
+        FinalTest f2 = new FinalTest();
+        FinalTest f3 = new FinalTest();
+        log.info("f1.STR={}", f1.STR);
+        log.info("f2.STR={}", f2.STR);
+        log.info("f3.STR={}", f3.STR);
+
+        log.info("STATIC_STR={}", f1.STATIC_STR);
+        log.info("STATIC_STR={}", f2.STATIC_STR);
+        log.info("STATIC_STR={}", f3.STATIC_STR);
+        String curStr = "World";
+        StringBuilder builder = new StringBuilder("Hello");
+        f1.append(builder, curStr);
+        log.info("builder={}", builder);
+    }
+
+    @Test
+    public void testTrie() {
         Trie tire = new Trie();
         tire.insert("apple");
         tire.insert("analysis");
         boolean app = tire.startsWith("app");
-        System.out.println("startwith="+app);
+        System.out.println("startwith=" + app);
 
     }
 
