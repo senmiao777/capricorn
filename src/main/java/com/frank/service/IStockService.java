@@ -4,6 +4,7 @@ import com.frank.entity.mysql.Stock;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @author frank
@@ -35,5 +36,5 @@ public interface IStockService {
      * @param code
      * @return
      */
-    Stock findStockByCodeRemote(String code) throws ExecutionException, InterruptedException;
+    Stock findStockByCodeRemote(String code) throws ExecutionException, InterruptedException, TimeoutException;
 }

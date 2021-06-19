@@ -6,6 +6,7 @@ import com.frank.model.StockRequest;
 import com.frank.repository.mysql.StockRepository;
 import com.frank.service.IStockService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -40,11 +41,16 @@ public class StockServiceImpl implements IStockService {
      */
     BlockingQueue<StockRequest> queue = new LinkedBlockingQueue<>();
 
+    private static ThreadLocal<Long> diff = ThreadLocal.withInitial(() -> System.currentTimeMillis());
+
     @PostConstruct
     public void init() {
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
         scheduledExecutorService.scheduleAtFixedRate(() -> {
 
+            long l = System.currentTimeMillis() - diff.get();
+            log.info("时间差={}", l);
+            diff.set(System.currentTimeMillis());
             int size;
             if ((size = queue.size()) <= 0) {
                 log.info("请求缓存队列数据为空");
@@ -67,6 +73,14 @@ public class StockServiceImpl implements IStockService {
                 realRequestParam.add(request.getStockCode());
             });
 
+
+            int random2 = RandomUtils.nextInt(200, 1000);
+            log.info("模拟延迟随机毫秒数={}", random2);
+            try {
+                Thread.sleep(random2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             log.info("查询条数={},realRequestParam={}", size, realRequestParam);
             List<Stock> stockResult = this.findByStockCodesReomte(realRequestParam);
             log.info("查询结果={}", stockResult);
@@ -84,18 +98,23 @@ public class StockServiceImpl implements IStockService {
                     log.info("未找到数据stockCode={}", request.getStockCode());
                 }
             }
-        }, 0, 10, TimeUnit.SECONDS);
+
+
+        }, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
 
     @Override
-    public Stock findStockByCodeRemote(String code) throws ExecutionException, InterruptedException {
+    public Stock findStockByCodeRemote(String code) throws ExecutionException, InterruptedException, TimeoutException {
         StockRequest request = new StockRequest();
         CompletableFuture<Stock> future = new CompletableFuture<>();
         request.setFuture(future);
         request.setStockCode(code);
         queue.add(request);
-        return future.get();
+        /**
+         * 设置等待时间，1200毫秒
+         */
+        return future.get(1200, TimeUnit.MILLISECONDS);
     }
 
     @Override

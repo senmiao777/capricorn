@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * 基本增删改查操作
@@ -65,16 +66,16 @@ public class StockController {
         log.info("stockCode={}", stockCode);
         try {
             Stock stock = stockService.findStockByCodeRemote(stockCode);
-            log.info("stock info={}",stock);
+            log.info("stock info={}", stock);
             return JsonResult.buildSuccessResult(stock);
 
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (ExecutionException | InterruptedException | TimeoutException e) {
             e.printStackTrace();
             return JsonResult.buildErrorResult(e.getMessage());
         }
     }
 
-    @RedisLock(key="123")
+    @RedisLock(key = "123")
     @ApiOperation(value = "跳转到Echart页面")
     @RequestMapping("/hello")
     public String helloHtml() {
@@ -95,8 +96,6 @@ public class StockController {
         return JsonResult.buildSuccessResult(incomeStatementList);
 
     }
-
-
 
 
     @RequestMapping(value = "/short/{id}", method = RequestMethod.GET)
