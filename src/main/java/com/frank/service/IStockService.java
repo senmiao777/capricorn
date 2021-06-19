@@ -13,14 +13,6 @@ import java.util.concurrent.ExecutionException;
 public interface IStockService {
     Stock findByStockCode(String stockCode);
 
-    /**
-     * 根据股票代码集合查询
-     *
-     * @param stockCodes
-     * @return
-     */
-    List<Stock> findByStockCodes(List<String> stockCodes);
-
     Stock findByStockName(String stockName);
 
     Stock save(Stock stock);
@@ -30,9 +22,18 @@ public interface IStockService {
     List<Stock> findByArea(String area);
 
     /**
+     * 模拟从第三方批量获取数据
+     *
+     * @param stockCodes
+     * @return
+     */
+    List<Stock> findByStockCodesReomte(List<String> stockCodes);
+
+    /**
      * 模拟从第三方获取数据
+     *
      * @param code
      * @return
      */
-    Stock findStockByRemote(String code) throws ExecutionException, InterruptedException;
+    Stock findStockByCodeRemote(String code) throws ExecutionException, InterruptedException;
 }

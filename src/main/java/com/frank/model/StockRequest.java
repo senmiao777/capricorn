@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
  */
 @Data
 @NoArgsConstructor
-public class CompletableFutureRequest {
+public class StockRequest {
     private String stockCode;
     /**
      * 如果业务参数不唯一，可以自己生成一个唯一值，用于查询条件和返回结果的绑定

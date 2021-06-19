@@ -2,7 +2,7 @@ package com.frank.service.impl;
 
 import com.frank.entity.mysql.Stock;
 import com.frank.enums.Common;
-import com.frank.model.CompletableFutureRequest;
+import com.frank.model.StockRequest;
 import com.frank.repository.mysql.StockRepository;
 import com.frank.service.IStockService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,6 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -36,45 +35,62 @@ public class StockServiceImpl implements IStockService {
     @Autowired
     private StockRepository stockRepository;
 
-    BlockingQueue<CompletableFutureRequest> queue = new LinkedBlockingQueue<>();
+    /**
+     * 暂存请求的队列
+     */
+    BlockingQueue<StockRequest> queue = new LinkedBlockingQueue<>();
 
     @PostConstruct
     public void init() {
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
         scheduledExecutorService.scheduleAtFixedRate(() -> {
-            List<CompletableFutureRequest> temporary = new ArrayList<>();
-            List<String> param = new ArrayList<>();
 
             int size;
             if ((size = queue.size()) <= 0) {
+                log.info("请求缓存队列数据为空");
                 return;
             }
 
-            IntStream.range(0, size).forEach((m) -> {
-                CompletableFutureRequest request = queue.poll();
-                temporary.add(request);
-                param.add(request.getStockCode());
+            /**
+             * 存放请求对象的集合
+             */
+            List<StockRequest> requests = new ArrayList<>();
+
+            /**
+             * 用于批量查询的请求参数
+             */
+            List<String> realRequestParam = new ArrayList<>();
+
+            IntStream.range(0, size).forEach(m -> {
+                StockRequest request = queue.poll();
+                requests.add(request);
+                realRequestParam.add(request.getStockCode());
             });
 
-            System.out.println("查询条数=" + size);
-            List<Stock> stockResult = this.findByStockCodes(param);
-//          temporary.stream()
-//                  .filter(t -> stockResult.stream().map(Stock::getCode).collect(Collectors.toList()).contains(t))
-//                  .findAny().ifPresent(r->r.future.complete());
-            for (CompletableFutureRequest request : temporary) {
+            log.info("查询条数={},realRequestParam={}", size, realRequestParam);
+            List<Stock> stockResult = this.findByStockCodesReomte(realRequestParam);
+            log.info("查询结果={}", stockResult);
+            for (StockRequest request : requests) {
+                boolean find = false;
                 for (Stock stock : stockResult) {
                     if (request.getStockCode().equals(stock.getCode())) {
                         request.getFuture().complete(stock);
+                        find = true;
+                        break;
                     }
                 }
+                if (!find) {
+                    request.getFuture().complete(null);
+                    log.info("未找到数据stockCode={}", request.getStockCode());
+                }
             }
-        }, 0, 5, TimeUnit.SECONDS);
+        }, 0, 10, TimeUnit.SECONDS);
     }
 
 
     @Override
-    public Stock findStockByRemote(String code) throws ExecutionException, InterruptedException {
-        CompletableFutureRequest request = new CompletableFutureRequest();
+    public Stock findStockByCodeRemote(String code) throws ExecutionException, InterruptedException {
+        StockRequest request = new StockRequest();
         CompletableFuture<Stock> future = new CompletableFuture<>();
         request.setFuture(future);
         request.setStockCode(code);
@@ -103,11 +119,11 @@ public class StockServiceImpl implements IStockService {
 
 
     @Override
-    public List<Stock> findByStockCodes(List<String> stockCodes) {
+    public List<Stock> findByStockCodesReomte(List<String> stockCodes) {
         if (CollectionUtils.isEmpty(stockCodes)) {
             return null;
         }
-        return stockRepository.findByStockCodes(stockCodes.stream().map(String::valueOf).collect(Collectors.joining(",")));
+        return stockRepository.findByStockCodes(stockCodes);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.frank.entity.mysql;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 @Table(name = "stock_base_info")
 @Getter
 @Setter
+@ToString
 public class Stock {
     /**
      * NAME

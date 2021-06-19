@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -49,6 +50,29 @@ public class StockController {
      * 每秒发十个令牌
      */
     RateLimiter rateLimiter = RateLimiter.create(10);
+
+
+    /**
+     * 根据股票代码查询该股票基本信息
+     * 请求先暂存到队列中，然后批量查询，从批量查询的结果中获取数据返回
+     *
+     * @param stockCode
+     * @return
+     */
+    @RequestMapping(value = "/info/async", method = RequestMethod.GET)
+    public JsonResult infoasync(@RequestParam String stockCode) {
+
+        log.info("stockCode={}", stockCode);
+        try {
+            Stock stock = stockService.findStockByCodeRemote(stockCode);
+            log.info("stock info={}",stock);
+            return JsonResult.buildSuccessResult(stock);
+
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return JsonResult.buildErrorResult(e.getMessage());
+        }
+    }
 
     @RedisLock(key="123")
     @ApiOperation(value = "跳转到Echart页面")
