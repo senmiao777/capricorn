@@ -43,6 +43,10 @@ public class StockServiceImpl implements IStockService {
 
     private static ThreadLocal<Long> diff = ThreadLocal.withInitial(() -> System.currentTimeMillis());
 
+    /**
+     * ScheduledExecutorService
+     * 定时任务阻塞，超过下下次请求时间，会导致请求时间顺延
+     */
     @PostConstruct
     public void init() {
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
