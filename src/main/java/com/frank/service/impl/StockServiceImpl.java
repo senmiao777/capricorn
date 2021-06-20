@@ -50,6 +50,12 @@ public class StockServiceImpl implements IStockService {
     @PostConstruct
     public void init() {
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+
+        /**
+         * If any execution of this task
+         * takes longer than its period, then subsequent executions
+         * may start late, but will not concurrently execute
+         */
         scheduledExecutorService.scheduleAtFixedRate(() -> {
 
             long l = System.currentTimeMillis() - diff.get();
@@ -103,7 +109,14 @@ public class StockServiceImpl implements IStockService {
                 }
             }
 
+            /**
+             * for循环效率低
+             * 构造一个Map
 
+             Map<String, Stock> collect = stockResult.stream().collect(Collectors.toMap(s -> s.getCode(), v -> v));
+             for (StockRequest request : requests) {
+             request.getFuture().complete(collect.get(request.getStockCode()));
+             }*/
         }, 0, 1000, TimeUnit.MILLISECONDS);
     }
 

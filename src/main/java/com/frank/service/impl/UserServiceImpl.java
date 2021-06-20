@@ -66,7 +66,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED ,rollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public User findAndUpdate(Long phone) {
 
         User byPhone = userRepository.findByPhone(phone);
@@ -76,7 +76,7 @@ public class UserServiceImpl implements IUserService {
         log.info("after update byPhone={}", byPhone);
         byPhone.setAge(90);
         userRepository.save(byPhone);
-        HibernateEntityManager hEntityManager = (HibernateEntityManager)entityManager;
+        HibernateEntityManager hEntityManager = (HibernateEntityManager) entityManager;
         Session session = hEntityManager.getSession();
         session.evict(byPhone);
         byPhone.setAge(91);
@@ -84,7 +84,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED ,rollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public User update(User user) {
 
         int i = userRepository.updatePhone(13286230001L, user.getId());
@@ -93,6 +93,23 @@ public class UserServiceImpl implements IUserService {
         user.setAge(88);
         userRepository.save(user);
 
+        return user;
+    }
+
+
+    @Override
+    public User findByIdFake(Long userId) {
+        User user = new User();
+        user.setId(userId);
+        user.setUserName("张三");
+        user.setAge(18);
+        user.setPhone(13240115678L);
+        try {
+            log.info("findByIdFake线程id={}",Thread.currentThread().getId());
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return user;
     }
 }

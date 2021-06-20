@@ -23,4 +23,12 @@ public interface IUserService {
 
 
     User update(User user);
+
+    /**
+     * 根据userId查询
+     * 仅用于方法验证
+     * @param userId
+     * @return
+     */
+    User findByIdFake(Long userId);
 }
