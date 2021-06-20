@@ -37,4 +37,12 @@ public interface IStockService {
      * @return
      */
     Stock findStockByCodeRemote(String code) throws ExecutionException, InterruptedException, TimeoutException;
+
+    /**
+     * 模拟从第三方获取数据
+     *
+     * @param code
+     * @return
+     */
+    Stock findStockByCodeFake(String code);
 }

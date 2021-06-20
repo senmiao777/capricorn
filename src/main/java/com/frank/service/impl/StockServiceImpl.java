@@ -183,4 +183,19 @@ public class StockServiceImpl implements IStockService {
         }
         return save;
     }
+
+    @Override
+    public Stock findStockByCodeFake(String code) {
+        Stock stock = new Stock();
+        stock.setCode(code);
+        stock.setName("万科");
+        stock.setIndustry("房地产");
+        try {
+            log.info("findStockByCodeFake线程id={}", Thread.currentThread().getId());
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return stock;
+    }
 }

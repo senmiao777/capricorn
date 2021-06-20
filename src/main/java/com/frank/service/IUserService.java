@@ -30,5 +30,5 @@ public interface IUserService {
      * @param userId
      * @return
      */
-    User findByIdFake(Long userId);
+    User findByUserIdFake(Long userId);
 }

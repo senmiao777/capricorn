@@ -98,7 +98,7 @@ public class UserServiceImpl implements IUserService {
 
 
     @Override
-    public User findByIdFake(Long userId) {
+    public User findByUserIdFake(Long userId) {
         User user = new User();
         user.setId(userId);
         user.setUserName("张三");
