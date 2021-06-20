@@ -3,6 +3,7 @@ package com.frank.service;
 import com.frank.entity.mysql.User;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author frank
@@ -31,4 +32,6 @@ public interface IUserService {
      * @return
      */
     User findByUserIdFake(Long userId);
+
+    User findByUserIdFake2(Long userId) throws ExecutionException, InterruptedException;
 }
