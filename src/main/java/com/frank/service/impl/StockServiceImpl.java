@@ -6,6 +6,7 @@ import com.frank.model.StockRequest;
 import com.frank.repository.mysql.StockRepository;
 import com.frank.service.IStockService;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
@@ -20,6 +21,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 /**
@@ -40,6 +42,9 @@ public class StockServiceImpl implements IStockService {
      * 暂存请求的队列
      */
     BlockingQueue<StockRequest> queue = new LinkedBlockingQueue<>();
+
+  //  BlockingQueue<StockRequest> queue = new DelayQueue<StockRequest>();
+
 
     private static ThreadLocal<Long> diff = ThreadLocal.withInitial(() -> System.currentTimeMillis());
 
@@ -77,12 +82,16 @@ public class StockServiceImpl implements IStockService {
              */
             List<String> realRequestParam = new ArrayList<>();
 
-            IntStream.range(0, size).forEach(m -> {
+            final int tasks = 100;
+            final AtomicInteger atomic = new AtomicInteger(100);
+            while (atomic.get()>0 || !queue.isEmpty()){
                 StockRequest request = queue.poll();
-                requests.add(request);
-                realRequestParam.add(request.getStockCode());
-            });
-
+                if(!request.getFuture().isCancelled()){
+                    requests.add(request);
+                    realRequestParam.add(request.getStockCode());
+                    atomic.decrementAndGet();
+                }
+            }
 
             int random2 = RandomUtils.nextInt(200, 1000);
             log.info("模拟延迟随机毫秒数={}", random2);
@@ -131,7 +140,14 @@ public class StockServiceImpl implements IStockService {
         /**
          * 设置等待时间，1200毫秒
          */
-        return future.get(1200, TimeUnit.MILLISECONDS);
+        //return future.get(1200, TimeUnit.MILLISECONDS);
+        Stock result = null;
+        try {
+            result = future.get(1200, TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            future.cancel(true);
+        }
+        return result;
     }
 
     @Override
