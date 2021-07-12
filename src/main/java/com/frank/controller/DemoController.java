@@ -1,37 +1,29 @@
-package concurrent;
+package com.frank.controller;
 
 import com.frank.entity.mysql.Stock;
 import com.frank.entity.mysql.User;
+import com.frank.model.JsonResult;
 import com.frank.model.Order;
 import com.frank.service.IOrderService;
 import com.frank.service.IStockService;
 import com.frank.service.IUserService;
+import com.google.common.util.concurrent.RateLimiter;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-/**
- * @author frank
- * @version 1.0
- * @date 2021/6/14 0014 下午 11:08
- */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootApplication
-@ComponentScan(basePackages = "com.frank")
-@SpringBootTest(classes = CompletableFutureTest.class)
 @Slf4j
-public class CompletableFutureTest {
+@RestController
+@RequestMapping(value = "/demo")
+public class DemoController {
 
     @Autowired
     private IStockService stockService;
@@ -46,52 +38,73 @@ public class CompletableFutureTest {
     @Qualifier("testTaskPoolExecutor")
     private Executor taskPoolExecutor;
 
-    @Test
-    public void completableFutureTest() {
+    /**
+     * 每秒发十个令牌
+     */
+    RateLimiter rateLimiter = RateLimiter.create(10);
+
+
+    @RequestMapping(value = "/info/async", method = RequestMethod.GET)
+    public JsonResult infoasync(Long userId) {
         long begin = System.currentTimeMillis();
-        User user = userService.findByUserIdFake(123L);
+        User user = userService.findByUserIdFake(userId);
         Order order = orderService.getByOrderIdFake("test123123");
         Stock stock = stockService.findStockByCodeFake("000002");
         Map<String, Object> res = new HashMap<>(8);
         res.put("user", user);
         res.put("order", order);
         res.put("stock", stock);
-        log.info("res={},\n耗时 {} 毫秒", res, (System.currentTimeMillis() - begin));
+        long cost = System.currentTimeMillis() - begin;
+        res.put("cost", cost);
+        log.info("res={},耗时 {} 毫秒", res, cost);
+        return JsonResult.buildSuccessResult(res);
     }
 
-    @Test
-    public void completableFutureTest2() {
+
+    @RequestMapping(value = "/info/async2", method = RequestMethod.GET)
+    public JsonResult infoasync2(Long userId) {
         long begin = System.currentTimeMillis();
-        CompletableFuture<User> userCompletableFuture = CompletableFuture.supplyAsync(() -> userService.findByUserIdFake(123L), taskPoolExecutor);
+        CompletableFuture<User> userCompletableFuture = CompletableFuture.supplyAsync(() -> userService.findByUserIdFake(userId), taskPoolExecutor);
         CompletableFuture<Order> orderCompletableFuture = CompletableFuture.supplyAsync(() -> orderService.getByOrderIdFake("test123123"), taskPoolExecutor);
         CompletableFuture<Stock> stockCompletableFuture = CompletableFuture.supplyAsync(() -> stockService.findStockByCodeFake("000002"), taskPoolExecutor);
 
         Map<String, Object> res = new HashMap<>(8);
-        try {
-            res.put("user", userCompletableFuture.get());
-            res.put("order", orderCompletableFuture.get());
-            res.put("stock", stockCompletableFuture.get());
-            log.info("res={},\n耗时 {} 毫秒", res, (System.currentTimeMillis() - begin));
-        } catch (Exception e) {
-            if (userCompletableFuture != null) {
-                userCompletableFuture.cancel(true);
+        //  try {
+        userCompletableFuture.whenComplete((v, e) -> {
+
+            if (e != null) {
+                log.error("查询用户信息异常，e={}",e);
+                User u = new User();
+                u.setUserName("兜底数据");
+                res.put("user", u);
+            } else {
+                res.put("user", v);
             }
-            if (orderCompletableFuture != null) {
-                orderCompletableFuture.cancel(true);
-            }
-            if (stockCompletableFuture != null) {
-                stockCompletableFuture.cancel(true);
-            }
-            e.printStackTrace();
-        }
+        });
+        orderCompletableFuture.whenComplete((v, e) -> res.put("order", v));
+        stockCompletableFuture.whenComplete((v, e) -> res.put("stock", v));
+
+        CompletableFuture.allOf(userCompletableFuture, orderCompletableFuture, stockCompletableFuture)
+                .thenAccept((a) -> {
+                    long cost = System.currentTimeMillis() - begin;
+                    log.info("res={},耗时 {} 毫秒", res, cost);
+                    res.put("cost", cost);
+                })
+                .exceptionally((e) -> {
+                    log.error("查询异常e={}", e.getMessage());
+                    return null;
+                    // return JsonResult.buildErrorResult(e.getMessage());
+                });
+        return JsonResult.buildSuccessResult(res);
     }
 
 
-    @Test
-    public void completableFutureTest3() {
+    @RequestMapping(value = "/info/async3", method = RequestMethod.GET)
+    public JsonResult infoasync3(Long userId) {
         long begin = System.currentTimeMillis();
-        CompletableFuture<User> userCompletableFuture = CompletableFuture.supplyAsync(() -> userService.findByUserIdFake(13L), taskPoolExecutor);
+        CompletableFuture<User> userCompletableFuture = CompletableFuture.supplyAsync(() -> userService.findByUserIdFake(userId), taskPoolExecutor);
         CompletableFuture<Order> orderCompletableFuture = CompletableFuture.supplyAsync(() -> orderService.getByOrderIdFake("test123123"), taskPoolExecutor);
+
         CompletableFuture.allOf(userCompletableFuture, orderCompletableFuture).thenApply((Void) -> {
             Map<String, Object> res = new HashMap<>(8);
             try {
@@ -113,15 +126,18 @@ public class CompletableFutureTest {
             CompletableFuture<Stock> stockCompletableFuture = CompletableFuture.supplyAsync(() -> stockService.findStockByCodeFake("000002"), taskPoolExecutor);
             try {
                 a.put("stock", stockCompletableFuture.get());
+                long cost = System.currentTimeMillis() - begin;
+                a.put("cost", cost);
                 log.info("res={},\n耗时 {} 毫秒", a, (System.currentTimeMillis() - begin));
-                return a;
+                return JsonResult.buildSuccessResult(a);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
-        }).exceptionally((e) -> {
-            log.error("CompletableFuture异常，e={}", e.getMessage());
-            return null;
+        }).whenComplete((r, e) -> {
+            JsonResult.buildSuccessResult(r);
         });
+
+        return null;
     }
 }
