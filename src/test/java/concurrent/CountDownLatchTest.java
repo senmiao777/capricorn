@@ -2,7 +2,6 @@ package concurrent;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.utility.RandomString;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
@@ -43,17 +42,16 @@ public class CountDownLatchTest {
     public void pathMatcherTest() throws InterruptedException {
         CountDownLatch oneCount = new CountDownLatch(1);
         String target = "/info/{name}";
-        IntStream.range(1,100).forEach((s)->{
+        IntStream.range(1, 100).forEach((s) -> {
 
             new Thread(() -> {
-                String temp = RandomStringUtils.randomAlphabetic(RandomUtils.nextInt(0,20));
                 try {
                     oneCount.await();
-                    boolean match = PATH_MATCHER.match(target, temp);
-                    if(match){
-                        System.out.println("1111");
-                    }else {
-                        System.out.println("222");
+                    String path = "/info/" + RandomStringUtils.randomAlphabetic(RandomUtils.nextInt(1, 20));
+                    System.out.println("path=" + path);
+                    boolean match = PATH_MATCHER.match(target, path);
+                    if (!match) {
+                        System.out.println("mismatch"+path);
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -63,9 +61,9 @@ public class CountDownLatchTest {
 
         });
 
-        count.countDown();
+        oneCount.countDown();
 
-        Thread.sleep(100);
+        Thread.sleep(1000);
 
     }
 

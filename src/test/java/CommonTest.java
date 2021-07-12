@@ -38,7 +38,6 @@ import org.springframework.test.annotation.Rollback;
 
 import java.io.*;
 import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryManagerMXBean;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.math.BigDecimal;
@@ -120,6 +119,8 @@ public class CommonTest {
 
     private String lock1 = "lock1111";
     private String lock2 = "lock2222";
+
+
 
 
     @Test
