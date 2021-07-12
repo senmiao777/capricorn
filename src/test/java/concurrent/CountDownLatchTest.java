@@ -2,8 +2,12 @@ package concurrent;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.utility.RandomString;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CountDownLatch;
@@ -32,6 +36,38 @@ public class CountDownLatchTest {
      */
     CyclicBarrier ready = new CyclicBarrier(NUMBER + 1);
     int stock = 200;
+
+    protected static final PathMatcher PATH_MATCHER = new AntPathMatcher();
+
+    @Test
+    public void pathMatcherTest() throws InterruptedException {
+        CountDownLatch oneCount = new CountDownLatch(1);
+        String target = "/info/{name}";
+        IntStream.range(1,100).forEach((s)->{
+
+            new Thread(() -> {
+                String temp = RandomStringUtils.randomAlphabetic(RandomUtils.nextInt(0,20));
+                try {
+                    oneCount.await();
+                    boolean match = PATH_MATCHER.match(target, temp);
+                    if(match){
+                        System.out.println("1111");
+                    }else {
+                        System.out.println("222");
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }).start();
+
+        });
+
+        count.countDown();
+
+        Thread.sleep(100);
+
+    }
 
     class StockTask implements Runnable {
 
