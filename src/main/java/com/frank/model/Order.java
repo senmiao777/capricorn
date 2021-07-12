@@ -12,7 +12,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Data
 @ToString
-public class Order {
+public class Order extends AbstractOrder{
 
     /**
      * 订单id
@@ -33,4 +33,10 @@ public class Order {
      * 购买数量
      */
     private Integer amount;
+
+
+    @Override
+    void commonPrintOrder() {
+        super.commonPrintOrder();
+    }
 }

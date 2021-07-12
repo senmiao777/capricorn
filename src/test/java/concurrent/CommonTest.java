@@ -16,6 +16,11 @@ import java.util.concurrent.TimeUnit;
  * @date 2021/5/22 0022 上午 10:48
  */
 public class CommonTest {
+    @Test
+    public void testTypeCast(){
+
+
+    }
 
     @Test
     public void testCheckSubarraySum(){
