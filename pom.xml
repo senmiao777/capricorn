@@ -15,7 +15,18 @@
         <!--<version>2.0.2.RELEASE</version>-->
     </parent>
 
+    <!--webmagic 爬虫框架-->
     <dependencies>
+        <dependency>
+            <groupId>us.codecraft</groupId>
+            <artifactId>webmagic-core</artifactId>
+            <version>0.7.4</version>
+        </dependency>
+        <dependency>
+            <groupId>us.codecraft</groupId>
+            <artifactId>webmagic-extension</artifactId>
+            <version>0.7.3</version>
+        </dependency>
 
         <dependency>
             <groupId>com.dangdang</groupId>
@@ -39,7 +50,6 @@
             <artifactId>sentry-spring</artifactId>
             <version>1.7.10</version>
         </dependency>
-
 
 
         <dependency>
@@ -101,21 +111,21 @@
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-data-elasticsearch</artifactId>-->
-            <!--<version>2.0.3.RELEASE</version>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>org.springframework.data</groupId>-->
-                    <!--<artifactId>spring-data-elasticsearch</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-data-elasticsearch</artifactId>-->
+        <!--<version>2.0.3.RELEASE</version>-->
+        <!--<exclusions>-->
+        <!--<exclusion>-->
+        <!--<groupId>org.springframework.data</groupId>-->
+        <!--<artifactId>spring-data-elasticsearch</artifactId>-->
+        <!--</exclusion>-->
+        <!--</exclusions>-->
         <!--</dependency>-->
 
         <!--<dependency>-->
-            <!--<groupId>org.springframework.data</groupId>-->
-            <!--<artifactId>spring-data-elasticsearch</artifactId>-->
-            <!--<version>3.0.7.RELEASE</version>-->
+        <!--<groupId>org.springframework.data</groupId>-->
+        <!--<artifactId>spring-data-elasticsearch</artifactId>-->
+        <!--<version>3.0.7.RELEASE</version>-->
         <!--</dependency>-->
         <dependency>
             <groupId>org.elasticsearch</groupId>
@@ -292,12 +302,12 @@
              <version>1.1-SNAPSHOT</version>
          </dependency>-->
 
-       <!-- <dependency>
-            <groupId>com.frank</groupId>
-            <artifactId>simple2</artifactId>
-            &lt;!&ndash;1.22-SNAPSHOT是个稳定版本&ndash;&gt;
-            <version>1.28-SNAPSHOT</version>
-        </dependency>-->
+        <!-- <dependency>
+             <groupId>com.frank</groupId>
+             <artifactId>simple2</artifactId>
+             &lt;!&ndash;1.22-SNAPSHOT是个稳定版本&ndash;&gt;
+             <version>1.28-SNAPSHOT</version>
+         </dependency>-->
 
     </dependencies>
 
@@ -308,13 +318,13 @@
         <maven.test.skip>true</maven.test.skip>
     </properties>
 
- <!--   <distributionManagement>
-        <repository>
-            <id>nexus-releases</id>
-            <name>releases</name>
-            <url>http://127.0.0.1:8081/nexus/content/repositories/releases/</url>
-        </repository>
-    </distributionManagement>-->
+    <!--   <distributionManagement>
+           <repository>
+               <id>nexus-releases</id>
+               <name>releases</name>
+               <url>http://127.0.0.1:8081/nexus/content/repositories/releases/</url>
+           </repository>
+       </distributionManagement>-->
 
     <build>
         <resources>
