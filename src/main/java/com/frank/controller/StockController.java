@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -123,6 +124,53 @@ public class StockController {
 
         Stock stock = stockService.findByStockCode(stockCode);
         return JsonResult.buildSuccessResult(stock);
+    }
+
+
+    /**
+     * 实体类对象
+     *
+     * @param stock
+     * @return
+     */
+    @RequestMapping(value = "/info/entry/param", method = RequestMethod.GET)
+    public JsonResult info2(Stock stock) {
+        if (stock != null) {
+            log.info("stock={}", stock);
+            if (!StringUtils.isEmpty(stock.getCode())) {
+                log.info("stockCode={},等待时间={}", stock.getCode());
+                Stock stockInfo = stockService.findByStockCode(stock.getCode());
+                log.info("stockInfo={}", stockInfo);
+                return JsonResult.buildSuccessResult(stock);
+            } else {
+                return JsonResult.buildSuccessResult("查询对象参数为空");
+            }
+        } else {
+            return JsonResult.buildSuccessResult("查询对象为空");
+        }
+    }
+
+    /**
+     * 实体类对象
+     *
+     * @param stock
+     * @return
+     */
+    @RequestMapping(value = "/info/entry/param2", method = RequestMethod.POST)
+    public JsonResult param2(@RequestBody Stock stock) {
+        if (stock != null) {
+            log.info("stock={}", stock);
+            if (!StringUtils.isEmpty(stock.getCode())) {
+                log.info("stockCode={},等待时间={}", stock.getCode());
+                Stock stockInfo = stockService.findByStockCode(stock.getCode());
+                log.info("stockInfo={}", stockInfo);
+                return JsonResult.buildSuccessResult(stock);
+            } else {
+                return JsonResult.buildSuccessResult("查询对象参数为空");
+            }
+        } else {
+            return JsonResult.buildSuccessResult("查询对象为空");
+        }
     }
 
     /**
