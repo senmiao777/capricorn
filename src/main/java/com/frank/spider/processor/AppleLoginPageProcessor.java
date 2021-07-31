@@ -45,16 +45,16 @@ public class AppleLoginPageProcessor implements PageProcessor {
         pw.put("accountName", "1042680038@qq.com");
         pw.put("rememberMe", false);
         pw.put("password", "No7wangjieru");
-        password.setExtras(nameValuePair);
-        spider.addRequest(password)
-                .thread(1)
-                .run();
+        password.setExtras(pw);
+
         System.out.println("2---------------------------");
 
         // Spider spider2 = Spider.create(new AppleLoginPageProcessor());
         Request code = new Request("https://idmsa.apple.com/appleauth/auth");
 
-        spider.addRequest(account, password, code)
+        spider.addRequest(account)
+                .addRequest(password)
+                .addRequest(code)
                 .thread(1)
                 .run();
     }
