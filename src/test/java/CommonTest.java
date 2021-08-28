@@ -49,6 +49,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -68,6 +69,27 @@ import java.util.stream.Collectors;
 public class CommonTest {
 
     private static final java.time.format.DateTimeFormatter YYYYMMDD = java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd");
+
+
+    // 36进制所用字符集
+    private static final String X36 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    // 十进制36
+    private static final int THIRTYSIX = 36;
+    // private static final Map<Integer, Character> DICT = new HashMap<>(72);
+
+    // 十六进制字符和十进制数对应关系
+    private static final Map<String, Integer> X36_DICT = new HashMap<>(72);
+    // 优化，用数组存储十进制和三十六进制的映射关系，查找效率比map高，并且没有空间浪费
+    private static final String[] X36_ARRAY = "0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".split(",");
+
+    static {
+        for (int i = 0; i < 36; i++) {
+            // DICT.put(i, X36.charAt(i));
+            X36_DICT.put(X36_ARRAY[i], i);
+        }
+    }
+
 
     enum Roman {
         M("M", 1000, "M对应值为1000"),
@@ -106,6 +128,69 @@ public class CommonTest {
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
     static final int MAXIMUM_CAPACITY = 1 << 30;
+
+
+    @Test
+    public void testTen2ThirtySix() {
+        final long now = System.currentTimeMillis() / 1000;
+        log.info("now={}", now);
+        final LocalDateTime begin = LocalDateTime.of(2010, 1, 1, 23, 59);
+        final long beginMill;
+        final long timediff;
+        log.info("begin={}", beginMill = begin.toEpochSecond(ZoneOffset.of("+8")));
+        log.info("timediff={}", timediff = (now - beginMill));
+
+        String apply36 = FUNC_TEN_TO_THIRTYSIX.apply(timediff);
+        log.info("十进制{}转为三十六进制结果={}", timediff, apply36);
+
+        Long apply10 = FUNC_THIRTYSIX_TO_TEN.apply(apply36);
+        log.info("三十六{}转为十进制结果={}", apply36, apply10);
+
+
+    }
+
+    /**
+     * 十进制转36进制
+     * 减少字符个数，节省空间
+     * <p>
+     * public Function<Long, String> FUNC_TEN_TO_THIRTYSIX_DEPRECATED = (num) -> {
+     * StringBuilder res = new StringBuilder();
+     * long mod;
+     * while (num > 0) {
+     * mod = num % THIRTYSIX;
+     * log.info("余数={}", mod);
+     * res.append(DICT.get((int) mod));
+     * num = num / 36;
+     * }
+     * return res.reverse().toString();
+     * };
+     */
+
+    /**
+     * 十进制转36进制
+     * 减少字符个数，节省空间
+     */
+    public Function<Long, String> FUNC_TEN_TO_THIRTYSIX = (num) -> {
+        StringBuilder res = new StringBuilder();
+        while (num > 0) {
+            res.append(X36_ARRAY[(int) (num % THIRTYSIX)]);
+            num = num / 36;
+        }
+        return res.reverse().toString();
+    };
+
+
+    /**
+     * 三十六进制转十进制
+     */
+    public Function<String, Long> FUNC_THIRTYSIX_TO_TEN = (num) -> {
+        Long res = 0L;
+        int size;
+        for (int i = 0; i < (size = num.length()); i++) {
+            res = res + X36_DICT.get(String.valueOf(num.charAt(i)).toUpperCase()) * (long) Math.pow(36, size - i -1);
+        }
+        return res;
+    };
 
 
     @Test
