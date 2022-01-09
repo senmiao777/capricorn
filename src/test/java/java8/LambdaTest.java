@@ -10,6 +10,9 @@ import org.springframework.test.annotation.Rollback;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.IntBinaryOperator;
 import java.util.stream.Collectors;
 
 
@@ -56,7 +59,27 @@ public class LambdaTest {
             System.out.println("no match");
         }
 
+        System.out.println("Function复合函数：" + a.andThen(b).apply(1));
+        System.out.println("BiFunction复合函数：" + c.andThen(a).apply(1,3));
+
     }
+
+    /**
+     * 像这种Int ,Float之类开头的函数式接口，是为了支持基本类型，避免不必要的拆箱装箱，性能高
+     * 装箱，本质是将基本类型包了个壳，然后创建一个对象类型的对象，保存在堆里。
+     * <p>
+     * UnaryOperator，一元操作，输入类型和返回类型一致，其实就是Function的特例。
+     * <p>
+     * a.andThen(b) 是先执行函数a，在执行函数b
+     * <p>
+     * a.compose(b) 是先执行函数b，在执行函数a
+     */
+    private Function<Integer, Integer> a = (a) -> a + 1;
+
+    private Function<Integer, Integer> b = (a) -> a * 2;
+
+    private BiFunction<Integer, Integer,Integer> c = Integer::sum;
+
 
     /**
      * 筛选红苹果
