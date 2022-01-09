@@ -10,6 +10,7 @@ import org.springframework.test.annotation.Rollback;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -23,17 +24,37 @@ import java.util.List;
 public class LambdaTest {
 
     final String BEI_JING = "beijing";
-    final String QING_DAO = "qing_adao";
+    final String QING_DAO = "qing_dao";
 
     /**
      * 为什么要用lambda表达式
      */
     @Test
     public void testLambda1() {
-        Apple apple1 = new Apple(Color.RED.getColor(), 1f, BEI_JING);
-        Apple apple2 = new Apple(Color.RED.getColor(), 2f, BEI_JING);
-        Apple apple3 = new Apple(Color.GREEN.getColor(), 3f, QING_DAO);
+        Apple apple1 = new Apple(Color.RED.getColor(), 10f, BEI_JING);
+        Apple apple2 = new Apple(Color.RED.getColor(), 20f, BEI_JING);
+        Apple apple3 = new Apple(Color.GREEN.getColor(), 30f, QING_DAO);
 
+        List<Apple> appleList = new ArrayList<>(8);
+        appleList.add(apple1);
+        appleList.add(apple2);
+        appleList.add(apple3);
+
+        /**
+         * 根据颜色筛选苹果
+         */
+        final List<Apple> applesByColor = getApplesByColor(appleList, Color.RED.getColor());
+
+        final List<Apple> collect = appleList.stream().filter(apple -> Color.GREEN.getColor().equals(apple.getColor()) &&
+                apple.getWeight() > 10.0f &&
+                QING_DAO.equals(apple.getArea())).collect(Collectors.toList());
+
+
+        if (CollectionUtils.isNotEmpty(collect)) {
+            collect.forEach(System.out::println);
+        } else {
+            System.out.println("no match");
+        }
 
     }
 

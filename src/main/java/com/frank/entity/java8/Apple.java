@@ -56,4 +56,13 @@ public class Apple {
         this.color = color;
         this.weight = weight;
     }
+
+    @Override
+    public String toString() {
+        return "Apple{" +
+                "color='" + color + '\'' +
+                ", weight=" + weight +
+                ", area='" + area + '\'' +
+                '}';
+    }
 }
