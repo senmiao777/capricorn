@@ -4,8 +4,20 @@ package com.frank.entity.java8;
  * @author Administrator
  */
 public class Apple {
+    /**
+     * 苹果颜色
+     */
     private String color;
+
+    /**
+     * 苹果重量
+     */
     private float weight;
+
+    /**
+     * 苹果产地
+     */
+    private String area;
 
     public String getColor() {
         return color;
@@ -23,7 +35,21 @@ public class Apple {
         this.weight = weight;
     }
 
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
     public Apple() {
+    }
+
+    public Apple(String color, float weight, String area) {
+        this.color = color;
+        this.weight = weight;
+        this.area = area;
     }
 
     public Apple(String color, float weight) {
