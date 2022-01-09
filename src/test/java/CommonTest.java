@@ -1,20 +1,24 @@
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.frank.concurrent.FinalTest;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.User;
 import com.frank.exception.ResubmitException;
 import com.frank.model.JsonResult;
 import com.frank.model.leetcode.LinkedOneWayList;
 import com.frank.model.leetcode.ListNode;
+import com.frank.model.leetcode.Trie;
 import com.frank.other.Node;
 import com.frank.other.SingleTon;
 import com.frank.repository.mysql.IncomeStatementRepository;
+import com.frank.repository.mysql.NamespaceErrorTotalRepository;
 import com.frank.util.GenerateUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.RateLimiter;
 import io.netty.util.HashedWheelTimer;
 import io.netty.util.Timeout;
+import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
@@ -33,6 +37,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.annotation.Rollback;
 
 import java.io.*;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
+import java.lang.management.ThreadMXBean;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.ByteBuffer;
@@ -123,11 +130,1211 @@ public class CommonTest {
     @Autowired
     private IncomeStatementRepository incomeStatementRepository;
 
+    @Autowired
+    private NamespaceErrorTotalRepository namespaceErrorTotalRepository;
+
     private String PASS = "PASS";
     private String FAIL = "FAIL";
     private static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern("yyyyMMdd");
     private static final DateTimeFormatter FORMATTER_RESULT = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
     static final int MAXIMUM_CAPACITY = 1 << 30;
+
+    private String lock1 = "lock1111";
+    private String lock2 = "lock2222";
+
+
+
+
+    @Test
+    public void deadLockTest() throws InterruptedException, BrokenBarrierException {
+
+        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+        ThreadInfo[] threadInfos = threadMXBean.dumpAllThreads(false, false);
+
+        Arrays.stream(threadInfos).forEach(t -> {
+            System.out.println("线程id=" + t.getThreadId() + ",线程名=" + t.getThreadName());
+        });
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(3);
+
+        Thread threadA = new Thread(new Runnable() {
+            @SneakyThrows
+            @Override
+            public void run() {
+                synchronized (lock1) {
+                    System.out.println("获取到锁:" + lock1);
+                    Thread.sleep(RandomUtils.nextInt(0, 10));
+                    synchronized (lock2) {
+                        System.out.println("获取到锁:" + lock2);
+                        cyclicBarrier.await();
+                    }
+                }
+
+            }
+        });
+
+
+        Thread threadB = new Thread(new Runnable() {
+            @SneakyThrows
+            @Override
+            public void run() {
+                synchronized (lock2) {
+                    System.out.println("获取到锁:" + lock2);
+                    Thread.sleep(RandomUtils.nextInt(0, 10));
+                    synchronized (lock1) {
+                        System.out.println("获取到锁:" + lock1);
+                        cyclicBarrier.await();
+                    }
+                }
+
+            }
+        });
+
+        /**
+         * 调用start方法，才是真正的在操作系统调用了C的创建线程方法
+         * new Thread,并没有创建线程
+         */
+        threadA.start();
+        threadB.start();
+
+
+        cyclicBarrier.await();
+
+
+        Thread.sleep(50);
+        System.out.println("main线程");
+    }
+
+
+    @Test
+    public void t() {
+        FinalTest f1 = new FinalTest();
+        FinalTest f2 = new FinalTest();
+        FinalTest f3 = new FinalTest();
+        log.info("f1.STR={}", f1.STR);
+        log.info("f2.STR={}", f2.STR);
+        log.info("f3.STR={}", f3.STR);
+
+        log.info("STATIC_STR={}", f1.STATIC_STR);
+        log.info("STATIC_STR={}", f2.STATIC_STR);
+        log.info("STATIC_STR={}", f3.STATIC_STR);
+        String curStr = "World";
+        StringBuilder builder = new StringBuilder("Hello");
+        f1.append(builder, curStr);
+        log.info("builder={}", builder);
+    }
+
+    @Test
+    public void testTrie() {
+        Trie tire = new Trie();
+        tire.insert("apple");
+        tire.insert("analysis");
+        boolean app = tire.startsWith("app");
+        System.out.println("startwith=" + app);
+
+    }
+
+    @Test
+    public void testFindNthUgly() {
+        int n = 19;
+        System.out.println("findNthUgly=" + findNthUgly(n));
+    }
+
+
+    /**
+     * 动态规划
+     *
+     * @param n
+     * @return
+     */
+    private int findNthUgly(int n) {
+        int[] result = new int[n];
+        result[0] = 1;
+
+        int current = 1;
+        int index2 = 0;
+        int index3 = 0;
+        int index5 = 0;
+        int t2;
+        int t3;
+        int t5;
+        int min;
+        int min2;
+
+        while (current < n) {
+
+            t2 = result[index2] * 2;
+            t3 = result[index3] * 3;
+            t5 = result[index5] * 5;
+
+           /* if (t2 < t3 && t2 < t5) {
+                result = t2;
+                index2 = index2 * 2;
+            } else if (t3 < t2 && t3 < t5) {
+                result = t3;
+                index3 = index3 * 3;
+            } else {
+                result = t5;
+                index5 = index5 * 5;
+            }*/
+
+            /**
+             * 开始是这么写的
+             *   t2 = index2 * 2;
+             t3 = index3 * 3;
+             t5 = index5 * 5;
+             */
+
+
+
+            /*if (t2 <= t3 && t2 < t5) {
+                result[current] = t2;
+                index2++;
+            } else if (t3 < t2 && t3 < t5) {
+                result[current] = t3;
+                index3++;
+            } else {
+                result[current] = t5;
+                index5++;
+            }*/
+            min = Math.min(t2, t3);
+            min2 = Math.min(min, t5);
+            result[current] = min2;
+           /*
+           这里不能用else if 的形式，因为 2 * 3 和 3*2是同一个结果，下标都需要加一
+           if(min2 == t2){
+                index2++;
+            }else if(min2 == t3){
+                index3++;
+            }else {
+                index5++;
+            }*/
+
+            /**
+             * 丑数数组的每个元素，都乘以2，或者3，或者5，得到下一个丑数
+             * 比如第一个元素是1，那么1分别乘以2,3,5后，得到三个丑数2,3,5，2是最小的，是丑数数组的第二个元素。
+             * 第一个元素乘以2的结果已经存到丑数数组了，所以下次是用下一个元素再乘以2
+             * 而第一个元素乘以3和5的结果还没有放到丑数数组里，所以还是用第一个元素分别乘以3和5
+             * 1 * 3 等于3，3也被放入到丑数数组里，所以下次要用第二个元素乘以3了，以此类推。每个位置都会乘以2,3,5
+             *
+             * 数组当前的index2位置已经乘过2了，下次该下一位置乘以2了
+             */
+            if (min2 == t2) {
+                index2++;
+            }
+            if (min2 == t3) {
+                index3++;
+            }
+
+            if (min2 == t5) {
+                index5++;
+            }
+
+            System.out.println("number=" + result[current]);
+            current++;
+        }
+
+
+        return result[n - 1];
+    }
+
+    @Test
+    public void testUgly() {
+        int n = -1000;
+        System.out.println("isUgly=" + ugly(n));
+    }
+
+    private boolean ugly(int n) {
+
+        /**
+         * 负数一定不是丑数，因为有个质因子-1
+         */
+        if (n <= 0) {
+            return false;
+        }
+
+        /**
+         * 先用5做除数，n变小的快，效率高
+         */
+        while (n % 5 == 0) {
+            n = n / 5;
+        }
+
+        while (n % 3 == 0) {
+            n = n / 3;
+        }
+
+        /**
+         * 开始条件是这么写的(n / 2 > 2)
+         */
+        while (n % 2 == 0) {
+            n = n / 2;
+        }
+
+
+        return n == 1;
+
+    }
+
+    @Test
+    public void testFindMin() {
+
+    }
+
+    private int findMin(int[] nums) {
+        int length = nums.length;
+        if (length == 1) {
+            return nums[0];
+        }
+        if (nums[0] < nums[length - 1]) {
+            return nums[0];
+        }
+
+        int head = 0;
+        int tail = length - 1;
+        int middle;
+        while (head < tail) {
+            /**
+             * 知道是用二分查找，看在这个middle的值怎么获取
+             * 为什么不是 middle = (head + tail) / 2 ???
+             *
+             * 目标值右边的情况会比较简单，容易区分，所以比较mid与right而不比较mid与left。
+             */
+            middle = head + (tail - head) / 2;
+            /**
+             * 有序，最小值在另一半
+             */
+            if (nums[middle] < nums[tail]) {
+                tail = middle;
+
+                /**
+                 * 值在前半部分
+                 */
+            } else {
+                /**
+                 * nums[middle] > nums[tail],所以middle位置一定不是最小值
+                 * 下一个位置才可能是
+                 */
+                head = middle + 1;
+            }
+
+        }
+        return nums[head];
+    }
+
+    /**
+     * 有重复元素的旋转数组查找最小值
+     */
+    private int findMin2(int[] nums) {
+        int length = nums.length;
+        if (length == 1) {
+            return nums[0];
+        }
+        if (nums[0] < nums[length - 1]) {
+            return nums[0];
+        }
+
+        int head = 0;
+        int tail = length - 1;
+        int middle;
+        while (head < tail) {
+            /**
+             * 知道是用二分查找，看在这个middle的值怎么获取
+             * 为什么不是 middle = (head + tail) / 2 ???
+             *
+             * 目标值右边的情况会比较简单，容易区分，所以比较mid与right而不比较mid与left。
+             */
+            middle = head + (tail - head) / 2;
+            /**
+             * 有序，最小值在另一半
+             */
+            if (nums[middle] < nums[tail]) {
+                tail = middle;
+
+                /**
+                 * 值在前半部分
+                 */
+            } else if (nums[middle] > nums[tail]) {
+                /**
+                 * nums[middle] > nums[tail],所以middle位置一定不是最小值
+                 * 下一个位置才可能是
+                 */
+                head = middle + 1;
+
+                /**
+                 * 中间值等于最后的值，不能说明最小值在什么位置
+                 * 但是可以确定的是，可以把tail往前移动一位，因为middle的值和tail是一样的，不会导致把最小值错过
+                 */
+            } else {
+                tail--;
+            }
+
+        }
+        return nums[head];
+    }
+
+
+    /**
+     * 给你两个有序整数数组 nums1 和 nums2，请你将 nums2 合并到 nums1 中，使 nums1 成为一个有序数组。
+     * 初始化 nums1 和 nums2 的元素数量分别为 m 和 n 。你可以假设 nums1 的空间大小等于 m + n，这样它就有足够的空间保存来自 nums2 的元素。
+     * 链接：https://leetcode-cn.com/problems/merge-sorted-array
+     */
+    @Test
+    public void testMerge() {
+        /*int[] nums1 = {1, 2, 3, 0, 0, 0};
+        int[] nums2 = {4, 5, 6};
+        merge(nums1, 3, nums2, 3);*/
+        int[] nums1 = {1};
+        int[] nums2 = {};
+        merge(nums1, 1, nums2, 0);
+
+        for (int j : nums1) {
+            System.out.println(j);
+        }
+
+    }
+
+    /**
+     * 归并排序
+     *
+     * @param nums1
+     * @param m
+     * @param nums2
+     * @param n
+     */
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int firstIndex = 0;
+        int secondIndex = 0;
+        int temp[] = new int[nums1.length];
+        /**
+         * 相等，
+         */
+        int index = 0;
+        while (firstIndex < m && secondIndex < n) {
+            if (nums1[firstIndex] <= nums2[secondIndex]) {
+                temp[index] = nums1[firstIndex];
+                firstIndex++;
+            } else if (nums1[firstIndex] > nums2[secondIndex]) {
+                temp[index] = nums2[secondIndex];
+                secondIndex++;
+            }
+            index++;
+        }
+
+        while (firstIndex < m) {
+            temp[index] = nums1[firstIndex];
+            firstIndex++;
+            index++;
+
+        }
+
+        while (secondIndex < n) {
+            temp[index] = nums2[secondIndex];
+            secondIndex++;
+            index++;
+
+        }
+
+        for (int i = 0; i < m + n; i++) {
+            nums1[i] = temp[i];
+        }
+
+
+    }
+
+    @Test
+    public void testRandom() {
+        RandomUtils.nextInt();
+        new Random().nextInt();
+        ThreadLocalRandom.current().nextInt();
+        int[] nums = {0, 0, 1, 1, 1, 1, 2, 3, 3};
+        int count = removeDuplicate(nums);
+
+
+        log.info("数组长度为{}", count);
+        for (int i : nums) {
+            log.info("{}", i);
+        }
+    }
+
+    /**
+     * 输入：nums = [0,0,1,1,1,1,2,3,3]
+     * 输出：7, nums = [0,0,1,1,2,3,3]
+     * 创建新数组，往新数组添加元素的思想
+     *
+     * @param nums
+     * @return
+     */
+    private int removeDuplicate(int[] nums) {
+        if (nums == null) {
+            return 0;
+        }
+        int length = nums.length;
+        if (length < 3) {
+            return length;
+        }
+
+        int index = 0;
+        for (int i = 0; i < length; i++) {
+            /**
+             * 认为在创建一个新的数组
+             * 数组不到两个元素，或者当前元素和前一个元素不同，不会构成连续三个相同元素
+             * 则往数组里添加元素，数组下标加一
+             */
+            if (index < 2 || nums[i] != nums[index - 2]) {
+                nums[index] = nums[i];
+                index++;
+            }
+        }
+        /**
+         * 或者直接从第三个元素开始
+         * int index = 2;
+         * if ( nums[i] != nums[index - 2]) {
+         *   nums[index] = nums[i];
+         *  index++;
+         *  }
+         */
+        return index;
+    }
+
+    private int removeDuplicate2(int[] nums) {
+
+        if (nums == null) {
+            return 0;
+        }
+        int length = nums.length;
+        if (length < 3) {
+            return length;
+        }
+
+        int index = 0;
+        int repeat = 1;
+        for (int i = 1; i < length; i++) {
+            if (nums[index] == nums[i] && repeat < 2) {
+                index++;
+                nums[index] = nums[i];
+                repeat++;
+            } else if (nums[index] != nums[i]) {
+                index++;
+                nums[index] = nums[i];
+                repeat = 1;
+            }
+        }
+
+        return index + 1;
+    }
+
+    @Test
+    public void testGetPath() {
+
+    }
+
+    @Test
+    public void testMap222() {
+        String m2 = " ";
+        char c1 = m2.charAt(0);
+        log.info("c1={}", Integer.valueOf(c1));
+
+        String s = FinalTest.str.get();
+        log.info("ThreadLocal test s={}", s);
+        FinalTest.str.set("set----123123lllll");
+        String s1 = FinalTest.str.get();
+        log.info("ThreadLocal test s1={}", s1);
+        FinalTest.str.remove();
+        log.info("ThreadLocal test s={}", s);
+
+
+        int a = 1;
+        int b = a++;
+        log.info("b={}", b);
+
+        int e = 1;
+        int f = (e++);
+        log.info("f2={}", f);
+
+        int c = 1;
+        int d = ++c;
+        log.info("d={}", d);
+        LinkedOneWayList list2 = new LinkedOneWayList();
+        list2.addTop(1);
+        list2.addTop(2);
+        list2.addTop(3);
+        ListNode add2 = list2.addTop(4);
+        while (add2.getNext() != null) {
+            log.info("add2={}", add2.getVal());
+            add2 = add2.getNext();
+        }
+
+        int m = 2;
+        log.info("{} >>> 1={}", m, m >>> 1);
+        log.info("1 << 30 ={}", 1 << 30);
+        int n = 2;
+        final int res = n |= n >>> 1;
+        log.info("{} >>> 1={}", n, res);
+        for (int i = 0; i < 18; i++) {
+            log.info("input {},output={}", i, tableSizeFor(i));
+        }
+    }
+
+    private int tableSizeFor(int cap) {
+        int n = cap - 1;
+        n |= n >>> 1;
+        n |= n >>> 2;
+        n |= n >>> 4;
+        n |= n >>> 8;
+        n |= n >>> 16;
+        return (n < 0) ? 1 : (n >= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + 1;
+    }
+
+    @Test
+    public void jdk7NewFeature() {
+
+        String s1 = "123";
+        String s2 = "311";
+        log.info("", s1.equals(s2));
+
+        int value = 1_000_000;
+        int value2 = 1000000;
+        log.info("value={}", value);
+        log.info("value={}", value == value2);
+        log.info("-Integer.MIN_VALUE % 10={}", -(Integer.MIN_VALUE % 10));
+        log.info("-0 * 10={}", -0 * 10);
+        /**
+         * 1个字节8位
+         * 2个字节16位
+         * 4个字节32位
+         * 8个字节64位
+         */
+        byte num1 = 0b00000010;
+        short num2 = 0b0000000000000111;
+        int num3 = 0b10100001010001011010000101000101;
+        long num4 = 0b0010000101000101101000010100010110100001010001011010000101000101L;
+        log.info("binaryValue num1={},num2={},num3={},num4={},", num1, num2, num3, num4);
+
+
+    }
+
+    /**
+     * equals 比较的是内容
+     * == 比较的是两个引用指向的是不是同一个地址，即同一个对象
+     * 如果是具体的阿拉伯数字的比较，值相等则为true，如：
+     * int a=10 与 long b=10L 与 double c=10.0都是相同的（为true），因为他们都指向地址为10的堆。
+     * <p>
+     * <p>
+     * <p>
+     * String s = "abcd";是唯一不需要new 就可以创建对象的方式，它是在常量池中而不是像new出来的对象一样放在堆中。
+     * 即当声明这样的一个字符串后，JVM会在常量池中先查找有有没有一个值为"abcd"的对象,
+     * 如果有,就会把它赋给当前引用.即原来那个引用和现在这个引用指点向了同一对象,
+     * 如果没有,则在常量池中新创建一个"abcd".
+     * 下一次如果有String s1 = "abcd",又会将s1指向"abcd"这个对象,即以这形式声明的字符串,只要值相等,任何多个引用都指向同一对象.
+     * String s = new String("XXX");这种方式创建的字符串对象不会放到串池里
+     * <p>
+     * jdk1.7 之前 hotspot JVM中常量池位于方法区，而jdk1.7之后，常量池从方法区移除，移到了堆中。
+     */
+    @Test
+    public void testString4() {
+
+        String s1 = "test";
+        String s2 = new String("test");
+        log.info("s1 == s2 {}", s1 == s2);
+        log.info("s1.equals(s2)) {}", s1.equals(s2));
+
+        String s3 = "test";
+        log.info("s1 == s3 {}", s1 == s3);
+        log.info("s1.equals(s3)) {}", s1.equals(s3));
+
+        char d = 10;
+        int a = 10;
+        long b = 10L;
+        double c = 10.0;
+
+        double v = d + c;
+
+        log.info(" d == a {},a == b {},b == c {}, c == d {}", d == a, a == b, b == c, c == d);
+
+
+    }
+
+    @Test
+    public void testHash() {
+        Map<String, String> map = new HashMap<>(4);
+        map.put("数学", "101");
+        map.put("语文", "120");
+        map.put("英语", "140");
+        map.put("物理", "110");
+        map.put("政治", "110");
+        map.put("生物", "110");
+        map.put("化学", "110");
+
+        /**
+         * 937651 二进制为 11100100111010110011
+         * 682778 二进制为 10100110101100011010
+         *
+         * 828410 二进制为 11001010001111111010
+         * 828406 二进制为 11001010001111110110
+         * 8 二进制为 1000
+         */
+
+        log.info("828410 & 8 ={}", (828410 & 8));
+        log.info("682778 & 8 ={}", (682778 & 8));
+
+        log.info("1136427 & 4 ={}", (1136427 & 4));
+        log.info("937651 & 4 ={}", (937651 & 4));
+    }
+
+    @Test
+    public void testRemove() {
+        List<Integer> num = new ArrayList<>();
+        num.add(0);
+        num.add(0);
+        num.add(1);
+        num.add(0);
+        num.add(0);
+        num.add(2);
+        num.add(0);
+        num.add(0);
+        num.add(3);
+        Integer integer = new Integer(0);
+
+        /**
+         * 隐式的迭代器遍历删除，会报ConcurrentModificationException
+         */
+        for (Integer i : num) {
+            log.info("current ={}", i);
+            if (i == 0) {
+                num.remove(integer);
+            }
+        }
+
+        /**
+         * 正向的遍历删除，存在数组元素前移，当前下标的下一个元素不会被删除的问题
+         *
+         */
+//        for(int i= 0; i < num.size();i++){
+//            if(num.get(i) == 0){
+//                num.remove(i);
+//            }
+//        }
+
+
+        /**
+         * 逆向遍历没有元素前移当前下标的下一个元素不会被删除的问题，因为当前就是最后一个元素
+         */
+        for (int i = num.size() - 1; i >= 0; i--) {
+            if (num.get(i) == 0) {
+                num.remove(i);
+            }
+        }
+
+        /**
+         * 迭代器遍历没有问题
+         */
+        Iterator<Integer> iterator = num.iterator();
+
+        while (iterator.hasNext()) {
+            Integer next = iterator.next();
+            if (next == 0) {
+                iterator.remove();
+            }
+        }
+
+        for (Integer i : num) {
+            log.info("current ={}", i);
+        }
+
+
+    }
+
+    @Test
+    public void testRead() {
+        final int END = -1;
+        final int ZERO = 0;
+        int BUFFER_SIZE = 16;
+        int num = 10;
+        // String path = "A:/test.txt";
+        String path = "D:/test/t1.txt";
+        try {
+            FileInputStream inputStream = new FileInputStream(path);
+            FileChannel inChannel = inputStream.getChannel();
+
+            ByteBuffer bytebuf = ByteBuffer.allocate(BUFFER_SIZE);
+            CharsetDecoder decoder = Charset.defaultCharset().newDecoder();
+            if (num < BUFFER_SIZE) {
+                inChannel.read(bytebuf);
+                bytebuf.flip();
+                //对bytebuf进行解码，避免乱码
+                CharBuffer decode = decoder.decode(bytebuf);
+                //  log.info("decode.toString()={}",decode.toString());
+                System.out.println(decode.toString().substring(ZERO, num));
+                //清空缓冲区，再次放入数据
+                bytebuf.clear();
+            } else {
+                while ((inChannel.read(bytebuf)) != END && num > ZERO) {
+                    bytebuf.flip();
+                    CharBuffer decode = decoder.decode(bytebuf);
+                    bytebuf.clear();
+                    // 最后一次读取，缓冲区字符超过了需要的个数
+                    if (num < BUFFER_SIZE) {
+                        System.out.println(decode.toString().substring(ZERO, num));
+                    } else {
+                        System.out.println(decode.toString());
+                    }
+                    num -= BUFFER_SIZE;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("文件未找到");
+        } catch (IOException ie) {
+            System.out.println("文件读取异常,error=" + ie.getStackTrace());
+        }
+    }
+
+    @Test
+    public void testNio() {
+        HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
+        objectObjectHashMap.put("k", "v");
+        String path = "D:/test/t1.txt";
+        try {
+            FileInputStream inputStream = new FileInputStream(path);
+            FileChannel inChannel = inputStream.getChannel();
+
+            ByteBuffer bytebuf = ByteBuffer.allocate(16);
+            CharsetDecoder decoder = Charset.defaultCharset().newDecoder();
+
+
+            while ((inChannel.read(bytebuf)) != -1) {//读取通道数据到缓冲区中,非-1就代表有数据
+
+                bytebuf.flip();
+                //对bytebuf进行解码，避免乱码
+                CharBuffer decode = decoder.decode(bytebuf);
+                System.out.println(decode.toString());
+                //清空缓冲区，再次放入数据
+                bytebuf.clear();
+
+
+            }
+
+//            final int read = channel.read(buff);
+//            log.info("read={}", read);
+//
+//            log.info("buff.get(5)={}", (char) buff.get(5));
+//            log.info("buff.array()={}", buff.array());
+
+
+            ByteBuffer outBuffer = ByteBuffer.allocate(8);
+
+            RandomAccessFile randomAccessFile = new RandomAccessFile(path, "rw");
+            FileChannel channel = randomAccessFile.getChannel();
+            while ((channel.read(outBuffer)) != -1) {//读取通道数据到缓冲区中,非-1就代表有数据
+                outBuffer.put(1, new Byte("97"));
+                outBuffer.put(2, new Byte("98"));
+                outBuffer.put(3, new Byte("99"));
+                outBuffer.flip();
+
+//                CharBuffer decode = decoder.decode(outBuffer);
+//                log.info("randomAccessFile decode={}", decode.toString());
+                channel.write(outBuffer);
+
+                /**
+                 FileInputStream inputStream2 = new FileInputStream(path);
+                 FileChannel inChannel2 = inputStream2.getChannel();
+                 inChannel2.write(outBuffer);
+                 NonWritableChannelException,原因channel是通过fileInputStream get出来的，所以只可读
+
+                 换成RandomAccessFile channel是双向的
+                 */
+
+                outBuffer.clear();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void test222() {
+
+        byte b1 = 127;
+        byte b2 = -128;
+
+        int a = 1;
+        log.info("a+1={}", a + 1);
+        char b = '1';
+        log.info("b+1={}", b + 1);
+        String c = "1";
+        log.info("1 + 1 + c +1={}", 1 + 1 + c + 1);
+
+        hello(b);
+
+        log.info("stopService={}", stopService());
+
+
+    }
+
+    private boolean stopService() {
+        final LocalDateTime now = LocalDateTime.now();
+        final LocalDateTime latest = LocalDateTime.now().withHour(22).withMinute(55);
+        final LocalDateTime earliest = LocalDateTime.now().withHour(13).withMinute(0);
+        if (now.isAfter(latest) || now.isBefore(earliest)) {
+            return true;
+        }
+        return false;
+    }
+
+    private void hello(Serializable param) {
+        log.info("hello param ={}", param);
+    }
+
+    @Test
+    public void test2() {
+        Long c = -128L;
+        Long d = -128L;
+        log.info("c == d ?={}", c == d);
+        String s = "12345678";
+        if (c.equals(s)) {
+            log.info("true");
+        } else {
+            log.info("false");
+        }
+
+        log.info("substring={}", s.substring(0));
+
+        final HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
+
+        ArrayList l;
+        final Timestamp TIME = new Timestamp(1557072000000L);
+        log.info("TIME={}", TIME);
+
+        final java.time.format.DateTimeFormatter FORMATTER = java.time.format.DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+        log.info("FORMATTER={}", FORMATTER.format(LocalDateTime.now()));
+    }
+
+    @Test
+    public void testBinary2Searc3h32() {
+//        final User.Builder userBuilder = new User.Builder().age(18);
+//        userBuilder.phone(13291790987L);
+//        userBuilder.userType(1);
+//        userBuilder.userName("建造者模式");
+//        final User user = userBuilder.bulid();
+//        log.info("user={}", user);
+
+        Long id = 123L;
+        Long t = null;
+        if (id.equals(t)) {
+            log.info("true");
+        } else {
+            log.info("false");
+        }
+
+        final User user = User.generateUser();
+        final String s = JSON.toJSONString(user);
+        log.info("user String = {}", s);
+
+        Object obj = s;
+        if (obj instanceof User) {
+            log.info("obj instanceof User ");
+        } else {
+            log.info("obj not instanceof User ");
+        }
+
+    }
+
+    @Test
+    public void testBinary2Searc3h2() {
+        AtomicReference<User> ATOMIC_REFERENCE = new AtomicReference<User>();
+
+        User u1 = null;
+        User u = User.generateUser();
+        u.setAge(123);
+        u.setUserName("ceshi1234");
+        final User user1 = User.generateUser();
+        user1.setUserName("张三1");
+        final User user2 = User.generateUser();
+        final User user3 = User.generateUser();
+
+        List<User> userList = new ArrayList<>(10);
+        userList.add(user1);
+        userList.add(user2);
+        userList.add(user3);
+
+        log.info("11 userList={}", userList);
+
+        final User user4 = userList.get(0);
+        user4.setUserName(user4.getUserName().concat("修改张三"));
+
+        log.info("22 userList={}", userList);
+
+
+//        try {
+//            if (u.getAge() == 123) {
+//                throw new BizException(Common.REQUEST_AT);
+//            }
+//        } catch (BizException e) {
+//            log.info("code={},errorMsg={},e={}", e.getCode(), e.getMessage(), ExceptionUtils.getStackTrace(e));
+//            e.printStackTrace();
+//        }
+
+        final User user = Optional.ofNullable(u1).orElse(u);
+        log.info("user={}", user);
+
+
+//        User u2 =u;
+//        log.info("u2.equals(u) ={}",u2.equals(u));
+//        u2.setAge(99);
+//      //  u.setAge(91);
+//        log.info("after set age u2.equals(u) ={}",u2.equals(u));
+//        final boolean b = ATOMIC_REFERENCE.compareAndSet(u, u2);
+//        String s = "12ss";
+//
+//
+//        log.info("result = {}",b);
+
+    }
+
+    @Test
+    public void testBinary2Search2() {
+//        User user = User.generateUser();
+//       // user.setTest(null);
+//        final Integer integer = Optional.ofNullable(user)
+//                .map(u -> u.getTest() !=null  && u.getAge() >10)
+//                .orElse(0);
+
+//        log.info("integer={}",integer);
+
+
+        LinkedList l = new LinkedList();
+        String str = "a";
+        final String substring = str.substring(0, str.length() - 1);
+        log.info("substring:{}", substring);
+
+        final byte[] bytes = str.getBytes();
+        log.info("bytes={}", bytes);
+        if (str.length() == 0) {
+            log.info(" length  == 0");
+        } else {
+            log.info(" length  ={}", str.length());
+        }
+
+        Map<String, String> map = new HashMap<>(10);
+        map.put("area", "1234平米");
+        map.put("duration", "3年");
+        map.put("employeeNumber", "1009");
+        map.put("businessVolume", "营业额6879万元?");
+        map.put("bills", "流水69万元?");
+        log.info(":map={}", JSON.toJSONString(map));
+    }
+
+    @Test
+    public void testBinarySearch2() {
+        List<Integer> list = Lists.newArrayList(1, 2, 3, 4);
+        User u = User.generateUser();
+        u.setUserName(list.toString());
+
+        // final String s = list.toString();
+        log.info("user={}", u);
+        log.info("s={}", StringUtils.join(list, ","));
+
+        log.info("user1111111111");
+        try {
+            method1(2);
+        } catch (Exception e) {
+            log.info("e={}", e.getMessage());
+        }
+
+
+        log.info("user222222222221111111111");
+
+    }
+
+    private void method1(int m) throws IllegalArgumentException {
+        if (m == 1) {
+            throw new IllegalArgumentException();
+        }
+
+        log.info("33333333333");
+        if (m == 2) {
+            throw new ResubmitException("1234");
+        }
+    }
+
+
+    /**
+     * 二分查找
+     */
+    @Test
+    public void testBinarySearch() {
+        int[] numbers = init(100);
+        int n = 110;
+        final int index = getIndex(numbers, n);
+        log.info("index={}", index);
+
+    }
+
+    private int getIndex(int[] numbers, int num) {
+        int head = 0;
+        int tail = numbers.length - 1;
+        if (numbers[head] > num || numbers[tail] < num) {
+            throw new RuntimeException("未找到数据");
+        }
+        while (tail > head) {
+            int mid = (head + tail) / 2;
+            int currentValue = numbers[mid];
+            if (currentValue == num) {
+                return mid;
+            }
+
+            if (currentValue < num) {
+                head = mid + 1;
+            } else {
+                tail = mid - 1;
+            }
+
+        }
+        throw new RuntimeException("未找到数据");
+    }
+
+    private int[] init(int number) {
+        if (number <= 0) {
+            number = 10;
+        }
+        int[] b = new int[number];
+        for (int i = 0; i < number; i++) {
+            b[i] = i;
+        }
+        return b;
+    }
+
+    @Test
+    public void testForityBillion() {
+        final int i1 = BigDecimal.ZERO.compareTo(new BigDecimal("123"));
+        String str = "S123.00";
+
+        log.info("bigDecimal1={}", i1);
+//        if(!NumberUtils.isNumber(str)){
+//            log.info("not number");
+//        }else {
+//            log.info("number");
+//        }
+//        final BigDecimal bigDecimal = NumberUtils.createBigDecimal(str);
+
+
+        String response = "sdfsd";
+        String userName = "账单李四王五照料";
+        if (userName.length() > 4) {
+            userName = userName.substring(0, 4).concat("...");
+        }
+        log.info("userName={}", userName);
+        JsonResult jsonResult = JSONObject.parseObject(response, JsonResult.class);
+        log.info("jsonResult={}", jsonResult);
+        log.info("jsonResult== null{}", jsonResult == null);
+
+        final LocalDate now = LocalDate.now();
+        final long l = now.atStartOfDay().minusDays(1).toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        log.info("now={}", l);
+
+        log.info("time={}", new Date(l));
+
+        String test = null;
+        final Optional<String> test1 = Optional.ofNullable(test);
+        if (test1.isPresent()) {
+            log.info("true");
+        } else {
+            log.info("false");
+        }
+
+        String contractNo = "sadfjlkasdfjabc.pdf";
+        final int i = contractNo.lastIndexOf(".");
+
+        final String substring = contractNo.substring(0, contractNo.lastIndexOf("."));
+        log.info("substring={}", substring);
+        String idCard = "110111199809092345";
+        byte[] b = new byte[0];
+        final Optional<byte[]> b1 = Optional.ofNullable(b);
+        log.info("b1={}", b1.get());
+        log.info("b1.length={}", b1.get().length);
+//       byte[] numbers = new byte[40*1000*1000*1000];
+//       numbers[0] = 0;
+//        numbers[1] = 0;
+//        numbers[2] = 0;
+//        numbers[3] = 1;
+//        numbers[4] = 1;
+//        numbers[5] = 1;
+//        numbers[6] = 0;
+//        numbers[7] = 0;
+//        numbers[8] = 0;
+//        numbers[9] = 0;
+//
+//     //  numbers.s
+//        log.info("exist={}",numbers[5]);
+
+
+    }
+
+    @Test
+    public void testRateLimiter() {
+        /**
+         * 每秒产生的令牌数量
+         * permitsPerSecond
+         */
+        RateLimiter rateLimiter = RateLimiter.create(2.0);
+
+        if (rateLimiter.tryAcquire()) { //未请求到limiter则立即返回false
+            // doSomething();
+        } else {
+            //doSomethingElse();
+        }
+    }
+
+    /**
+     * 限制线程池的执行速度
+     * final RateLimiter rateLimiter = RateLimiter.create(5000.0);
+     *
+     * @param tasks
+     * @param executor
+     */
+
+    void submitTasks(List<Runnable> tasks, Executor executor) {
+        for (Runnable task : tasks) {
+            //   rateLimiter.acquire(); // may wait
+            executor.execute(task);
+        }
+    }
+
+    /**
+     * 每发送N字节的数据，使用N个令牌
+     * 假如我们会产生一个数据流,然后我们想以每秒5kb的速度发送出去.
+     * 我们可以每获取一个令牌(permit)就发送一个byte的数据,这样我们就可以通过一个每秒5000个令牌的RateLimiter来实现:
+     *
+     * @param packet
+     */
+    void submitPacket(byte[] packet) {
+        //   rateLimiter.acquire(packet.length);
+        // xxService.doSomething(packet);
+    }
+
+
+    @Test
+    public void testMap2() {
+        String s = "123年的ll";
+        String e1 = s.substring(0, s.indexOf("年"));
+        log.info("e1={}", e1);
+        Integer a = 200;
+        Integer b = 200;
+        int c = 200;
+        log.info("Integer Integer result = {}", a == b);
+        log.info("Integer int result = {}", a == c);
+        Integer d = 20;
+        Integer e = 20;
+        log.info("Integer  -128~127之间，result = {}", d == e);
+        Hashtable t;
+        HashMap m;
+        // 2018-08-24 15:08:03
+        Date deadline = new Date(1535094483000L);
+        final Date date = DateUtils.addDays(deadline, -30);
+        log.info("deadline={},date={}", deadline, date);
+    }
+
 
     /**
      * 链表反转

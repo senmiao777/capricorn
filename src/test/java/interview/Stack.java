@@ -2,9 +2,10 @@ package interview;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
-import org.assertj.core.util.Lists;
+import com.google.common.collect.Lists;
 import org.junit.Test;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -14,8 +15,14 @@ import java.util.List;
 @Slf4j
 public class Stack {
 
+
+
+
     public List<Integer> minIndex = Lists.newArrayList();
     public List<Integer> data = Lists.newArrayList();
+
+
+
 
     /**
      * 设计一个栈结构，有获取栈的最小值功能

@@ -1,12 +1,19 @@
 import com.alibaba.fastjson.JSON;
 import com.frank.entity.mysql.Benefit;
 import com.frank.entity.mysql.IncomeStatement;
+import com.frank.entity.mysql.Stock;
+import com.frank.entity.mysql.User;
 import com.frank.model.Result;
 import com.frank.repository.mysql.BenefitRepository;
 import com.frank.repository.mysql.IncomeStatementRepository;
+import com.frank.repository.mysql.StockRepository;
+import com.frank.service.IDbService;
+import com.frank.service.IStockService;
+import com.frank.service.IUserService;
 import com.frank.util.GenerateUtil;
 import com.frank.util.HttpUtil;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -15,15 +22,20 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.assertj.core.util.Lists;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -34,10 +46,10 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Created by Administrator on 2017/4/25 0025.
  */
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@SpringBootApplication
-//@ComponentScan(basePackages = "com.frank")
-//@SpringBootTest(classes = StockTest.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootApplication
+@ComponentScan(basePackages = "com.frank")
+@SpringBootTest(classes = StockTest.class)
 //@Rollback(false)
 @Slf4j
 public class StockTest {
@@ -47,6 +59,15 @@ public class StockTest {
 
     @Autowired
     private IncomeStatementRepository incomeStatementRepository;
+
+    @Autowired
+    private IDbService dbService;
+
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private IStockService stockService;
 
 //    @Autowired
 //    @Qualifier(value="testTaskPoolExecutor")
@@ -63,8 +84,44 @@ public class StockTest {
     private final AtomicLong num = new AtomicLong(0L);
     volatile int count = 0;
 
+    @Autowired
+    private StockRepository stockRepository;
+
+    @Test
+    public void testBatchSelect() {
+        List<String> codes = new ArrayList<String>() {{
+            add("000852");
+            add("000582");
+            add("300046");
+        }};
+        List<Stock> byStockCodes = stockRepository.findByStockCodes(codes);
+        System.out.println("结果=" + byStockCodes);
+    }
+
+    @Test
+    public void testSave() {
+
+        User byPhone = userService.findByPhone(13286230000L);
+        //userService.update(byPhone);
+        byPhone.setAge(66);
+
+    }
+
+    @Test
+    public void testTransaction() {
+        User user = User.generateUser();
+        user.setUserName("事务测试");
+        Stock stock = new Stock();
+        stock.setCode("test00");
+        stock.setArea("江苏");
+        // dbService.saveUserAndStockWithException(user,stock);
+        dbService.saveUserAndStock(user, stock);
+
+    }
+
     @Test
     public void testVolatile() {
+
 
         Executor executor = Executors.newScheduledThreadPool(10);
         for (int i = 0; i < 100; i++) {
@@ -104,7 +161,7 @@ public class StockTest {
                 "headline varchar(256) ");
 
         String sql = GenerateUtil.sqlList2Entity(attrList);
-        log.info("sqlList2Entity sql = {}",sql.toString());
+        log.info("sqlList2Entity sql = {}", sql.toString());
 
 
     }

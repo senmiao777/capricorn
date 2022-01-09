@@ -18,5 +18,8 @@ public interface StockRepository extends JpaRepository<Stock, Long>, JpaSpecific
     @Query(value = "select * from stock_base_info where name= ?1", nativeQuery = true)
     Stock findByStockName(String stockName);
 
+    @Query(value = "select * from stock_base_info where code in ?1", nativeQuery = true)
+    List<Stock> findByStockCodes(List<String> stockCodes);
+
     List<Stock> findByArea(String area);
 }

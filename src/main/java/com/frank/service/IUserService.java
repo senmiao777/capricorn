@@ -3,6 +3,7 @@ package com.frank.service;
 import com.frank.entity.mysql.User;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author frank
@@ -15,4 +16,22 @@ public interface IUserService {
 
     boolean batchSave(List<User> userList);
 
+    int updatePhone(Long phone, Long id);
+
+    User findByPhone(Long phone);
+
+    User findAndUpdate(Long phone);
+
+
+    User update(User user);
+
+    /**
+     * 根据userId查询
+     * 仅用于方法验证
+     * @param userId
+     * @return
+     */
+    User findByUserIdFake(Long userId);
+
+    User findByUserIdFake2(Long userId) throws ExecutionException, InterruptedException;
 }

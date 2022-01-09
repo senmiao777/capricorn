@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.frank.entity.mysql.BlindDateComment;
+import com.frank.entity.mysql.NamespaceErrorTotal;
 import com.frank.entity.mysql.Stock;
 import com.frank.repository.mysql.BlindDateCommentRepository;
+import com.frank.repository.mysql.NamespaceErrorTotalRepository;
 import com.frank.repository.mysql.StockRepository;
 import com.frank.util.ESUtil;
 import com.google.common.base.Splitter;
@@ -56,6 +58,20 @@ public class RepoTest {
 
     @Autowired
     private TransportClient client;
+
+    @Autowired
+    private NamespaceErrorTotalRepository namespaceErrorTotalRepository;
+
+
+    @Test
+    public void testGetPath22() {
+
+        int date  = 20210320;
+        List<NamespaceErrorTotal> byDate = namespaceErrorTotalRepository.findByDate(date);
+        log.info("byDate={}", byDate);
+
+    }
+
 
     @Test
     public void testCreate() {

@@ -1,5 +1,6 @@
 package com.frank.controller;
 
+import com.frank.annotation.RedisLock;
 import com.frank.entity.mysql.IncomeStatement;
 import com.frank.entity.mysql.Stock;
 import com.frank.model.JsonResult;
@@ -14,13 +15,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * 基本增删改查操作
@@ -49,10 +53,35 @@ public class StockController {
      */
     RateLimiter rateLimiter = RateLimiter.create(10);
 
+
+    /**
+     * 根据股票代码查询该股票基本信息
+     * 请求先暂存到队列中，然后批量查询，从批量查询的结果中获取数据返回
+     *
+     * @param stockCode
+     * @return
+     */
+    @RequestMapping(value = "/info/async", method = RequestMethod.GET)
+    public JsonResult infoasync(@RequestParam String stockCode) {
+
+        log.info("stockCode={}", stockCode);
+        try {
+            Stock stock = stockService.findStockByCodeRemote(stockCode);
+            log.info("stock info={}", stock);
+            return JsonResult.buildSuccessResult(stock);
+
+        } catch (ExecutionException | InterruptedException | TimeoutException e) {
+            e.printStackTrace();
+            return JsonResult.buildErrorResult(e.getMessage());
+        }
+    }
+
+    @RedisLock(key = "123")
     @ApiOperation(value = "跳转到Echart页面")
     @RequestMapping("/hello")
     public String helloHtml() {
         //  map.put("hello","hello");
+
         return "/firstEchart.html";
     }
 
@@ -69,20 +98,6 @@ public class StockController {
 
     }
 
-    /**
-     * 根据股票代码查询该股票基本信息
-     * rateLimiter限制访问速度
-     *
-     * @param stockCode
-     * @return
-     */
-    @RequestMapping(value = "/info", method = RequestMethod.GET)
-    public JsonResult info(@RequestParam String stockCode) {
-
-        log.info("stockCode={},等待时间={}", stockCode, rateLimiter.acquire());
-        Stock stock = stockRepository.findByStockCode(stockCode);
-        return JsonResult.buildSuccessResult(stock);
-    }
 
     @RequestMapping(value = "/short/{id}", method = RequestMethod.GET)
     public void shortresource(HttpServletResponse response, @PathVariable("id") Long id) {
@@ -109,6 +124,53 @@ public class StockController {
 
         Stock stock = stockService.findByStockCode(stockCode);
         return JsonResult.buildSuccessResult(stock);
+    }
+
+
+    /**
+     * 实体类对象
+     *
+     * @param stock
+     * @return
+     */
+    @RequestMapping(value = "/info/entry/param", method = RequestMethod.GET)
+    public JsonResult info2(Stock stock) {
+        if (stock != null) {
+            log.info("stock={}", stock);
+            if (!StringUtils.isEmpty(stock.getCode())) {
+                log.info("stockCode={},等待时间={}", stock.getCode());
+                Stock stockInfo = stockService.findByStockCode(stock.getCode());
+                log.info("stockInfo={}", stockInfo);
+                return JsonResult.buildSuccessResult(stock);
+            } else {
+                return JsonResult.buildSuccessResult("查询对象参数为空");
+            }
+        } else {
+            return JsonResult.buildSuccessResult("查询对象为空");
+        }
+    }
+
+    /**
+     * 实体类对象
+     *
+     * @param stock
+     * @return
+     */
+    @RequestMapping(value = "/info/entry/param2", method = RequestMethod.POST)
+    public JsonResult param2(@RequestBody Stock stock) {
+        if (stock != null) {
+            log.info("stock={}", stock);
+            if (!StringUtils.isEmpty(stock.getCode())) {
+                log.info("stockCode={},等待时间={}", stock.getCode());
+                Stock stockInfo = stockService.findByStockCode(stock.getCode());
+                log.info("stockInfo={}", stockInfo);
+                return JsonResult.buildSuccessResult(stock);
+            } else {
+                return JsonResult.buildSuccessResult("查询对象参数为空");
+            }
+        } else {
+            return JsonResult.buildSuccessResult("查询对象为空");
+        }
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.frank.config;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -8,6 +9,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.util.concurrent.*;
 
 @Configuration
+@Slf4j
 public class ExecutorConfig {
 
     /**
@@ -33,6 +35,7 @@ public class ExecutorConfig {
         // rejection-policy：当pool已经达到max size的时候，如何处理新任务
         // 如果QueueCapacity 都爆了 ,使用主线程跑任务  CallerRunsPolicy
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
+        executor.setAllowCoreThreadTimeOut(true);
         executor.initialize();
         return executor;
     }
@@ -48,6 +51,7 @@ public class ExecutorConfig {
                 /**
                  * 当线程池满了的时候，自定义处理方式
                  */
+
             }
         });
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());

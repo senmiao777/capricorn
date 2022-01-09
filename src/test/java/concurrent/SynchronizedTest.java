@@ -2,6 +2,7 @@ package concurrent;
 
 import com.frank.concurrent.Alternate;
 import com.frank.concurrent.SyncTest;
+import com.frank.entity.mysql.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
@@ -25,6 +26,33 @@ import java.util.Vector;
 public class SynchronizedTest {
 
 
+
+    @Test
+    public void abcd() throws InterruptedException {
+        testHeap();
+        Sync2Test syncTest = new Sync2Test();
+        Sync2Test syncTest2 = new Sync2Test();
+        Thread thread = new Thread(() -> syncTest.incr(),"t1");
+        Thread threadTwo = new Thread(() -> syncTest2.incr(),"t2");
+        thread.start();
+        threadTwo.start();
+//        thread.join();
+//        threadTwo.join();
+        Thread.sleep(1000);
+        //最终打印结果是20000，如果不使用synchronized修饰，就会导致线程安全问题，输出不确定结果
+        System.out.println("-----------------"+syncTest.getJ());
+        System.out.println("-----------------"+syncTest2.getJ());
+    }
+
+    private void testHeap(){
+        User user = User.generateUser();
+        System.out.println("user="+user);
+        try {
+            Thread.sleep(1000000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void abc(){
