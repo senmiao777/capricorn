@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * @author Administrator
  */
-public class Message {
+public class Message1 {
 
     /**
      * 用户名
