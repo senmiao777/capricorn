@@ -9,8 +9,11 @@ import org.junit.Test;
 import sun.reflect.generics.tree.Tree;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class TreeNodeTest {
@@ -32,8 +35,20 @@ public class TreeNodeTest {
         numbers.add(null);
         numbers.add(4);
 
+
+        final List<Integer> collect = numbers.stream().filter(n -> {
+                    System.out.println("filter number is " + n);
+                    return n != null && n > 3;
+                }).map(n -> {
+                    System.out.println("do nothing number is " + n);
+                    return n;
+                }).limit(2).collect(Collectors.toList());
+        System.out.println(collect);
+
         TreeNode treeNode = createTreeNode(numbers);
         preOrder(treeNode);
+        System.out.println("----------------------");
+        levelPost(treeNode);
 
 
     }
@@ -69,6 +84,7 @@ public class TreeNodeTest {
 
     /**
      * 中序遍历
+     *
      * @param node
      */
     public void inOrder(TreeNode node) {
@@ -80,12 +96,34 @@ public class TreeNodeTest {
         inOrder(node.getRight());
     }
 
-    public void postOrder(TreeNode node){
-        if(node == null){
+    public void postOrder(TreeNode node) {
+        if (node == null) {
             return;
         }
         postOrder(node.getLeft());
         postOrder(node.getRight());
         System.out.println(node.getVal());
+    }
+
+
+    /**
+     * 广度优先遍历
+     * 出队，打印值，将孩子入队（如不为空的话）
+     *
+     * @param root
+     */
+    public void levelPost(TreeNode root) {
+        Queue<TreeNode> treeNodes = new LinkedList<>();
+        treeNodes.offer(root);
+        while (!treeNodes.isEmpty()) {
+            TreeNode node = treeNodes.poll();
+            System.out.println(node.getVal());
+            if (node.getLeft() != null) {
+                treeNodes.offer(node.getLeft());
+            }
+            if (node.getRight() != null) {
+                treeNodes.offer(node.getRight());
+            }
+        }
     }
 }
