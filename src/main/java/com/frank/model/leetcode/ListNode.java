@@ -6,8 +6,8 @@ import lombok.ToString;
 @Data
 @ToString
 public class ListNode {
-    int val;
-    ListNode next;
+    public int val;
+    public ListNode next;
 
     public ListNode(int x) {
         val = x;
@@ -46,6 +46,7 @@ public class ListNode {
 
     /**
      * 删除指定value的节点
+     *
      * @param node
      * @param num
      * @return
