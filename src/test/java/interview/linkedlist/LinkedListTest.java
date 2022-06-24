@@ -12,8 +12,19 @@ import org.springframework.context.annotation.Bean;
  **/
 public class LinkedListTest {
 
+    /**
+     * 链表头节点
+     */
     public ListNode head;
 
+    /**
+     * 链表尾节点
+     */
+    public ListNode tail;
+
+    /**
+     * 初始化一个可用链表，方便测试
+     */
     @Before
     public void init() {
         ListNode one = new ListNode(1);
@@ -29,26 +40,31 @@ public class LinkedListTest {
         five.next = six;
         six.next = null;
         head = one;
+        tail = six;
     }
 
     @Test
     public void testReverse() {
-        ListNode reverse = reverse(head);
+        //ListNode reverse = reverse(head);
+        ListNode reverse = reverse(new ListNode(11));
         while (reverse != null) {
             System.out.println(reverse.val);
             reverse = reverse.next;
         }
     }
 
+    @Test
+    public void testHasCycle() {
+
+    }
+
     /**
      * 单向链表翻转
-     * 最后指向null 不会处理
+
+     *
      * @param head
      */
     private ListNode reverse(ListNode head) {
-        if (head == null) {
-            return null;
-        }
         ListNode current = head;
         ListNode prev = null;
         ListNode next;
