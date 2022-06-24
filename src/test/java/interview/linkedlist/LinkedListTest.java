@@ -46,20 +46,18 @@ public class LinkedListTest {
      * @param head
      */
     private ListNode reverse(ListNode head) {
-
-
         if (head == null) {
             return null;
         }
-        ListNode temp = head;
-        ListNode tail = null;
-        while (head != null) {
-            temp = head;
-            head = head.next;
-            temp.next = tail;
-            tail = temp;
+        ListNode current = head;
+        ListNode prev = null;
+        ListNode next;
+        while (current != null) {
+            next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
         }
-
-        return temp;
+        return prev;
     }
 }
