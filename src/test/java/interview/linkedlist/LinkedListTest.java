@@ -54,9 +54,9 @@ public class LinkedListTest {
         head = one;
         tail = six;
 
-        ListNode a = new ListNode(2);
+        ListNode a = new ListNode(1);
         ListNode a1 = new ListNode(2);
-        ListNode a2 = new ListNode(2);
+        ListNode a2 = new ListNode(3);
 
         ListNode b = new ListNode(57);
         ListNode c = new ListNode(395);
@@ -94,6 +94,66 @@ public class LinkedListTest {
         ListNode listNode = mergeSort(head, anotherHead);
         System.out.println(listNode);
     }
+
+    @Test
+    public void testRemoveCountBackwardsNth() {
+        ListNode listNode = removeCountBackwardsNth(head, 7);
+        System.out.println(listNode);
+    }
+
+    @Test
+    public void testMiddleNode() {
+        ListNode middle = getMiddle(anotherHead);
+        System.out.println(middle);
+    }
+
+    private ListNode getMiddle(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast != null) {
+            fast = fast.next;
+            if (fast == null) {
+                return slow;
+            }
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+
+    private ListNode removeCountBackwardsNth(ListNode head, int n) {
+        if (head == null || n == 0) {
+            return head;
+        }
+        if (n < 0) {
+            throw new RuntimeException("参数异常");
+        }
+        ListNode fast = head;
+        // 要删除节点的前驱节点
+        ListNode slow = head;
+        int i = 0;
+        // 往前走n+1步
+        while (fast != null && i < n + 1) {
+            fast = fast.next;
+            i++;
+        }
+        // fast == null退出 ,要删除的节点为头节点
+        if (i == n) {
+            return head.next;
+        }
+
+        if (i < n) {
+            throw new RuntimeException("链表长度小于" + n);
+        }
+
+        while (fast != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        slow.next = slow.next.next;
+        return head;
+    }
+
 
     private boolean hasCycle(ListNode head) {
         if (head == null || head.next == null) {
