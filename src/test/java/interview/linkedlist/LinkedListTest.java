@@ -54,9 +54,9 @@ public class LinkedListTest {
         head = one;
         tail = six;
 
-        ListNode a = new ListNode(1);
+        ListNode a = new ListNode(2);
         ListNode a1 = new ListNode(2);
-        ListNode a2 = new ListNode(3);
+        ListNode a2 = new ListNode(2);
 
         ListNode b = new ListNode(57);
         ListNode c = new ListNode(395);
@@ -97,16 +97,25 @@ public class LinkedListTest {
 
     @Test
     public void testRemoveCountBackwardsNth() {
-        ListNode listNode = removeCountBackwardsNth(head, 7);
+        ListNode a = new ListNode(1);
+
+
+        ListNode listNode = removeCountBackwardsNth(a, 1);
         System.out.println(listNode);
     }
 
     @Test
     public void testMiddleNode() {
-        ListNode middle = getMiddle(anotherHead);
+        ListNode middle = getMiddle(head);
         System.out.println(middle);
     }
 
+    /**
+     * 获取中间节点 https://leetcode.com/problems/middle-of-the-linked-list/
+     *
+     * @param head
+     * @return
+     */
     private ListNode getMiddle(ListNode head) {
         ListNode fast = head;
         ListNode slow = head;
@@ -177,13 +186,10 @@ public class LinkedListTest {
     /**
      * @param one     第一个有序链表
      * @param another 第二个有序链表
+     *                时间超长
      * @return
      */
     private ListNode mergeSort(ListNode one, ListNode another) {
-        // 两个链表全为空，直接返回
-        if (one == null && another == null) {
-            return null;
-        }
         if (one == null) {
             return another;
         }
@@ -191,41 +197,20 @@ public class LinkedListTest {
             return one;
         }
         // 两个链表都不为空，找到最小值作为头节点
-        ListNode head = one.val < another.val ? one : another;
-        ListNode firstCur = one;
-        ListNode secondCur = another;
-        ListNode secondPrev = null;
-        ListNode firstPrev = one;
-        ListNode firstFind = null;
-        boolean secondLtFirst = false;
-        while (firstCur != null) {
-            while (secondCur != null && (firstCur.val >= secondCur.val)) {
-                if (!secondLtFirst) {
-                    secondLtFirst = true;
-                    firstFind = secondCur;
-                }
-                secondPrev = secondCur;
-                secondCur = secondCur.next;
+        ListNode dummy = new ListNode(0);
+        ListNode head = dummy;
+        while (one != null && another != null) {
+            if (one.val < another.val) {
+                dummy.next = one;
+                one = one.next;
+            } else {
+                dummy.next = another;
+                another = another.next;
             }
-
-            if (secondLtFirst) {
-                secondLtFirst = false;
-                // 在第二个链表中找到比第一个链表的当前节点大的节点
-                secondPrev.next = firstCur;
-                if (firstPrev.val <= secondPrev.val) {
-                    firstPrev.next = firstFind;
-                }
-
-                // 第二个链表已找到尾节点，退出
-                if (secondCur == null) {
-                    return head;
-                }
-            }
-            firstPrev = firstCur;
-            firstCur = firstCur.next;
+            dummy = dummy.next;
         }
-        firstPrev.next = secondCur;
-        return head;
+        dummy.next = one == null ? another : one;
+        return head.next;
     }
 
 
