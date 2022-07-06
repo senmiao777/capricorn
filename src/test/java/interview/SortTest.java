@@ -19,6 +19,14 @@ public class SortTest {
         System.out.println(Arrays.toString(num));
     }
 
+    @Test
+    public void testPartition() {
+        int[] num = {8,10,2,3,6,1,5};
+        //bubbleSort(num);
+        int partition = partition(num, 0, 6);
+        System.out.println("partition=" + partition + "num=" + Arrays.toString(num));
+    }
+
     /**
      * 冒泡排序
      *
@@ -64,5 +72,48 @@ public class SortTest {
                 numbers[j + 1] = cur;
             }
         }
+    }
+
+    /**
+     * 归并排序
+     *
+     * @param num
+     */
+    private int[] mergeSort(int[] num, int begin, int end) {
+        return null;
+    }
+
+    /**
+     * 以数组中num[end]元素值A作为中间值进行元素排列，比A小的元素值放在左边，比A大的元素值放在右边
+     *
+     * @param num   数组
+     * @param start 起始下标
+     * @param end   截止下标
+     * @return 排序后A元素下标值
+     */
+    private int partition(int[] num, int start, int end) {
+        int pivotValue = num[end];
+        int i = start;
+        for (int j = start; j <= end - 1; j++) {
+            if (num[j] < pivotValue) {
+                swap(num, i, j);
+                i++;
+            }
+        }
+        swap(num, i, end);
+        return i;
+    }
+
+    /**
+     * 交换数组中下标i和下标j元素值
+     *
+     * @param num 数据
+     * @param i   下标i
+     * @param j   下标j
+     */
+    private void swap(int[] num, int i, int j) {
+        int temp = num[i];
+        num[i] = num[j];
+        num[j] = temp;
     }
 }
