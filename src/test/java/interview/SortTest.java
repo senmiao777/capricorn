@@ -21,10 +21,17 @@ public class SortTest {
 
     @Test
     public void testPartition() {
-        int[] num = {8,10,2,3,6,1,5};
+        int[] num = {8, 10, 2, 3, 6, 1, 5};
         //bubbleSort(num);
         int partition = partition(num, 0, 6);
         System.out.println("partition=" + partition + "num=" + Arrays.toString(num));
+    }
+
+    @Test
+    public void testQuickSort(){
+        int[] num = {8, 10, 2, 3,8,8, 6, 1, 5};
+        quicksort(num);
+        System.out.println(Arrays.toString(num));
     }
 
     /**
@@ -81,6 +88,26 @@ public class SortTest {
      */
     private int[] mergeSort(int[] num, int begin, int end) {
         return null;
+    }
+
+    /**
+     * 快速排序
+     * 思想：从数组中找一个数（通常直接用最后一个数就行），比这个数字大的调整到数组左边，比这个数字小的调整到数组右边
+     * 重复这个过程
+     *
+     * @param num 待排序数组
+     */
+    private void quicksort(int[] num) {
+        quicksortHandle(num, 0, num.length - 1);
+    }
+
+    private void quicksortHandle(int[] num, int start, int end) {
+        if (start >= end) {
+            return;
+        }
+        int pivot = partition(num, start, end);
+        quicksortHandle(num, start, pivot - 1);
+        quicksortHandle(num, pivot + 1, end);
     }
 
     /**
