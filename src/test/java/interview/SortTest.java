@@ -37,8 +37,9 @@ public class SortTest {
 
     @Test
     public void testFindKthLargestNumber() {
-        int[] num = {8, 10, 2, 3, 8, 8, 6, 1, 5};
-        int k = 3;
+      //  int[] num = {3,2,1,5,6,4};
+        int[] num = {8, 10, 2, 3, 8, 8, 6, 9, 5};
+        int k = 6;
         int kthLargestNumber = getKthLargestNumber(num, k);
         System.out.println("第" + k + "大的数为：" + kthLargestNumber);
     }
@@ -63,10 +64,9 @@ public class SortTest {
 
     private int getKthLargestNumberHandle(int[] num, int start, int end, int k) {
         int pivot = partition(num, 0, end);
-        // 从大到小的有序数组，下标 k-1 位置的元素即为第k大的数
-        if (pivot == (k - 1)) {
+        if (pivot == k) {
             return num[pivot];
-        } else if (pivot > (k - 1)) {
+        } else if (pivot > k) {
             return getKthLargestNumberHandle(num, 0, pivot - 1, k);
         } else {
             return getKthLargestNumberHandle(num, pivot + 1, end, k);
@@ -163,7 +163,7 @@ public class SortTest {
         int i = start;
         /**
          * j = start
-         * j <= end - 1
+         * j < end
          */
         for (int j = start; j < end; j++) {
             if (num[j] <= pivotValue) {
