@@ -28,11 +28,51 @@ public class SortTest {
     }
 
     @Test
-    public void testQuickSort(){
-        int[] num = {8, 10, 2, 3,8,8, 6, 1, 5};
+    public void testQuickSort() {
+        int[] num = {8, 10, 2, 3, 8, 8, 6, 1, 5};
         quicksort(num);
         System.out.println(Arrays.toString(num));
     }
+
+
+    @Test
+    public void testFindKthLargestNumber() {
+        int[] num = {8, 10, 2, 3, 8, 8, 6, 1, 5};
+        int k = 3;
+        int kthLargestNumber = getKthLargestNumber(num, k);
+        System.out.println("第" + k + "大的数为：" + kthLargestNumber);
+    }
+
+    /**
+     * 在数组中找到第K大的元素
+     * 思路一：先对数组进行排序，然后遍历一下，找到第K大的元素，时间复杂度O( n * log n )
+     * 思路二：利用快排思想，不需要让数组全部有序就可以找到第K大的元素 ，时间复杂度O( n )
+     *
+     * @param num
+     * @param k
+     * @return
+     */
+    private int getKthLargestNumber(int[] num, int k) {
+        int length = num.length;
+        if (length < k) {
+            throw new RuntimeException("数组长度小于" + k);
+        }
+        // length - k 是关键
+        return getKthLargestNumberHandle(num, 0, length - 1, length - k);
+    }
+
+    private int getKthLargestNumberHandle(int[] num, int start, int end, int k) {
+        int pivot = partition(num, 0, end);
+        // 从大到小的有序数组，下标 k-1 位置的元素即为第k大的数
+        if (pivot == (k - 1)) {
+            return num[pivot];
+        } else if (pivot > (k - 1)) {
+            return getKthLargestNumberHandle(num, 0, pivot - 1, k);
+        } else {
+            return getKthLargestNumberHandle(num, pivot + 1, end, k);
+        }
+    }
+
 
     /**
      * 冒泡排序
@@ -121,8 +161,12 @@ public class SortTest {
     private int partition(int[] num, int start, int end) {
         int pivotValue = num[end];
         int i = start;
-        for (int j = start; j <= end - 1; j++) {
-            if (num[j] < pivotValue) {
+        /**
+         * j = start
+         * j <= end - 1
+         */
+        for (int j = start; j < end; j++) {
+            if (num[j] <= pivotValue) {
                 swap(num, i, j);
                 i++;
             }

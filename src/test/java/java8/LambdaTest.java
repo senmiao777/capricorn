@@ -3,7 +3,7 @@ package java8;
 import com.frank.entity.java8.Apple;
 import com.frank.enums.Color;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.IntBinaryOperator;
 import java.util.stream.Collectors;
 
 
