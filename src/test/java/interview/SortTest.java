@@ -37,11 +37,36 @@ public class SortTest {
 
     @Test
     public void testFindKthLargestNumber() {
-      //  int[] num = {3,2,1,5,6,4};
+        //  int[] num = {3,2,1,5,6,4};
         int[] num = {8, 10, 2, 3, 8, 8, 6, 9, 5};
         int k = 6;
         int kthLargestNumber = getKthLargestNumber(num, k);
         System.out.println("第" + k + "大的数为：" + kthLargestNumber);
+    }
+
+    @Test
+    public void testCountSort() {
+        int[] scores = {2, 5, 3, 0, 2, 3, 0, 3};
+        int[] numberCountArray = getNumberCountArray(scores, 6);
+        System.out.println(Arrays.toString(numberCountArray));
+    }
+
+    /**
+     * @param nums 待排序数组
+     * @param n    不同值元素个数
+     * @return 不同值元素值对应计数（出现个数）数组
+     */
+    private int[] getNumberCountArray(int[] nums, int n) {
+        // 不考虑入参有误情况
+        int[] res = new int[n];
+        for (int num : nums) {
+            /*
+              注意：这里写res[nums[i]] =  res[nums[i]] + 1 或者 ++ res[nums[i]] 都行，但是写res[nums[i]] ++ 不行，
+              因为a ++ 是先赋值，在进行加一操作
+             */
+            res[num] = res[num] + 1;
+        }
+        return res;
     }
 
     /**
