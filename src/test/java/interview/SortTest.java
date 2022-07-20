@@ -52,21 +52,43 @@ public class SortTest {
     }
 
     /**
-     * @param nums 待排序数组
+     * @param nums 待排序数组 [2, 5, 3, 0, 2, 3, 0, 3]
      * @param n    不同值元素个数
-     * @return 不同值元素值对应计数（出现个数）数组
+     * @return 不同值元素值对应计数（出现个数）数组 得到 [2, 0, 2, 3, 0, 1]
      */
     private int[] getNumberCountArray(int[] nums, int n) {
         // 不考虑入参有误情况
-        int[] res = new int[n];
+        int[] assist = new int[n];
+        // 构造不同值元素值对应计数（出现个数）数组 A 比如
         for (int num : nums) {
             /*
               注意：这里写res[nums[i]] =  res[nums[i]] + 1 或者 ++ res[nums[i]] 都行，但是写res[nums[i]] ++ 不行，
               因为a ++ 是先赋值，在进行加一操作
              */
-            res[num] = res[num] + 1;
+            assist[num] = assist[num] + 1;
         }
-        return res;
+
+        // 构造数组A 元素求和数组 得到 [2, 2, 4, 7, 7, 8]
+        for (int i = 1; i < n; i++) {
+            assist[i] = assist[i] + assist[i - 1];
+        }
+
+        // 构造结果数组，存放各个元素的排序
+        int[] result = new int[nums.length];
+
+
+        int count;
+        int value;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            value = nums[i];
+            // 小于等于当前值value的元素个数count
+            count = assist[value];
+            result[count - 1] = value;
+
+            // 小于等于当前值value的元素个数count 减1
+            assist[value] = count - 1;
+        }
+        return result;
     }
 
     /**
