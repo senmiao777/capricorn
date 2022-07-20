@@ -47,18 +47,25 @@ public class SortTest {
     @Test
     public void testCountSort() {
         int[] scores = {2, 5, 3, 0, 2, 3, 0, 3};
-        int[] numberCountArray = getNumberCountArray(scores, 6);
+        int[] numberCountArray = getNumberCountArray(scores);
         System.out.println(Arrays.toString(numberCountArray));
     }
 
     /**
      * @param nums 待排序数组 [2, 5, 3, 0, 2, 3, 0, 3]
-     * @param n    不同值元素个数
      * @return 不同值元素值对应计数（出现个数）数组 得到 [2, 0, 2, 3, 0, 1]
      */
-    private int[] getNumberCountArray(int[] nums, int n) {
+    private int[] getNumberCountArray(int[] nums) {
+
+        // 获取数据范围
+        int max = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] > max) {
+                max = nums[i];
+            }
+        }
         // 不考虑入参有误情况
-        int[] assist = new int[n];
+        int[] assist = new int[max+1];
         // 构造不同值元素值对应计数（出现个数）数组 A 比如
         for (int num : nums) {
             /*
@@ -69,14 +76,12 @@ public class SortTest {
         }
 
         // 构造数组A 元素求和数组 得到 [2, 2, 4, 7, 7, 8]
-        for (int i = 1; i < n; i++) {
+        for (int i = 1; i < assist.length; i++) {
             assist[i] = assist[i] + assist[i - 1];
         }
 
         // 构造结果数组，存放各个元素的排序
         int[] result = new int[nums.length];
-
-
         int count;
         int value;
         for (int i = nums.length - 1; i >= 0; i--) {
