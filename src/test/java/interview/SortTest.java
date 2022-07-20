@@ -84,6 +84,7 @@ public class SortTest {
         int[] result = new int[nums.length];
         int count;
         int value;
+        // 从尾部开始取，可以保证是稳定排序，从头取数据就不是稳定排序了
         for (int i = nums.length - 1; i >= 0; i--) {
             value = nums[i];
             // 小于等于当前值value的元素个数count
