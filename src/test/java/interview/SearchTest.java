@@ -55,6 +55,18 @@ public class SearchTest {
      * @return
      */
     private int search2(int[] nums, int low, int high, int k) {
+        if (low > high) {
+            return -1;
+        }
+        int mid = low + ((high - low) >> 1);
+        int value = nums[mid];
+        if (k == value) {
+            return mid;
+        } else if (k > value) {
+            search2(nums, mid + 1, high, k);
+        } else {
+            search2(nums, low, high - 1, k);
+        }
         return 0;
     }
 }
