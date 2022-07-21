@@ -65,7 +65,7 @@ public class SortTest {
             }
         }
         // 不考虑入参有误情况
-        int[] assist = new int[max+1];
+        int[] assist = new int[max + 1];
         // 构造不同值元素值对应计数（出现个数）数组 A 比如
         for (int num : nums) {
             /*
@@ -194,6 +194,7 @@ public class SortTest {
         quicksortHandle(num, 0, num.length - 1);
     }
 
+    // 选取元素作为分割点的时候，可以从头，中、尾选三个，然后用中间值作为分割元素，这样左右两遍元素个数差别小的概率大一些
     private void quicksortHandle(int[] num, int start, int end) {
         if (start >= end) {
             return;
