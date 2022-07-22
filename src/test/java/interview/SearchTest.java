@@ -113,7 +113,7 @@ public class SearchTest {
                 if (mid == len || nums[mid + 1] > k) {
                     return mid;
                 } else {
-                   low = mid + 1;
+                    low = mid + 1;
                 }
             } else {
                 high = mid - 1;
@@ -121,4 +121,34 @@ public class SearchTest {
         }
         return -1;
     }
+
+
+    /**
+     * 查找最后一个小于等于给定值的元素位置
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    private int searchLastLt(int[] nums, int k) {
+        int low = 0;
+        int len = nums.length - 1;
+        int high = len;
+        int mid;
+        while (low <= high) {
+            mid = low + ((high - low) >> 2);
+            if (nums[mid] <= k) {
+                if (mid == len || nums[mid + 1] > k) {
+                    return mid;
+                } else {
+                    low = mid + 1;
+                }
+            } else {
+                high = mid - 1;
+            }
+        }
+        return -1;
+
+    }
+
 }
