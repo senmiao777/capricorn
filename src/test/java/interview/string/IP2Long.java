@@ -17,6 +17,9 @@ public class IP2Long {
         long value = ip2Long(ip);
         System.out.println(ip + "转换为long=" + value);
 
+        String rawIP = long2Ip(value);
+        System.out.println(value + "转换为String=" + rawIP);
+
     }
 
     /**
@@ -30,11 +33,23 @@ public class IP2Long {
     private long ip2Long(String ip) {
         // 不考虑IP字符串异常情况
         final String[] numbers = ip.split("\\.");
-        long result;
-        result = (Long.parseLong(numbers[0]) << 24)
+        return (Long.parseLong(numbers[0]) << 24)
                 + (Long.parseLong(numbers[1]) << 16)
                 + (Long.parseLong(numbers[2]) << 8)
                 + Long.parseLong(numbers[3]);
-        return result;
+    }
+
+    /**
+     * long类型ip转换为String类型字符串
+     *
+     * @param ip long类型ip值
+     * @return String类型ip字符串
+     */
+    private String long2Ip(long ip) {
+        return (ip >> 24) + "."
+                + ((ip & 0xFF0000) >> 16) + "."
+                + ((ip & 0xFF00) >> 8) + "."
+                + (ip & 0xFF);
+
     }
 }
