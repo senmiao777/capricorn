@@ -69,4 +69,56 @@ public class SearchTest {
         }
         return 0;
     }
+
+    /**
+     * 查找第一个大于等于给定元素k的元素位置
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    private int searchFirstGt(int[] nums, int k) {
+        int low = 0;
+        int high = nums.length - 1;
+        int mid = low + ((high - low) >> 1);
+        while (low <= high) {
+            if (nums[mid] >= k) {
+                if (mid == 0 || nums[mid - 1] < k) {
+                    return mid;
+                } else {
+                    high = mid - 1;
+                }
+            } else {
+                low = mid + 1;
+            }
+        }
+        return -1;
+    }
+
+
+    /**
+     * 查找第一个小于等于给定元素k的元素位置
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    private int searchFirstLt(int[] nums, int k) {
+        int low = 0;
+        int len = nums.length - 1;
+        int high = len;
+        int mid = low + ((high - low) >> 1);
+        while (low <= high) {
+            if (nums[mid] <= k) {
+                if (mid == len || nums[mid + 1] > k) {
+                    return mid;
+                } else {
+                   low = mid + 1;
+                }
+            } else {
+                high = mid - 1;
+            }
+        }
+        return -1;
+    }
 }
