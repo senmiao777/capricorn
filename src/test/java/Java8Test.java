@@ -1,9 +1,23 @@
 import com.frank.entity.mysql.User;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.*;
+import org.apache.lucene.index.*;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.*;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.util.Version;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -24,6 +38,142 @@ public class Java8Test {
 
     public String[] strs = {"new", "Java8", "new", "feature", "Stream", "API"};
     public int[] intStrs = {12, 136, 22, 35, 66};
+
+
+    @Test
+    public void testLucene() throws IOException {
+        /*final Set<String> festivalSet = Sets.newHashSet("小寒", "大寒", "立春", "雨水", "惊蛰", "春分",
+                "清明", "谷雨", "立夏", "小满", "芒种", "夏至", "小暑", "大暑", "立秋", "处暑", "白露",
+                "秋分", "寒露", "霜降", "立冬", "小雪", "大雪", "冬至",
+                "春节", "春龙节", "龙抬头", "中秋", "重阳", "腊八", "除夕", "父亲节", "感恩节", "母亲节",
+                "小年", "春运",
+                "元宵", "汤圆", "正月十五", "灯谜",
+                "端午", "五月五", "龙舟节",
+                "七夕", "乞巧节", "牛郎织女"
+                , "中元节", "鬼节", "七月半", "七月十五"
+        );*/
+
+        String path = "/Users/guojingfeng/mine/luceneindex";
+        IndexWriter writer = null;
+        Directory directory = FSDirectory.open(Paths.get(path));
+        //RAMDirectory directory=new RAMDirectory();
+       IndexWriterConfig iwc = new IndexWriterConfig(new SmartChineseAnalyzer());
+       // IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST,new StandardAnalyzer());
+       // IndexWriterConfig iwc = new IndexWriterConfig(new StandardAnalyzer());
+
+
+        writer = new IndexWriter(directory, iwc);
+        Document document ;
+        int i = 100;
+         final Set<String> lanternFestival = Sets.newHashSet("元宵", "汤圆", "正月十五", "灯谜");
+        for(String word:lanternFestival){
+            document = new Document();
+            document.add(new IntPoint("duration",i));
+            document.add(new StoredField("duration",i));
+            document.add(new StringField("word",word, Field.Store.YES));
+            writer.addDocument(document);
+            writer.commit();
+            i++;
+        }
+        writer.close();
+        //new Term();
+
+
+
+    }
+
+
+
+    @Test
+    public void testSearch() throws Exception {
+        // 创建TermQuery 搜索对象
+      //  Query  query = new TermQuery(new Term("word",title));
+
+
+        doSearch(null);
+    }
+
+    @Test
+    public void testUpdate() throws Exception {
+        String path = "/Users/guojingfeng/mine/luceneindex";
+        IndexWriter writer = null;
+        Directory directory = FSDirectory.open(Paths.get(path));
+        DirectoryReader directoryReader = DirectoryReader.open(directory);
+        //IndexReader indexReader = DirectoryReader.open(directory);
+
+        IndexSearcher searcher = new IndexSearcher(directoryReader);
+        doSearch(searcher);
+        System.out.println("`````````````````````````````");
+
+        //RAMDirectory directory=new RAMDirectory();
+        IndexWriterConfig iwc = new IndexWriterConfig(new SmartChineseAnalyzer());
+        // IndexWriterConfig iwc = new IndexWriterConfig(Version.LATEST,new StandardAnalyzer());
+        // IndexWriterConfig iwc = new IndexWriterConfig(new StandardAnalyzer());
+
+
+        writer = new IndexWriter(directory, iwc);
+
+      /*  int i =123;
+        Document document = new Document();
+        document.add(new IntPoint("duration",i));
+        document.add(new StoredField("duration",i));
+        document.add(new StringField("word","立夏", Field.Store.YES));
+
+        writer.updateDocument(new Term("word","立夏"),document);*/
+
+        Document document1 = new Document();
+        document1.add(new IntPoint("duration",666));
+        document1.add(new StoredField("duration",666));
+        document1.add(new StringField("word","剑圣", Field.Store.YES));
+
+        writer.updateDocument(new Term("word","成功"),document1);
+        writer.commit();
+
+
+        writer.close();
+        IndexReader indexReader2 = DirectoryReader.openIfChanged(directoryReader);
+
+        // openIfChanged 得到的indexReader不为null，则重新创建一个searcher
+        IndexSearcher searcher2 = new IndexSearcher(indexReader2);
+        doSearch(searcher2);
+
+    }
+
+    public  void  doSearch(IndexSearcher searcher)throws  Exception{
+        QueryParser  query = new QueryParser("word",new SmartChineseAnalyzer());
+
+
+        if(Objects.isNull(searcher)){
+
+            String path = "/Users/guojingfeng/mine/luceneindex";
+            // 创建Directory 流对象
+            Directory directory = FSDirectory.open(Paths.get(path));
+            // 创建IndexReader
+            IndexReader indexReader = DirectoryReader.open(directory);
+            searcher = new IndexSearcher(indexReader);
+        }
+
+
+        String title = "小寒和大寒之后就是立夏了,下个节气是母亲节，之后是元宵节，测试一下是否修改成功。剑圣是刀塔中的一个英雄";
+
+        // 获取TopDocs
+        TopDocs topDocs = searcher.search(query.parse(title),10);
+
+        //indexReader.close();
+        System.out.println("查询索引总条数:" + topDocs.totalHits);
+        ScoreDoc[] docs = topDocs.scoreDocs;
+
+        // 解析结果集
+        for (ScoreDoc scoreDoc : docs){
+            int  docID = scoreDoc.doc;
+            Document  document = searcher.doc(docID);
+            System.out.println("docID:"+docID);
+            System.out.println("duration:"+document.get("duration"));
+            System.out.println("word:"+document.get("word"));
+            System.out.println("--------------------");
+        }
+
+    }
 
     @Test
     public void testAtomicReference() throws InterruptedException {

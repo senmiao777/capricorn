@@ -22,7 +22,7 @@ import java.util.Map;
 public class ClassTest {
 
     static {
-        log.info("看到这句话说明类加载了，并且static代码块执行了");
+        System.out.println("看到这句话说明类加载了，并且static代码块执行了");
     }
 
 
