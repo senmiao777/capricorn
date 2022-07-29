@@ -1,25 +1,26 @@
 import com.frank.entity.mysql.User;
+import com.frank.lucene.MySmartChineseAnalyzer;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
-
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.cjk.CJKAnalyzer;
 import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.*;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.store.RAMDirectory;
-import org.apache.lucene.util.Version;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
@@ -38,11 +39,16 @@ public class Java8Test {
 
     public String[] strs = {"new", "Java8", "new", "feature", "Stream", "API"};
     public int[] intStrs = {12, 136, 22, 35, 66};
+    String path = "F:\\zpark\\keyword";
+    String title = "再有几个月就七月半年了小寒和大寒之后就是立夏了,下个节气是母亲节，之后是元宵节，测试一下是否修改成功。剑圣是刀塔中的一个英雄";
 
 
+    public String[] keys = {"七月半", "今儿","今日","剑圣"};
+
+    List<String> words = Arrays.asList(keys);
     @Test
     public void testLucene() throws IOException {
-        /*final Set<String> festivalSet = Sets.newHashSet("小寒", "大寒", "立春", "雨水", "惊蛰", "春分",
+        final Set<String> festivalSet = Sets.newHashSet("小寒", "大寒", "立春", "雨水", "惊蛰", "春分",
                 "清明", "谷雨", "立夏", "小满", "芒种", "夏至", "小暑", "大暑", "立秋", "处暑", "白露",
                 "秋分", "寒露", "霜降", "立冬", "小雪", "大雪", "冬至",
                 "春节", "春龙节", "龙抬头", "中秋", "重阳", "腊八", "除夕", "父亲节", "感恩节", "母亲节",
@@ -50,10 +56,10 @@ public class Java8Test {
                 "元宵", "汤圆", "正月十五", "灯谜",
                 "端午", "五月五", "龙舟节",
                 "七夕", "乞巧节", "牛郎织女"
-                , "中元节", "鬼节", "七月半", "七月十五"
-        );*/
+                , "中元节", "鬼节", "七月半", "七月十五","今儿","今日","元宵", "汤圆", "正月十五", "灯谜"
+        );
 
-        String path = "/Users/guojingfeng/mine/luceneindex";
+
         IndexWriter writer = null;
         Directory directory = FSDirectory.open(Paths.get(path));
         //RAMDirectory directory=new RAMDirectory();
@@ -65,8 +71,8 @@ public class Java8Test {
         writer = new IndexWriter(directory, iwc);
         Document document ;
         int i = 100;
-         final Set<String> lanternFestival = Sets.newHashSet("元宵", "汤圆", "正月十五", "灯谜");
-        for(String word:lanternFestival){
+
+        for(String word:festivalSet){
             document = new Document();
             document.add(new IntPoint("duration",i));
             document.add(new StoredField("duration",i));
@@ -91,6 +97,25 @@ public class Java8Test {
 
 
         doSearch(null);
+    }
+
+    @Test
+    public void testMy() throws Exception {
+        Analyzer analyzer = new MySmartChineseAnalyzer( words);
+        Analyzer analyzer3 = new CJKAnalyzer( );
+
+        Analyzer analyzer2 = new SmartChineseAnalyzer( );
+        TokenStream tokenStream = analyzer.tokenStream("word", title);
+
+        OffsetAttribute offsetAttribute = tokenStream.addAttribute(OffsetAttribute.class);
+        tokenStream.reset();
+
+        List<String> tokens = new ArrayList<>();
+        while (tokenStream.incrementToken()) {
+            tokens.add(offsetAttribute.toString());
+        }
+        tokenStream.end();
+        System.out.println(String.format("tokens:%s", tokens));
     }
 
     @Test
@@ -140,12 +165,13 @@ public class Java8Test {
     }
 
     public  void  doSearch(IndexSearcher searcher)throws  Exception{
-        QueryParser  query = new QueryParser("word",new SmartChineseAnalyzer());
+      //  QueryParser  query = new QueryParser("word",new SmartChineseAnalyzer());
+
+        QueryParser  query = new QueryParser("word",new MySmartChineseAnalyzer(words));
 
 
         if(Objects.isNull(searcher)){
 
-            String path = "/Users/guojingfeng/mine/luceneindex";
             // 创建Directory 流对象
             Directory directory = FSDirectory.open(Paths.get(path));
             // 创建IndexReader
@@ -153,8 +179,6 @@ public class Java8Test {
             searcher = new IndexSearcher(indexReader);
         }
 
-
-        String title = "小寒和大寒之后就是立夏了,下个节气是母亲节，之后是元宵节，测试一下是否修改成功。剑圣是刀塔中的一个英雄";
 
         // 获取TopDocs
         TopDocs topDocs = searcher.search(query.parse(title),10);
