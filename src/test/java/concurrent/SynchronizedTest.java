@@ -78,18 +78,15 @@ public class SynchronizedTest {
         String anotherName = "T2";
 
         // static synchronized 修饰方法
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                obj.staticMethod1();
-            }
+        new Thread(()-> {
+                obj.initMethod();
         }, "obj - staticMethod1 ").start();
 
         //static synchronized 修饰方法
         new Thread(new Runnable() {
             @Override
             public void run() {
-                obj2.staticMethod2();
+                obj2.initMethod();
             }
         }, "obj2 - staticMethod2 ").start();
 
@@ -105,7 +102,7 @@ public class SynchronizedTest {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                obj3.innerSyncWithClass();
+                obj3.initMethod();
             }
         }, "synchronized block").start();
 

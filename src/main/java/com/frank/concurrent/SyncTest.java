@@ -16,6 +16,8 @@ public class SyncTest<Integer> implements Callable<Integer> {
     private final Object lock = new Object();
     private int count = 0;
 
+    private static volatile boolean init = false;
+
     // @Override
     public void run() {
         log.info("ThreadId={}", Thread.currentThread().getId());
@@ -24,9 +26,28 @@ public class SyncTest<Integer> implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         //final int i = RandomUtils.nextInt(100, 1000);
-        syncMethod();
+        //syncMethod();
+        initMethod();
         return null;
     }
+
+    public void initMethod() {
+        System.out.println("initMethod 111111");
+        try {
+            Thread.sleep(20);
+        } catch (Exception e) {
+            System.out.println("error");
+        }
+        synchronized (SyncTest.class) {
+            if (init) {
+                System.out.println("do nothing -----------");
+                return;
+            }
+            init = true;
+        }
+        System.out.println("业务代码执行");
+    }
+
 
     public synchronized int syncMethod() {
         final int s = RandomUtils.nextInt(500, 1000);
@@ -49,6 +70,7 @@ public class SyncTest<Integer> implements Callable<Integer> {
     /**
      * synchronized 修饰方法，多个线程访问 同一个对象的 同步 方法时，只有一个线程能获得锁。锁住的是对象，等同于synchronized（this）
      * synchronized 代码块，注意是对谁加锁，加的不是同一把锁，根本不起作用。
+     *
      * @param lock
      * @return
      */
@@ -70,6 +92,7 @@ public class SyncTest<Integer> implements Callable<Integer> {
      * 比如 A、B、C 三个方法都是被static synchronized 修饰的方法，一个线程一下会锁住A、B、C三个方法，和对象无关。
      * synchronized代码块，用类.class加锁，效果和static synchronized一样
      * 没有static修饰的synchronized不影响。
+     *
      * @return
      */
     public static synchronized int staticMethod1() {
@@ -116,6 +139,7 @@ public class SyncTest<Integer> implements Callable<Integer> {
 
     /**
      * 同步代码块，锁为 clazz
+     *
      * @return
      */
     public int innerSyncWithClass() {
@@ -132,9 +156,10 @@ public class SyncTest<Integer> implements Callable<Integer> {
 
     /**
      * 打印日志，方便观察线程执行情况
+     *
      * @return
      */
-    private static void show(){
+    private static void show() {
         int i = 5;
         while (i-- > 0) {
             log.info("ThreadId ={},i={}", Thread.currentThread().getId(), i);
