@@ -50,7 +50,7 @@ public class TreeNodeTest {
         System.out.println("----------------------");
         levelPost(treeNode);
 
-        int i = maxDeep(treeNode);
+        int i = maxDepth(treeNode);
         System.out.println("treeNode maxDeep="+i);
     }
 
@@ -60,12 +60,12 @@ public class TreeNodeTest {
      * @param treeNode
      * @return
      */
-    private int maxDeep(TreeNode treeNode) {
+    private int maxDepth(TreeNode treeNode) {
         if (treeNode == null) {
             return 0;
         }
-        int left = maxDeep(treeNode.left);
-        int right = maxDeep(treeNode.right);
+        int left = maxDepth(treeNode.left);
+        int right = maxDepth(treeNode.right);
         return Math.max(left, right) + 1;
     }
 
