@@ -33,12 +33,13 @@ public class SyncTest<Integer> implements Callable<Integer> {
 
     public void initMethod() {
         System.out.println("initMethod 111111");
-        try {
-            Thread.sleep(20);
-        } catch (Exception e) {
-            System.out.println("error");
-        }
+
         synchronized (SyncTest.class) {
+            try {
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                System.out.println("error");
+            }
             if (init) {
                 System.out.println("do nothing -----------");
                 return;
