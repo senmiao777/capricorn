@@ -37,12 +37,12 @@ public class TreeNodeTest {
 
 
         final List<Integer> collect = numbers.stream().filter(n -> {
-                    System.out.println("filter number is " + n);
-                    return n != null && n > 3;
-                }).map(n -> {
-                    System.out.println("do nothing number is " + n);
-                    return n;
-                }).limit(2).collect(Collectors.toList());
+            System.out.println("filter number is " + n);
+            return n != null && n > 3;
+        }).map(n -> {
+            System.out.println("do nothing number is " + n);
+            return n;
+        }).limit(2).collect(Collectors.toList());
         System.out.println(collect);
 
         TreeNode treeNode = createTreeNode(numbers);
@@ -50,7 +50,23 @@ public class TreeNodeTest {
         System.out.println("----------------------");
         levelPost(treeNode);
 
+        int i = maxDeep(treeNode);
+        System.out.println("treeNode maxDeep="+i);
+    }
 
+
+    /**
+     * 获取二叉树的深度
+     * @param treeNode
+     * @return
+     */
+    private int maxDeep(TreeNode treeNode) {
+        if (treeNode == null) {
+            return 0;
+        }
+        int left = maxDeep(treeNode.left);
+        int right = maxDeep(treeNode.right);
+        return Math.max(left, right) + 1;
     }
 
     /**
