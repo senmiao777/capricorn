@@ -221,7 +221,9 @@ public class SortTest {
          */
         for (int j = start; j < end; j++) {
             if (num[j] <= pivotValue) {
-                swap(num, i, j);
+                if (i != j) {
+                    swap(num, i, j);
+                }
                 i++;
             }
         }
