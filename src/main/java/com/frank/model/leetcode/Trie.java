@@ -43,6 +43,25 @@ public class Trie {
         cur.setEnd(true);
     }
 
+    private boolean search2(String word) {
+        if (StringUtils.isEmpty(word)) {
+            return false;
+        }
+        TrieNode cur = root;
+        for (int i = 0; i < word.length(); i++) {
+            int c = word.charAt(i);
+            int index = c - 'a';
+            TrieNode child = cur.getChildren()[index];
+            if (child != null) {
+                cur = child;
+            } else {
+                return false;
+            }
+        }
+        // 非最终节点，只是前缀
+        return cur.isEnd();
+    }
+
     public void insert(String word) {
         Trie node = this;
         for (int i = 0; i < word.length(); i++) {
