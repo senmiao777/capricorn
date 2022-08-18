@@ -142,7 +142,16 @@ public class CommonTest {
     private String lock1 = "lock1111";
     private String lock2 = "lock2222";
 
+    @Test
+    public void deadLockTest2(){
 
+        System.out.println("111111111111");
+
+        for(int i=0;i< 100 ;i++){
+            System.out.println("befor"+(int)System.currentTimeMillis() % 4);
+            System.out.println("after"+(int)(System.currentTimeMillis() % 4));
+        }
+    }
 
 
     @Test

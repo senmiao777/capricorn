@@ -106,6 +106,7 @@ public class DesignPatternTest {
 
         Vector vector = new Vector();
         Enumeration elements = vector.elements();
+        elements.hasMoreElements();
         /**
          * EnumerationIterator作为一个适配器，使Enumeration具有Iterator的遍历方法
          */

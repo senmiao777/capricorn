@@ -1,5 +1,7 @@
 package com.frank.model.leetcode;
 
+import org.springframework.util.StringUtils;
+
 import java.util.Arrays;
 
 /**
@@ -11,9 +13,34 @@ public class Trie {
     private Trie[] children;
     private boolean isEnd;
 
+    // 根节点存储一个无意义字符
+    private final TrieNode root = new TrieNode('/');
+
     public Trie() {
         children = new Trie[26];
         isEnd = false;
+    }
+
+    public static void main(String[] args) {
+        Trie trie = new Trie();
+
+    }
+
+    public void insert2(String word) {
+        if (StringUtils.isEmpty(word)) {
+            return;
+        }
+        TrieNode cur = root;
+        for (int i = 0; i < word.length(); i++) {
+            char c = word.charAt(i);
+            int index = c - 'a';
+            if (cur.getChildren()[index] == null) {
+                cur.getChildren()[index] = new TrieNode(c);
+            }
+            cur = cur.getChildren()[index];
+
+        }
+        cur.setEnd(true);
     }
 
     public void insert(String word) {
