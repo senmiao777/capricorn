@@ -64,6 +64,9 @@ public class User implements Serializable {
         return user;
     }
 
+    public User(String userName) {
+        this.userName = userName;
+    }
 
     public User(Builder builder) {
         this.userName = builder.userName;
