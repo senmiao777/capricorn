@@ -13,6 +13,7 @@ import com.frank.other.SingleTon;
 import com.frank.repository.mysql.IncomeStatementRepository;
 import com.frank.repository.mysql.NamespaceErrorTotalRepository;
 import com.frank.util.GenerateUtil;
+import com.frank.util.RsaUtil;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.RateLimiter;
@@ -21,6 +22,7 @@ import io.netty.util.Timeout;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -36,6 +38,8 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.annotation.Rollback;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
@@ -47,6 +51,7 @@ import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.text.Format;
 import java.text.ParseException;
@@ -143,14 +148,64 @@ public class CommonTest {
     private String lock2 = "lock2222";
 
     @Test
-    public void deadLockTest2(){
+    public void deadLockTest2() throws Exception {
 
-        System.out.println("111111111111");
 
-        for(int i=0;i< 100 ;i++){
-            System.out.println("befor"+(int)System.currentTimeMillis() % 4);
-            System.out.println("after"+(int)(System.currentTimeMillis() % 4));
+        String aesKey = RandomStringUtils.randomAlphabetic(16);
+
+        String content = "窗帘_2022年新款北京北京窗帘定做_免费测量安装" +
+                "窗帘 2022年新款北京北京窗帘定做「厂家直销价格优惠」承接办公室，医院，学校，家庭等类型窗帘定制 I 完善售后质量保证 I 免费上门设计安装一条龙服务 I 7x24小时热线" +
+                "北京帛源布业有限公司";
+
+        Map<String, String> stringStringMap = RsaUtil.generateKeyPair();
+
+        long encTime = 0;
+        long decTime = 0;
+        for(int i=0;i< 10000;i++){
+            long start = System.currentTimeMillis();
+            String enc = Base64.getEncoder().withoutPadding().encodeToString(getAesEncryptResult(content+1, aesKey));
+            long end = System.currentTimeMillis();
+            encTime = encTime + (end - start);
+            //加密后的二进制数组
+            byte[] byte2 = Base64.getDecoder().decode(enc);
+            //解密
+            byte[] decrypt = getAesDecryptResult(byte2, aesKey);
+            decTime = decTime + (System.currentTimeMillis() - end);
         }
+    /*    String publicKey = stringStringMap.get("publicKey");
+        String privateKey = stringStringMap.get("privateKey");
+        for (int i = 0; i < 10000; i++) {
+            long start = System.currentTimeMillis();
+            String enc = RsaUtil.encrypt(content+1, publicKey);
+            long end = System.currentTimeMillis();
+            encTime = encTime + (end - start);
+            //加密后的二进制数组
+            String decrypt = RsaUtil.decrypt(enc, privateKey);
+            decTime = decTime + (System.currentTimeMillis() - end);
+        }*/
+        System.out.println("encTime+" + encTime);
+        System.out.println("decTime+" + decTime);
+    }
+
+    public byte[] getAesDecryptResult(byte[] content, String password) throws Exception {
+        byte[] enCodeFormat = password.getBytes();
+        // 转换为AES专用密钥
+        SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
+        // 创建密码器
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        // 初始化为解密模式的密码器
+        cipher.init(Cipher.DECRYPT_MODE, key);
+        // 明文
+        return cipher.doFinal(content);
+    }
+
+    public static byte[] getAesEncryptResult(String content, String password) throws Exception {
+        byte[] enCodeFormat = password.getBytes();// 返回基本编码格式的密钥，如果此密钥不支持编码，则返回
+        SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        byte[] byteContent = content.getBytes(StandardCharsets.UTF_8);
+        cipher.init(Cipher.ENCRYPT_MODE, key);// 初始化为加密模式的密码器
+        return cipher.doFinal(byteContent);
     }
 
 
