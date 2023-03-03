@@ -17,6 +17,111 @@ import java.util.Map;
 @Slf4j
 public class ArrayEasyTest {
 
+    /**
+     * 二分查找
+     * 在有序升序不重复数组中查找元素，找到返回下标，找不到返回-1
+     */
+    @Test
+    public void testBinarySearch() {
+        int[] nums = {-1, 0, 3, 5, 9, 12};
+        //int[] nums = {-1,  9};
+        int target = 9;
+        System.out.println("index = " + binarySearch(nums, target));
+
+    }
+
+
+    @Test
+    public void testFindPosition() {
+        int[] nums = {1,3,  5, 6};
+        //int[] nums = {-1,  9};
+        int target = 7;
+        System.out.println("index = " + findPosition(nums, target));
+
+    }
+
+    /**
+     * https://leetcode.cn/problems/first-bad-version/?envType=study-plan&id=suan-fa-ru-men&plan=algorithms&plan_progress=fqntkk3
+     * 两个关键点
+     * 1：当isBadVersion(m) tail = m ,而不是 m -1。因为有可能m是第一个错误的版本，而m-1就是正确的了，不是答案
+     * 2：返回值是head（此时head和tail是同一个值），而不是m
+     *
+     * @param n
+     * @return
+     */
+    private int firstBadVersion(int n) {
+        int head = 1;
+        int tail = n;
+        int m = 0;
+        while (head < tail) {
+            m = head + (tail - head) / 2;
+            if (isBadVersion(m)) {
+                tail = m;
+            } else {
+                head = m + 1;
+            }
+        }
+        return head;
+    }
+
+    private boolean isBadVersion(int n) {
+        return n / 2 == 0;
+    }
+
+    /**
+     * 两个关键位置
+     * 1：while 循环是head 小于等于 tail,小于在部分情况不准
+     * 2：中间下标计算位置 是 head + (tail - head)/2 直接 ( head + tail ) / 2 可能有int超长问题
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    private int binarySearch(int[] nums, int target) {
+        if (nums.length == 0) {
+            return -1;
+        }
+        int head = 0;
+        int tail = nums.length - 1;
+        while (head <= tail) {
+            int m = head + (tail - head) / 2;
+            int mv = nums[m];
+            if (mv == target) {
+                return m;
+            } else if (mv > target) {
+                tail = m - 1;
+            } else {
+                head = m + 1;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * https://leetcode.cn/problems/search-insert-position/?envType=study-plan&id=suan-fa-ru-men&plan=algorithms&plan_progress=fqntkk3
+     *
+     *  => 找到第一个大于等于target的下标
+     * @param nums
+     * @param target
+     * @return
+     */
+    private int findPosition(int[] nums, int target) {
+
+        int head = 0;
+        int tail = nums.length - 1;
+        int m ;
+        while (head <= tail) {
+            m = head + (tail - head) / 2;
+            if ( nums[m] < target) {
+                head = m + 1;
+            }  else {
+                tail = m -1;
+            }
+        }
+        return head;
+    }
+
+
     @Test
     public void string2Integer() {
         log.info(" ".charAt(0) == ' ' ? "true" : "false");
