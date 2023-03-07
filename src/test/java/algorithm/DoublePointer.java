@@ -8,6 +8,48 @@ import java.util.Arrays;
 public class DoublePointer {
 
     /**
+     * 557. 反转字符串中的单词 III
+     * 给定一个字符串 s ，你需要反转字符串中每个单词的字符顺序，同时仍保留空格和单词的初始顺序。
+     * 输入：s = "Let's take LeetCode contest"
+     * 输出："s'teL ekat edoCteeL tsetnoc"
+     */
+    @Test
+    public void testReverseWord() {
+        char[] sentence = "Let's take LeetCode contest".toCharArray();
+        reverseSentence(sentence);
+        printArray(sentence);
+    }
+
+    private void reverseSentence(char[] sentence) {
+        int head = 0;
+        int tail;
+
+        for (int i = 0; i < sentence.length; i++) {
+            if (sentence[i] == ' ') {
+                tail = i - 1;
+                change(head,tail,sentence);
+                if (i + 1 < sentence.length) {
+                    head = i + 1;
+                }
+            }
+        }
+        change(head,sentence.length-1,sentence);
+    }
+
+    private void change(int head,int tail ,char[] sentence){
+        char temp;
+        while (tail > head) {
+            if (sentence[head] != sentence[tail]) {
+                temp = sentence[head];
+                sentence[head] = sentence[tail];
+                sentence[tail] = temp;
+            }
+            head++;
+            tail--;
+        }
+    }
+
+    /**
      * 344. 反转字符串
      * 不要给另外的数组分配额外的空间，你必须原地修改输入数组、使用 O(1) 的额外空间解决这一问题。
      * 输入：s = ["h","e","l","l","o"]
@@ -17,7 +59,7 @@ public class DoublePointer {
     public void testReverseCode() {
         char[] code = "hello".toCharArray();
         reverseCode(code);
-        for (int i = 0;i< code.length;i++){
+        for (int i = 0; i < code.length; i++) {
             System.out.println(code[i]);
         }
     }
@@ -58,6 +100,18 @@ public class DoublePointer {
             System.out.println(twoSum2[i]);
         }
 
+    }
+
+    private void printArray(int[] array) {
+        for (int i = 0; i < array.length; i++) {
+            System.out.println(array[i]);
+        }
+    }
+
+    private void printArray(char[] array) {
+        for (int i = 0; i < array.length; i++) {
+            System.out.print(array[i]);
+        }
     }
 
     public int[] getTwoSum2(int[] nums, int target) {
