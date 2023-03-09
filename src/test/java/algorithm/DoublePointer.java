@@ -1,11 +1,99 @@
 package algorithm;
 
 
+import com.frank.model.leetcode.ListNode;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class DoublePointer {
+
+
+    /**
+     * 19. 删除链表的倒数第 N 个结点
+     * 给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点
+     * 输入：head = [1,2,3,4,5], n = 2
+     * 输出：[1,2,3,5]
+     * <p>
+     * 输入：head = [1], n = 1
+     * 输出：[]
+     */
+    @Test
+    public void testRemoveNthFromEnd() {
+        ListNode five = new ListNode(5, null);
+        ListNode four = new ListNode(4, five);
+        ListNode three = new ListNode(3, four);
+        ListNode two = new ListNode(2, three);
+        ListNode one = new ListNode(1, two);
+        ListNode head = removeNthFromEnd(one, 5);
+        System.out.println(head);
+
+        ListNode only = new ListNode(11, null);
+        ListNode head2 = removeNthFromEnd(only, 1);
+        System.out.println(head2);
+
+    }
+
+    /**
+     * 两个要点：
+     * 1、新建一个哑节点，dummy，可以简化很多问题
+     * 2、判断条件是fast不为空
+     *
+     * @param head 头节点
+     * @param n    要删除的倒数第几个节点
+     * @return 删除的倒数第n个节点之后的头节点
+     */
+    private ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode fast = head;
+        // 哑节点
+        ListNode dummy = new ListNode(-1, head);
+        ListNode slow = dummy;
+        for (int i = 0; i < n; i++) {
+            fast = fast.next;
+        }
+
+        while (fast != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        slow.next = slow.next.next;
+        return dummy.next;
+    }
+
+
+    /**
+     * 给你单链表的头结点 head ，请你找出并返回链表的中间结点。
+     * 如果有两个中间结点，则返回第二个中间结点。
+     * 输入：head = [1,2,3,4,5,6]
+     * 输出：[4,5,6]
+     * 解释：该链表有两个中间结点，值分别为 3 和 4 ，返回第二个结点。
+     */
+    @Test
+    public void testFindMiddle() {
+        // ListNode six = new ListNode(6, null);
+        ListNode five = new ListNode(5, null);
+        ListNode four = new ListNode(4, five);
+        ListNode three = new ListNode(3, four);
+        ListNode two = new ListNode(2, three);
+        ListNode one = new ListNode(1, two);
+        ListNode middle = findMiddle(one);
+        System.out.println(middle);
+
+    }
+
+    private ListNode findMiddle(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast.next != null) {
+            fast = fast.next;
+            slow = slow.next;
+            if (fast.next != null) {
+                fast = fast.next;
+            }
+        }
+        return slow;
+    }
 
     /**
      * 557. 反转字符串中的单词 III
@@ -27,16 +115,16 @@ public class DoublePointer {
         for (int i = 0; i < sentence.length; i++) {
             if (sentence[i] == ' ') {
                 tail = i - 1;
-                change(head,tail,sentence);
+                change(head, tail, sentence);
                 if (i + 1 < sentence.length) {
                     head = i + 1;
                 }
             }
         }
-        change(head,sentence.length-1,sentence);
+        change(head, sentence.length - 1, sentence);
     }
 
-    private void change(int head,int tail ,char[] sentence){
+    private void change(int head, int tail, char[] sentence) {
         char temp;
         while (tail > head) {
             if (sentence[head] != sentence[tail]) {
