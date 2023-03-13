@@ -4,10 +4,53 @@ package algorithm;
 import com.frank.model.leetcode.ListNode;
 import org.junit.Test;
 
+import javax.print.DocFlavor;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DoublePointer {
+
+    /**
+     * 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
+     * 输入: s = "abcabcbb"
+     * 输出: 3
+     * 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+     */
+    @Test
+    public void testLengthOfLongestSubstring() {
+
+        String s = "pwwkew";
+        System.out.println("length = " + getLengthOfLongestSubString(s));
+    }
+
+    /**
+     * 两个关键点：
+     * 1：start = Math.max(position + 1, start);
+     * 2：res = Math.max(res, i - start + 1);
+     * @param s
+     * @return
+     */
+    private int getLengthOfLongestSubString(String s) {
+        if (s.length() == 0) {
+            return 0;
+        }
+        Map<Character, Integer> index = new HashMap<>(64);
+        int res = 0;
+        int start = 0;
+        Integer position;
+
+        for (int i = 0; i < s.length(); i++) {
+            position = index.get(s.charAt(i));
+            if (position != null) {
+                start = Math.max(position + 1, start);
+            }
+            res = Math.max(res, i - start + 1);
+            index.put(s.charAt(i), i);
+        }
+        return res;
+    }
 
 
     /**
