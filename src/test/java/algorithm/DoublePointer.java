@@ -4,10 +4,42 @@ package algorithm;
 import com.frank.model.leetcode.ListNode;
 import org.junit.Test;
 
-import javax.print.DocFlavor;
 import java.util.*;
 
 public class DoublePointer {
+
+    @Test
+    public void testFindLastWordLength() {
+        String s = "a";
+        System.out.println("length= " + findLastWordLength(s));
+    }
+
+    /**
+     * 关键点
+     * 1:start = -1,左边下标是从负一开始，不是从0 ，否则 针对 "a"这种单字符形式会出错
+     *
+     * @param s
+     * @return
+     */
+    private int findLastWordLength(String s) {
+        int n = s.length() - 1;
+        boolean findStart = false;
+        int end = n;
+        int start = -1;
+        char c;
+        for (int i = n; i >= 0; i--) {
+            if ((c = s.charAt(i)) != ' ' && !findStart) {
+                findStart = true;
+                end = i;
+                continue;
+            }
+            if (findStart && c == ' ') {
+                start = i;
+                break;
+            }
+        }
+        return end - start;
+    }
 
 
     /**

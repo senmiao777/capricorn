@@ -95,6 +95,38 @@ public class LinkedListTest {
         System.out.println(listNode);
     }
 
+    /**
+     * 合并两个升序链表
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    private ListNode mergeTwoSortedList(ListNode a, ListNode b) {
+        if (a == null) {
+            return b;
+        }
+        if (b == null) {
+            return a;
+        }
+        // 哨兵节点
+        ListNode dummy = new ListNode(0);
+        ListNode head = dummy;
+        while (a != null && b != null) {
+
+            if (a.val < b.val) {
+                dummy.next = a;
+                a = a.next;
+            } else {
+                dummy.next = b;
+                b = b.next;
+            }
+            dummy = dummy.next;
+        }
+        dummy.next = (a == null) ? b : a;
+        return head.next;
+    }
+
     @Test
     public void testRemoveCountBackwardsNth() {
         ListNode a = new ListNode(1);

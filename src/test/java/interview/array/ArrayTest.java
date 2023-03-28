@@ -1,16 +1,116 @@
 package interview.array;
 
-import com.frank.model.leetcode.LetterCombination;
-import com.frank.model.leetcode.ListNode;
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
 //@Slf4j
 public class ArrayTest {
+
+    @Test
+    public void testBinaryAdd() {
+        String a = "1111";
+        String b = "1111";
+        System.out.println(binaryAdd(a, b));
+
+    }
+
+    private String binaryAdd(String a, String b) {
+        // 进位数值
+        int high = 0;
+        int aLength = a.length();
+        int bLength = b.length();
+        char[] res = new char[Math.max(aLength, bLength)];
+        int cur = 0;
+        int i = aLength - 1;
+        int j = bLength - 1;
+        int t = Math.max(i, j);
+        /**
+         * 顺序搞反了，下标0是在最前边
+         */
+        while (i >= 0 && j >= 0) {
+            /**
+             * 0的ASCII码是48
+             * 1的ASCII码是49
+             */
+            cur = a.charAt(i) + b.charAt(j) + high - 96;
+            res[t] = (cur % 2 == 1 ? '1' : '0');
+            high = cur / 2;
+            i--;
+            j--;
+            t--;
+        }
+        // a 字符串比较短
+        if (i == -1 && j >= 0) {
+            if (high == 1) {
+                for (int k = j ; k >= 0; k--) {
+                    cur = b.charAt(k) + high - 48;
+                    res[k] = (cur % 2 == 1 ? '1' : '0');
+                    high = cur / 2;
+                }
+            } else {
+                for (int k = j; k >= 0; k--) {
+                    res[k] = b.charAt(k);
+                }
+            }
+        } else if (j == -1 && i >= 0) {
+            if (high == 1) {
+                for (int k = i ; k >= 0; k--) {
+                    cur = a.charAt(k) + high - 48;
+                    res[k] = (cur % 2 == 1 ? '1' : '0');
+                    high = cur / 2;
+                }
+            } else {
+                for (int k = i ; k >= 0; k--) {
+                    res[k] = a.charAt(k);
+                }
+            }
+        }
+
+        if (high == 1) {
+            return "1" + new String(res);
+        }
+        return new String(res);
+    }
+
+    /*
+     *给定一个由 整数 组成的 非空 数组所表示的非负整数，在该数的基础上加一。
+     *最高位数字存放在数组的首位， 数组中每个元素只存储单个数字。
+     *你可以假设除了整数 0 之外，这个整数不会以零开头。
+     *输入：digits = [1,2,3]
+     *输出：[1,2,4]
+     *解释：输入数组表示数字 123。
+     */
+    @Test
+    public void testAddOne() {
+        int[] digits = {4, 3, 2, 1};
+        int[] ints = plusOne(digits);
+        for (int i = 0; i < ints.length; i++) {
+            System.out.println(ints[i]);
+        }
+
+
+    }
+
+    private int[] plusOne(int[] digits) {
+        int cur;
+        for (int i = digits.length - 1; i >= 0; i--) {
+            cur = digits[i];
+            if (cur == 9) {
+                digits[i] = 0;
+            } else {
+                digits[i] = cur + 1;
+                break;
+            }
+        }
+        // 第一位是0 ，说明当前数组容量不够
+        if (digits[0] == 0) {
+            int[] res = new int[digits.length + 1];
+            res[0] = 1;
+            return res;
+        }
+        return digits;
+    }
 
 
     /**
@@ -19,7 +119,7 @@ public class ArrayTest {
      * (u(love)i) -> (uevoli) -> iloveu
      */
     @Test
-    public void testStackReverse(){
+    public void testStackReverse() {
         String s = "a(bcdefghijkl(mno)p)q";
 
         StringBuilder stringBuilder = new StringBuilder("abc");
@@ -27,21 +127,21 @@ public class ArrayTest {
         System.out.println(reverse);
         System.out.println(stringBuilder);
 
-        stringBuilder.insert(1,"defg");
+        stringBuilder.insert(1, "defg");
         System.out.println(stringBuilder);
 
-        System.out.println("翻转之后="+stackReverse(s));
+        System.out.println("翻转之后=" + stackReverse(s));
     }
 
-    private String stackReverse(String str){
+    private String stackReverse(String str) {
 
         LinkedList<StringBuilder> stack = new LinkedList<>();
 
         StringBuilder tempStr = new StringBuilder();
 
-        for(int i= 0 ;i< str.length();i++){
+        for (int i = 0; i < str.length(); i++) {
             char currentChar = str.charAt(i);
-            if('(' == currentChar){
+            if ('(' == currentChar) {
                 stack.push(tempStr);
                 tempStr = new StringBuilder();
                 /**
@@ -50,11 +150,11 @@ public class ArrayTest {
                  *  stack.push(sb.toString());
                  *  sb.setLength(0);
                  */
-            }else if(')' == currentChar){
+            } else if (')' == currentChar) {
                 tempStr.reverse();
                 // 把外层的字符串拿出来，放在前边，后边拼接当前字符串反转之后的值
-                tempStr.insert(0,stack.pop());
-            }else {
+                tempStr.insert(0, stack.pop());
+            } else {
                 tempStr.append(currentChar);
             }
         }
