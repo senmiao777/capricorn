@@ -1,5 +1,6 @@
 package interview.array;
 
+import com.frank.model.leetcode.Solution;
 import org.junit.Test;
 
 import java.util.*;
@@ -7,13 +8,31 @@ import java.util.*;
 //@Slf4j
 public class ArrayTest {
 
+    /**
+     * 作者：LeetCode-Solution
+     * 链接：https://leetcode.cn/problems/add-binary/solution/er-jin-zhi-qiu-he-by-leetcode-solution/
+     */
     @Test
     public void testBinaryAdd() {
         String a = "1111";
         String b = "1111";
         System.out.println(binaryAdd(a, b));
+        System.out.println(Integer.parseInt("1111",2));
 
     }
+
+    /**
+     * java 提供的api
+     * @param a
+     * @param b
+     * @return
+     */
+    public String addBinary(String a, String b) {
+        return Integer.toBinaryString(
+                Integer.parseInt(a, 2) + Integer.parseInt(b, 2)
+        );
+    }
+
 
     private String binaryAdd(String a, String b) {
         // 进位数值
@@ -21,7 +40,7 @@ public class ArrayTest {
         int aLength = a.length();
         int bLength = b.length();
         char[] res = new char[Math.max(aLength, bLength)];
-        int cur = 0;
+        int cur;
         int i = aLength - 1;
         int j = bLength - 1;
         int t = Math.max(i, j);
@@ -42,29 +61,9 @@ public class ArrayTest {
         }
         // a 字符串比较短
         if (i == -1 && j >= 0) {
-            if (high == 1) {
-                for (int k = j ; k >= 0; k--) {
-                    cur = b.charAt(k) + high - 48;
-                    res[k] = (cur % 2 == 1 ? '1' : '0');
-                    high = cur / 2;
-                }
-            } else {
-                for (int k = j; k >= 0; k--) {
-                    res[k] = b.charAt(k);
-                }
-            }
+            high = flag(b, j, high, res);
         } else if (j == -1 && i >= 0) {
-            if (high == 1) {
-                for (int k = i ; k >= 0; k--) {
-                    cur = a.charAt(k) + high - 48;
-                    res[k] = (cur % 2 == 1 ? '1' : '0');
-                    high = cur / 2;
-                }
-            } else {
-                for (int k = i ; k >= 0; k--) {
-                    res[k] = a.charAt(k);
-                }
-            }
+            high = flag(a, i, high, res);
         }
 
         if (high == 1) {
@@ -72,6 +71,30 @@ public class ArrayTest {
         }
         return new String(res);
     }
+
+    /**
+     * @param s    原始字符串
+     * @param p    当前下标位置
+     * @param high 高位 1 / 0
+     * @param res  结果字符数组
+     * @return 高位标识
+     */
+    private int flag(String s, int p, int high, char[] res) {
+        int cur;
+        if (high == 1) {
+            for (int k = p; k >= 0; k--) {
+                cur = s.charAt(k) + high - 48;
+                res[k] = (cur % 2 == 1 ? '1' : '0');
+                high = cur / 2;
+            }
+        } else {
+            for (int k = p; k >= 0; k--) {
+                res[k] = s.charAt(k);
+            }
+        }
+        return high;
+    }
+
 
     /*
      *给定一个由 整数 组成的 非空 数组所表示的非负整数，在该数的基础上加一。
