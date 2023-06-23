@@ -25,6 +25,7 @@ public class Application {
 
 
 
+
 	/*@Bean
 	public FilterRegistrationBean filterRegistrationBean() {
 		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
