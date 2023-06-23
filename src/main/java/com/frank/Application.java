@@ -14,9 +14,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  * Created by Administrator on 2017/4/26 0026.
  */
 @Configuration
-@EnableAutoConfiguration
 @EnableAspectJAutoProxy
-@ComponentScan(basePackages ="com.frank")
 @EnableAsync
 @SpringBootApplication
 @PropertySource({"classpath:dev/my.properties","classpath:dev/application.properties"})
