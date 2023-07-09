@@ -260,7 +260,7 @@ public class DoublePointer {
      */
     @Test
     public void testFindMiddle() {
-        // ListNode six = new ListNode(6, null);
+         ListNode six = new ListNode(6, null);
         ListNode five = new ListNode(5, null);
         ListNode four = new ListNode(4, five);
         ListNode three = new ListNode(3, four);

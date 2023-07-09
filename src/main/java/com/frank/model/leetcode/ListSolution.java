@@ -27,7 +27,7 @@ import java.util.PriorityQueue;
  * 来源：力扣（LeetCode）
  * 链接：https://leetcode-cn.com/problems/k-closest-points-to-origin
  */
-public class Solution {
+public class ListSolution {
 
     public static void main(String[] args) {
         int[][] points = new int[2][];

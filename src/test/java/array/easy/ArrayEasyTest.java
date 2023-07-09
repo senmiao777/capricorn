@@ -18,22 +18,195 @@ import java.util.Map;
 public class ArrayEasyTest {
 
     /**
+     * BM22 比较版本号
+     * 三个要注意的点
+     * 1：终止条件是 或者不是并且 i< l1 || j<l2
+     * 2：while循环之后，下一步需要i++ 和 j++ ，跳过当前的 '.'
+     * 3：求和的时候用long类型接收，负责可能越界
+     * @param version1
+     * @param version2
+     * @return
+     */
+    public int compare (String version1, String version2) {
+        // write code here
+        int l1 = version1.length();
+        int l2 = version2.length();
+
+        int i =0;
+        int j =0;
+        while(i< l1 || j<l2){
+            long num1 =0L;
+
+            while(i< l1 &&   version1.charAt(i) != '.'){
+                num1 = num1 *10 + (version1.charAt(i) - '0');
+                i++;
+            }
+            // 注意，这步是把点跳过去
+            i++;
+            long num2=0L;
+            while(j<l2 && version2.charAt(j) != '.'){
+                num2 = num2 * 10 + (version2.charAt(j)-'0');
+                j++;
+            }
+            // 注意，这步是把点跳过去
+            j++;
+            if(num1 > num2){
+                return 1;
+            }
+            if(num1 < num2){
+                return -1;
+            }
+        }
+        return 0;
+    }
+
+
+    /**
+     * 旋转数组最小数字
+     * 思路：中间值和边界值进行比较，不断缩小区间
+     * 当中间值和右边界的值相同（比如[1,1,1,1,1,1,1,0,1,1]这样）时，无法判断
+     * 循环条件是 head < tail
+     *
+     * @param nums
+     * @return
+     */
+    public int minNumberInRotateArray(int[] nums) {
+        // write code here
+        int head = 0;
+        int tail = nums.length - 1;
+        int mid;
+        while (head < tail) {
+            mid = head + (tail - head) / 2;
+            if (nums[mid] > nums[tail]) {
+                head = mid + 1;
+            } else if (nums[mid] < nums[tail]) {
+                tail = mid;
+            } else {
+                tail--;
+            }
+        }
+        return nums[head];
+    }
+
+
+    /**
+     * 找到波峰
+     * 思路，中间值和其下一个值进行比较
+     * 循环条件是 head < tail
+     * @param nums
+     * @return
+     */
+    public int findPeakElement(int[] nums) {
+        // write code here
+        int head = 0;
+        int tail = nums.length - 1;
+        int mid;
+        while (head < tail) {
+            mid = head + (tail - head) / 2;
+            // 题目给的是左右边界均是最小值
+            // 右边往下的不一定有波峰
+            if (nums[mid] > nums[mid + 1]) {
+                tail = mid;
+                // 右边往上一定有波峰
+            } else {
+                head = mid + 1;
+            }
+        }
+        return head;
+    }
+
+
+    /**
+     * 二维有序数组查找目标值，从左下角开始找
+     *
+     * @param target
+     * @param array
+     * @return
+     */
+    public boolean Find(int target, int[][] array) {
+        // write code here
+        if (array.length == 0) {
+            return false;
+        }
+
+        int row = array.length - 1;
+        int col = array[0].length - 1;
+
+        int curRow = row;
+        int curCol = 0;
+        int value;
+        while (curRow >= 0 && curCol <= col) {
+            value = array[curRow][curCol];
+            if (value == target) {
+                return true;
+            } else if (value < target) {
+                curCol++;
+            } else {
+                curRow--;
+            }
+        }
+        return false;
+    }
+
+    /**
      * 二分查找
      * 在有序升序不重复数组中查找元素，找到返回下标，找不到返回-1
      */
     @Test
     public void testBinarySearch() {
-        int[] nums = {-1, 0, 3, 5, 9, 12};
+        int[] nums = {-1, 0, 3, 4, 6, 10, 13, 14};
         //int[] nums = {-1,  9};
-        int target = 9;
-        System.out.println("index = " + binarySearch(nums, target));
+        int target = 13;
+        System.out.println("index = " + search(nums, target));
+
+    }
+
+    /**
+     * int head = 0;
+     * int tail = nums.length - 1;
+     * while (head <= tail) {
+     * int m = head + (tail - head) / 2;
+     * int mv = nums[m];
+     * if (mv == target) {
+     * return m;
+     * } else if (mv > target) {
+     * tail = m - 1;
+     * } else {
+     * head = m + 1;
+     * }
+     * }
+     * return -1;
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int search(int[] nums, int target) {
+        // write code here
+        if (nums.length <= 0) {
+            return -1;
+        }
+        int head = 0;
+        int tail = nums.length - 1;
+        while (head <= tail) {
+            int mid = head + (tail - head) / 2;
+            int value = nums[mid];
+            if (value == target) {
+                return mid;
+            } else if (value > target) {
+                tail = mid - 1;
+            } else {
+                head = mid + 1;
+            }
+        }
+        return -1;
 
     }
 
 
     @Test
     public void testFindPosition() {
-        int[] nums = {1,3,  5, 6};
+        int[] nums = {1, 3, 5, 6};
         //int[] nums = {-1,  9};
         int target = 7;
         System.out.println("index = " + findPosition(nums, target));
@@ -99,8 +272,9 @@ public class ArrayEasyTest {
 
     /**
      * https://leetcode.cn/problems/search-insert-position/?envType=study-plan&id=suan-fa-ru-men&plan=algorithms&plan_progress=fqntkk3
+     * <p>
+     * => 找到第一个大于等于target的下标
      *
-     *  => 找到第一个大于等于target的下标
      * @param nums
      * @param target
      * @return
@@ -109,13 +283,13 @@ public class ArrayEasyTest {
 
         int head = 0;
         int tail = nums.length - 1;
-        int m ;
+        int m;
         while (head <= tail) {
             m = head + (tail - head) / 2;
-            if ( nums[m] < target) {
+            if (nums[m] < target) {
                 head = m + 1;
-            }  else {
-                tail = m -1;
+            } else {
+                tail = m - 1;
             }
         }
         return head;

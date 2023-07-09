@@ -1,6 +1,5 @@
 package interview.array;
 
-import com.frank.model.leetcode.Solution;
 import org.junit.Test;
 
 import java.util.*;
