@@ -5,9 +5,10 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.SQLOutput;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author frank
@@ -18,42 +19,88 @@ import java.util.Map;
 public class ArrayEasyTest {
 
     /**
+     * list 删除元素
+     * 1、for循环倒序删除
+     * 2、迭代器删除
+     * 3、java8 lambda过滤
+     * 4、直接调用list对象的removeIf方法 底层就是迭代器
+     *
+     */
+    @Test
+    public void delete(){
+
+        ConcurrentHashMap map =new ConcurrentHashMap();
+        map.put("1","2");
+        List<String> list = Lists.newArrayList("兰陵王","曹操","安琪拉","大忌","凯","兰亭序");
+        // 正序有问题 因为随着删除元素，数据会减少，下标越界
+  /*      for(int i =0;i< list.size();i++){
+            if(list.get(i).startsWith("兰")){
+                list.remove(i);
+            }
+
+        }*/
+
+
+    /*    for(int i= list.size() -1;i>=0;i--){
+            if(list.get(i).startsWith("兰")){
+                list.remove(i);
+            }
+        }*/
+
+     /*   Iterator<String> iterator = list.iterator();
+        while (iterator.hasNext()){
+            String next = iterator.next();
+            if(next.startsWith("兰")){
+                iterator.remove();
+            }
+        }*/
+
+        List<String> res = list.stream().filter(s -> !s.startsWith("兰")).collect(Collectors.toList());
+        res.stream().forEach(System.out::println);
+
+        list.removeIf(s -> s.startsWith("兰"));
+
+        list.stream().forEach(System.out::println);
+    }
+
+    /**
      * BM22 比较版本号
      * 三个要注意的点
      * 1：终止条件是 或者不是并且 i< l1 || j<l2
      * 2：while循环之后，下一步需要i++ 和 j++ ，跳过当前的 '.'
      * 3：求和的时候用long类型接收，负责可能越界
+     *
      * @param version1
      * @param version2
      * @return
      */
-    public int compare (String version1, String version2) {
+    public int compare(String version1, String version2) {
         // write code here
         int l1 = version1.length();
         int l2 = version2.length();
 
-        int i =0;
-        int j =0;
-        while(i< l1 || j<l2){
-            long num1 =0L;
+        int i = 0;
+        int j = 0;
+        while (i < l1 || j < l2) {
+            long num1 = 0L;
 
-            while(i< l1 &&   version1.charAt(i) != '.'){
-                num1 = num1 *10 + (version1.charAt(i) - '0');
+            while (i < l1 && version1.charAt(i) != '.') {
+                num1 = num1 * 10 + (version1.charAt(i) - '0');
                 i++;
             }
             // 注意，这步是把点跳过去
             i++;
-            long num2=0L;
-            while(j<l2 && version2.charAt(j) != '.'){
-                num2 = num2 * 10 + (version2.charAt(j)-'0');
+            long num2 = 0L;
+            while (j < l2 && version2.charAt(j) != '.') {
+                num2 = num2 * 10 + (version2.charAt(j) - '0');
                 j++;
             }
             // 注意，这步是把点跳过去
             j++;
-            if(num1 > num2){
+            if (num1 > num2) {
                 return 1;
             }
-            if(num1 < num2){
+            if (num1 < num2) {
                 return -1;
             }
         }
@@ -93,6 +140,7 @@ public class ArrayEasyTest {
      * 找到波峰
      * 思路，中间值和其下一个值进行比较
      * 循环条件是 head < tail
+     *
      * @param nums
      * @return
      */

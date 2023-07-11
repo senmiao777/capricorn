@@ -1,9 +1,102 @@
 package com.frank.model.leetcode;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.*;
 
 public class BinaryTree {
+
+
+    /**
+     * 之字形遍历，即第一行从左到右，第二行从右到左
+     * @param pRoot
+     * @return
+     */
+    public ArrayList<ArrayList<Integer>> Print (TreeNode pRoot) {
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+
+        if (pRoot == null) {
+            return res;
+        }
+        // write code here
+        Queue<TreeNode> q = new LinkedList<TreeNode>();
+        q.offer(pRoot);
+        boolean flag = true;
+        while (!q.isEmpty()) {
+            int size = q.size();
+            ArrayList<Integer> row = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                TreeNode node =  q.poll();
+                row.add(node.val);
+                if (node.left != null) {
+                    q.offer(node.left);
+                }
+                if (node.right != null) {
+                    q.offer(node.right);
+                }
+            }
+            flag = !flag;
+            if (flag) {
+                Collections.reverse(row);
+            }
+            res.add(row);
+        }
+        return res;
+
+
+    }
+
+    /**
+     * 给定一个二叉树，返回该二叉树层序遍历的结果，（从左到右，一层一层地遍历） 例如： 给定的二叉树是{3,9,20,#,#,15,7}, 该二叉树层序遍历的结果是 [ [3], [9,20], [15,7] ] 提示: 0 1500
+     * 示例1
+     * 输入
+     * {1,2}
+     * 输出
+     * [[1],[2]]
+     * 示例2
+     * 输入
+     * {1,2,3,4,#,#,5}
+     * 输出
+     * [[1],[2,3],[4,5]]
+     * <p>
+     * BM26 求二叉树的层序遍历
+     *
+     * @param root
+     * @return
+     */
+    public ArrayList<ArrayList<Integer>> levelOrder(TreeNode root) {
+        // write code here
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        Collections.reverse(res);
+        if (root == null) {
+            return res;
+        }
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        //LinkedList
+        // 先把根节点放进去
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            // 当前行的list
+            ArrayList<Integer> row = new ArrayList<>();
+            // 该层元素的数量
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                // 依次遍历队列里的元素，将其左右孩子（如有）放入队列尾部
+                TreeNode cur = queue.poll();
+                row.add(cur.val);
+                if (cur.left != null) {
+                    queue.add(cur.left);
+                }
+                if (cur.right != null) {
+                    queue.add(cur.right);
+                }
+            }
+            // 遍历完该层的所有元素之后，添加到结果list中
+            res.add(row);
+        }
+        return res;
+    }
 
     /**
      * 前序遍历

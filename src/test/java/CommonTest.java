@@ -147,6 +147,30 @@ public class CommonTest {
     private String lock1 = "lock1111";
     private String lock2 = "lock2222";
 
+
+    @Test
+    public void testsss(){
+
+        String input = "2.5 y";
+        String[] split = input.split(" ");
+        float weight = Float.valueOf(split[0]);
+        char c = split[1].charAt(0);
+        boolean flag = (c == 'y');
+
+        int res = flag ? 20 : 25;
+
+        if (weight <= 1.0F) {
+            System.out.println(res);
+        } else {
+            weight = weight - 1;
+            double weight2 = Math.ceil(weight);
+            res = res + (int)weight2;
+            System.out.println(res);
+        }
+
+
+    }
+
     @Test
     public void deadLockTest2() throws Exception {
 
