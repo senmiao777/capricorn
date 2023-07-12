@@ -9,11 +9,27 @@ public class BinaryTree {
 
 
     /**
+     * BM28 二叉树的最大深度
+     *
+     * @param root
+     * @return
+     */
+    public int maxDepth(TreeNode root) {
+        // write code here
+        if (root == null) {
+            return 0;
+        }
+        return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+
+    }
+
+    /**
      * 之字形遍历，即第一行从左到右，第二行从右到左
+     *
      * @param pRoot
      * @return
      */
-    public ArrayList<ArrayList<Integer>> Print (TreeNode pRoot) {
+    public ArrayList<ArrayList<Integer>> Print(TreeNode pRoot) {
         ArrayList<ArrayList<Integer>> res = new ArrayList<>();
 
         if (pRoot == null) {
@@ -24,10 +40,13 @@ public class BinaryTree {
         q.offer(pRoot);
         boolean flag = true;
         while (!q.isEmpty()) {
+            /**
+             * 每次放这一层的元素个数
+             */
             int size = q.size();
             ArrayList<Integer> row = new ArrayList<>();
             for (int i = 0; i < size; i++) {
-                TreeNode node =  q.poll();
+                TreeNode node = q.poll();
                 row.add(node.val);
                 if (node.left != null) {
                     q.offer(node.left);

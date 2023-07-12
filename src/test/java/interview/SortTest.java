@@ -199,6 +199,13 @@ public class SortTest {
         if (start >= end) {
             return;
         }
+        /**
+         *
+         枢轴 [ˈpɪvət]
+         n.	枢轴; 中心; 支点; 核心; 中心点; 最重要的人(或事物);
+         v.	(使)在枢轴上旋转(或转动);
+
+         */
         int pivot = partition(num, start, end);
         quicksortHandle(num, start, pivot - 1);
         quicksortHandle(num, pivot + 1, end);
@@ -214,21 +221,26 @@ public class SortTest {
      */
     private int partition(int[] num, int start, int end) {
         int pivotValue = num[end];
-        int i = start;
+        int left = start;
         /**
          * j = start
          * j < end
          */
         for (int j = start; j < end; j++) {
+            /**
+             * 只要小于选出来的轴值，左下标就要++
+             */
             if (num[j] <= pivotValue) {
-                if (i != j) {
-                    swap(num, i, j);
+                // 左下标和当前不相等，交换
+                if (left != j) {
+                    swap(num, left, j);
                 }
-                i++;
+                left++;
             }
         }
-        swap(num, i, end);
-        return i;
+        // 最后有一步交换，返回左下标
+        swap(num, left, end);
+        return left;
     }
 
     /**

@@ -36,7 +36,13 @@ public class Solution {
         dummy.next = head;
         int v;
         while (cur.next != null && cur.next.next != null) {
-            if ((v = cur.next.val) == cur.next.next.val) {
+            /**
+             * 关键点：
+             * 首先判断当前节点的下一节点和下下个节点相同
+             * 然后，获取这值，只要是和这个值相同的节点，都跳过
+             */
+            if (cur.next.val == cur.next.next.val) {
+                v = cur.next.val;
                 while (cur.next != null && cur.next.val == v) {
                     //靠这步下标后移
                     cur.next = cur.next.next;
