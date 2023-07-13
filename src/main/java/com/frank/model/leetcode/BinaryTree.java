@@ -7,6 +7,55 @@ import java.util.*;
 
 public class BinaryTree {
 
+    /**
+     * BM32 合并二叉树
+     * @param t1
+     * @param t2
+     * @return
+     */
+    public TreeNode mergeTrees (TreeNode t1, TreeNode t2) {
+        // write code here
+        if(t1 == null){
+            return t2;
+        }
+        if(t2 == null){
+            return t1;
+        }
+        TreeNode cur = new TreeNode(t1.val + t2.val);
+        cur.left = mergeTrees(t1.left,t2.left);
+        cur.right = mergeTrees(t1.right,t2.right);
+        return cur;
+    }
+
+    /**
+     * 给定一个二叉树root和一个值 sum ，判断是否有从根节点到叶子节点的节点值之和等于 sum 的路径。 1.该题路径定义为从树的根结点开始往下一直到叶子结点所经过的结点 2.叶子节点是指没有子节点的节点 3.路径只能从父节点到子节点，不能从子节点到父节点 4.总节点数目为n 例如： 给出如下的二叉树，， 返回true，因为存在一条路径 的节点值之和为 22 数据范围： 1.树上的节点数满足 2.每 个节点的值都满足 要求：空间复杂度 ，时间复杂度 进阶：空间复杂度 ，时间复杂度
+     * 示例1
+     * 输入
+     * {5,4,8,1,11,#,9,#,#,2,7},22
+     * 输出
+     * true
+     * BM29 二叉树中和为某一值的路径(一)
+     * @param root
+     * @param sum
+     * @return
+     */
+    public boolean hasPathSum (TreeNode root, int sum) {
+        // write code here
+        if(root == null){
+            return false;
+        }
+
+        /**
+         * 左右都为空说明找到了最后
+         */
+        if(root.left == null && root.right == null && sum - root.val == 0){
+            return true;
+        }
+        /**
+         * 左子树或右子树
+         */
+        return hasPathSum(root.left,sum - root.val) || hasPathSum(root.right,sum - root.val);
+    }
 
     /**
      * BM28 二叉树的最大深度
