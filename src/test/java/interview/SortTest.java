@@ -101,6 +101,7 @@ public class SortTest {
      * 在数组中找到第K大的元素
      * 思路一：先对数组进行排序，然后遍历一下，找到第K大的元素，时间复杂度O( n * log n )
      * 思路二：利用快排思想，不需要让数组全部有序就可以找到第K大的元素 ，时间复杂度O( n )
+     * 注意：寻找第K大的值，找下标的时候，是找 length - k 位置
      *
      * @param num
      * @param k
@@ -213,7 +214,8 @@ public class SortTest {
 
     /**
      * 以数组中num[end]元素值A作为中间值进行元素排列，比A小的元素值放在左边，比A大的元素值放在右边
-     *
+     * 注意，最后有一步交换，返回的是左下标，而不是左下标对应的值
+     * 只要当前值小于等于中轴值，就进行交换
      * @param num   数组
      * @param start 起始下标
      * @param end   截止下标
@@ -228,6 +230,7 @@ public class SortTest {
          */
         for (int j = start; j < end; j++) {
             /**
+             * 注意，生效条件是小于等于
              * 只要小于选出来的轴值，左下标就要++
              */
             if (num[j] <= pivotValue) {
