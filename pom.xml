@@ -241,7 +241,7 @@
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
-            <version>6.2.3</version>
+            <version>7.17.13</version>
             <exclusions>
                 <exclusion>
                     <artifactId>lucene-analyzers-common</artifactId>
